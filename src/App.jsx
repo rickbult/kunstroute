@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { Footer } from './Footer.jsx';
+import { Searchbar } from './Searchbar.jsx';
 
 export const Card = ({
   name,
@@ -24,13 +25,14 @@ export const Card = ({
     <p><strong>📅 Open:</strong> {day}</p>
     <p><strong>📞 Tel:</strong> {phonenumer}</p>
     <p><strong>✉️ Email:</strong> {email}</p>
-    <p><strong>🌐 Website:</strong> <a href={website} target="_blank">{website}</a></p>
+    <p><strong>🌐 Website:</strong> <a href={website} target="_blank" rel="noopener noreferrer">{website}</a></p>
   </div>
 );
 
 const App = () => (
   <div className="app">
     <h1 className="page-title">Onze Kunstenaars</h1>
+    <Searchbar />
     <div className="flex-container">
       <Card
         picture="https://picsum.photos/seed/josderckx/320/320"
