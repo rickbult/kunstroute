@@ -53,6 +53,7 @@ const App = () => (
       email="info@janisdeman.com"
       website="https://www.janisdeman.com"
     />
+    
   </div>
 );
 
