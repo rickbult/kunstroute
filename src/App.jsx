@@ -3,7 +3,7 @@ import './App.css';
 const app = () => (
 
   <div>
-        
+
 
 
   </div>
@@ -35,6 +35,8 @@ export const Card = ({
 );
 
 const App = () => (
+
+  
   <div className="app">
     <h1 className="page-title">Onze Kunstenaars</h1>
     <div className="flex-container">
