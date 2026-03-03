@@ -1,13 +1,7 @@
 import React from 'react';
 import './App.css';
-const app = () => (
+import { Footer } from './Footer.jsx';
 
-  <div>
-
-
-
-  </div>
-)
 export const Card = ({
   name,
   title,
@@ -35,8 +29,6 @@ export const Card = ({
 );
 
 const App = () => (
-
-  
   <div className="app">
     <h1 className="page-title">Onze Kunstenaars</h1>
     <div className="flex-container">
@@ -100,6 +92,7 @@ const App = () => (
         email="sofie@sofiedesigns.nl"
         website="https://www.sofiedesigns.nl"
       />
+      <Footer />
     </div>
   </div>
 );
