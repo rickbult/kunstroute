@@ -1,7 +1,12 @@
 export default function Navbar() {
   return (
     <nav className="navbar">
-      <a href="/" className="site-title">🎨 Kunst Route</a>
+      <a href="/" className="logo">
+        <img src="/src/assets/kunstroutelogo.png" 
+          alt="Kunst Route Noordwest Veluwe" 
+          className="logo-img"
+        />
+      </a>
       <ul>
         <li className="active"><a href="#">🗺️ Kaart</a></li>
         <li className="active"><a href="#">🎨 Kunstwerken</a></li>

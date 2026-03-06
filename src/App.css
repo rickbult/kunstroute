@@ -87,7 +87,6 @@ body {
 }
 
 .navbar {
-    background-color: #333;
     color: White;
     display: flex;
     justify-content: space-between;
@@ -129,3 +128,9 @@ body {
     background-color: #777;
 }
 
+.logo-img{
+  height: 100px;
+  width: 200px;
+
+
+}
