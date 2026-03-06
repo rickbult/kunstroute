@@ -8,7 +8,6 @@ body {
 h1, h2 {
   justify-content: center;
     display: flex;
-    color: red;
 }
 
 .app {
@@ -113,4 +112,9 @@ footer {
   padding: 0.25rem;
 }
 
+footer{
 
+
+
+
+}
