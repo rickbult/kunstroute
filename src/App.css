@@ -134,3 +134,37 @@ body {
 
 
 }
+.searchbar{
+  justify-content: center;
+
+
+}
+
+.searchbar {
+  position: relative;
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+.searchbar input {
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 50px;
+  outline: none;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.searchbar input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.searchbar input::placeholder {
+  color: #888;
+}
+
+
