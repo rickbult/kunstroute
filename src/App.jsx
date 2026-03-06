@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Searchbar from './Searchbar.jsx';
+import Searchbar from './searchbar.jsx';
 import Navbar from './navbar.jsx';
 import Card from './card.jsx';
 
