@@ -1,0 +1,8 @@
+node_modules/
+mijn-react-app/node_modules/
+Kunstrouteapp/node_modules/
+dist/
+mijn-react-app/dist/
+Kunstrouteapp/dist/
+.vite/
+*.log
