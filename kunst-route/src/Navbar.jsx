@@ -1,24 +1,25 @@
 export default function Navbar() {
   return (
     <nav className="navbar">
-      <a href="/" className="site-title">Kunst Route</a>
-      
-      <ul>
-        <li className="active">
-          <a href="#">Kaart</a>
+      <a href="/" className="logo">
+        <span className="logo-top">KUNST ROUTE</span>
+        <span className="logo-bottom">NOORDWEST VELUWE</span>
+      </a>
+
+      <ul className="nav-links">
+        <li><a href="#">Kaart</a></li>
+        <li><a href="#">Kunstwerken</a></li>
+        <li><a href="#">Kunstenaars</a></li>
+        <li><a href="#">Info & Agenda</a></li>
+        <li>
+          <a href="#" className="btn-inschrijven">Inschrijven</a>
         </li>
-        <li className="active">
-          <a href="#">Kunstwerken</a>
-        </li>
-        <li className="active">
-          <a href="#">Kunstenaars</a>
-        </li>
-        <li className="active">
-          <a href="#">Info & Agenda</a>
-        </li>
-         <li className="active"></li>
-         <a href="#">Inschrijven</a>
       </ul>
     </nav>
   );
 }
+
+
+
+
+
