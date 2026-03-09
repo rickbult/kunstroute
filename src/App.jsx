@@ -1,4 +1,5 @@
 import React from 'react';
+import './navbar.css';
 import './App.css';
 import Searchbar from './searchbar.jsx';
 import Navbar from './navbar.jsx';
