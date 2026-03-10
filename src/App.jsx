@@ -1,8 +1,9 @@
-import React from 'react';
-import './App.css';
-import Searchbar from './searchbar.jsx';
-import Navbar from './navbar.jsx';
-import Card from './card.jsx';
+import React from "react";
+import "./App.css";  
+
+import Navbar from "./components/navbar/navbar.jsx";
+import Searchbar from "./components/searchbar/searchbar.jsx";
+import Card from "./components/card/card.jsx";
 
 function App() {
   return (
