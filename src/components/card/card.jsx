@@ -1,3 +1,6 @@
+import React from "react";
+import "./card.css";  // FIXED!
+
 export default function Card({ name, title, bio, picture, adres, wheelchairaccessibility, day, phonenumer, email, website }) {
   return (
     <div className="card">
