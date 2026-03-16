@@ -1,79 +1,82 @@
-import React from "react";
-import "./App.css";  
+import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import { Card } from "./components/Card";
+import { ArtistDetail } from "./components/ArtistDetail";
 
-import Navbar from "./components/navbar/navbar.jsx";
-import Searchbar from "./components/searchbar/searchbar.jsx";
-import Card from "./components/card/card.jsx";
+const cards = [
+  {
+    imgSrc: "https://picsum.photos/id/201/300/200", imgAlt: "Card Image 1",
+    title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)",
+    link: "card1", location: "Locatie", days: "Za & Zo aanwezig",
+    address: "Adres", postcode: "Postcode",
+    phone: "Telefoonnummer", email: "Email",
+    artworks: [
+      { imgSrc: "https://picsum.photos/id/301/300/200", name: "Naam Kunstwerk", year: "2023", bio: "Korte Bio" },
+      { imgSrc: "https://picsum.photos/id/302/300/200", name: "Naam Kunstwerk", year: "2022", bio: "Korte Bio" },
+      { imgSrc: "https://picsum.photos/id/303/300/200", name: "Naam Kunstwerk", year: "2021", bio: "Korte Bio" },
+      { imgSrc: "https://picsum.photos/id/304/300/200", name: "Naam Kunstwerk", year: "2020", bio: "Korte Bio" },
+    ],
+  },
+  {
+    imgSrc: "https://picsum.photos/id/202/300/200", imgAlt: "Card Image 2",
+    title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)",
+    link: "card2", location: "Loactie", days: "Zo aanwezig",
+    address: "Adress", postcode: "Postcode",
+    phone: "Telefoonnummer", email: "Email",
+    artworks: [
+      { imgSrc: "https://picsum.photos/id/305/300/200", name: "Naam Kunstwerk", year: "2023", bio: "Korte Bio" },
+      { imgSrc: "https://picsum.photos/id/306/300/200", name: "Naam Kunstwerk", year: "2022", bio: "Korte Bio" },
+    ],
+  },
+  { imgSrc: "https://picsum.photos/id/193/300/200", imgAlt: "Card Image 3", title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)", link: "card3", location: "Adres", days: "Za aanwezig", address: "Straat", postcode: "Postcode", phone: "Telefoonnummer", email: "Email", artworks: [] },
+  { imgSrc: "https://picsum.photos/id/211/300/200", imgAlt: "Card Image 4", title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)", link: "card4", location: "Adres", days: "Za & Zo aanwezig", address: "Straat", postcode: "Postcode", phone: "Telefoonnummer", email: "Email", artworks: [] },
+  { imgSrc: "https://picsum.photos/id/250/300/200", imgAlt: "Card Image 5", title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)", link: "card5", location: "Adres", days: "Zo aanwezig", address: "Straat", postcode: "Postcode", phone: "Telefoonnummer", email: "Email", artworks: [] },
+  { imgSrc: "https://picsum.photos/id/203/300/200", imgAlt: "Card Image 6", title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)", link: "card6", location: "Adres", days: "Za aanwezig", address: "Straat", postcode: "Postcode", phone: "Telefoonnummer", email: "Email", artworks: [] },
+  { imgSrc: "https://picsum.photos/id/106/300/200", imgAlt: "Card Image 7", title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)", link: "card7", location: "Adres", days: "Za & Zo aanwezig", address: "Straat", postcode: "Postcode", phone: "Telefoonnummer", email: "Email", artworks: [] },
+  { imgSrc: "https://picsum.photos/id/190/300/200", imgAlt: "Card Image 8", title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)", link: "card8", location: "Adres", days: "Zo aanwezig", address: "Straat", postcode: "Postcode", phone: "Telefoonnummer", email: "Email", artworks: [] },
+  { imgSrc: "https://picsum.photos/id/191/300/200", imgAlt: "Card Image 9", title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)", link: "card9", location: "Adres", days: "Za aanwezig", address: "Straat", postcode: "Postcode", phone: "Telefoonnummer", email: "Email", artworks: [] },
+  { imgSrc: "https://picsum.photos/id/192/300/200", imgAlt: "Card Image 10", title: "kaart titel", description: "Biografie van de kunstenaar zelf (deze vult degene uit eindelijk zelf in)", link: "card10", location: "Adres", days: "Za & Zo aanwezig", address: "Straat", postcode: "Postcode", phone: "Telefoonnummer", email: "Email", artworks: [] },
+];
+
+function CardList({ cards }) {
+  const [search, setSearch] = useState("");
+
+  const filteredCards = cards.filter((card) =>
+    card.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="page-wrapper">
+      <div className="page-header">
+        <h1>Onze Kunstenaars</h1>
+        <p>Maak kennis met de creatieve geesten achter de kunstwerken.</p>
+      </div>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Zoek een kunstenaar..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+      <div className="card-grid">
+        {filteredCards.map((card, index) => (
+          <Card key={index} {...card} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="app">
-      <Navbar />
-      <h1 className="page-title">Onze Kunstenaars</h1>
-      <Searchbar />
-      <div className="flex-container">
-        <Card 
-          picture="https://picsum.photos/seed/josderckx/320/320" 
-          name="Jos Derckx" 
-          title="Illustrator en Kunstenaar" 
-          bio="Zijn werk is kleurrijk, maatschappijkritisch en vol humor en surrealisme. Gebaseerd in Utrecht." 
-          adres="Nijverlei 10, Utrecht" 
-          wheelchairaccessibility="Ja" 
-          day="Zaterdag" 
-          phonenumer="030-7654321" 
-          email="jos@josderckx.nl" 
-          website="https://www.instagram.com/josderckx/" 
-        />
-        <Card 
-          picture="https://picsum.photos/seed/janisdeman/320/320" 
-          name="Jan Is De Man" 
-          title="Street Art Kunstenaar" 
-          bio="Creëert muurschilderingen die verbonden zijn met de locatie, vaak met iconische ogen en boekenkasten." 
-          adres="Oudegracht 200, Utrecht" 
-          wheelchairaccessibility="Afhankelijk van locatie" 
-          day="Zondag" 
-          phonenumer="030-8765432" 
-          email="info@janisdeman.com" 
-          website="https://www.janisdeman.com" 
-        />
-        <Card 
-          picture="https://picsum.photos/seed/emilyart/320/320" 
-          name="Emily van den Broek" 
-          title="Keramiste" 
-          bio="Werkt met lokale klei om natuurlijke texturen te verkennen in minimalistische keramiek." 
-          adres="Lombokstraat 12, Utrecht" 
-          wheelchairaccessibility="Ja" 
-          day="Donderdag & Vrijdag" 
-          phonenumer="06-11223344" 
-          email="studio@emilykeramiek.nl" 
-          website="https://www.emilykeramiek.nl" 
-        />
-        <Card 
-          picture="https://picsum.photos/seed/lucaschreuder/320/320" 
-          name="Lucas Schreuder" 
-          title="Fotograaf" 
-          bio="Richt zich op stedelijke architectuur en het samenspel tussen licht en schaduw." 
-          adres="Wittevrouwenstraat 45, Utrecht" 
-          wheelchairaccessibility="Nee" 
-          day="Woensdag" 
-          phonenumer="030-9988776" 
-          email="lucas@lichtbeeld.com" 
-          website="https://www.lichtbeeld.com" 
-        />
-        <Card 
-          picture="https://picsum.photos/seed/sofiedesigns/320/320" 
-          name="Sofie Designs" 
-          title="Grafisch Ontwerper" 
-          bio="Combineert typografie en krachtige kleuren in branding voor duurzame merken." 
-          adres="Kanaalstraat 88, Utrecht" 
-          wheelchairaccessibility="Ja" 
-          day="Maandag t/m Vrijdag" 
-          phonenumer="030-2233445" 
-          email="sofie@sofiedesigns.nl" 
-          website="https://www.sofiedesigns.nl" 
-        />
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<CardList cards={cards} />} />
+        <Route path="/artist/:id" element={<ArtistDetail artists={cards} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
