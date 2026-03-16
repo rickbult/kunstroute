@@ -1,4 +1,4 @@
- *{
+*{
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -50,7 +50,7 @@ body {
 }
 
 .nav-links a {
-  color: #484848;
+  color: #0b0b0b;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s;
@@ -61,9 +61,32 @@ body {
 }
 
 .btn-inschrijven {
-  background-color: #676666;
+  background-color: #737373;
   padding: 0.5rem 1.2rem;
   border-radius: 6px;
   font-weight: 600;
   transition: background-color 0.2s;
+}
+
+.page {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 2rem;
+  min-height: calc(100vh - 60px);
+}
+
+.nav-links .tekst-blauw {
+  color: #2e2e8b;
+}
+
+.tekst-roze {
+  color: #e01b68;
+}
+
+.tekst-geel {
+  color: #f2c14e;
+}
+
+.tekst-groen {
+  color: #4caf50;
 }

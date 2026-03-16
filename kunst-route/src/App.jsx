@@ -1,40 +1,26 @@
+import { Routes, Route } from "react-router-dom"
 import Navbar from "./Navbar"
 import Home from "./pages/Home"
 import Kaart from "./pages/Kaart"
 import Kunstwerken from "./pages/Kunstwerken"
 import Kunstenaars from "./pages/Kunstenaars"
-import InfoAgenda from "./pages/Info & Agenda"
+import InfoAgenda from "./pages/InfoAgenda"
 import Inschrijven from "./pages/Inschrijven"
 
 function App() {
-  let compenent
-  switch (window.location.pathname) {
-    case "/":
-      compenent = <Home />
-      break;
-    case "/kaart":
-      compenent = <Kaart />
-      break;
-    case "/kunstwerken":
-      compenent = <Kunstwerken />
-      break;
-    case "/kunstenaars":
-      compenent = <Kunstenaars />
-      break;
-    case "/info-agenda":
-      compenent = <InfoAgenda />
-      break;
-    case "/inschrijven":
-      compenent = <Inschrijven />
-      break;
-    
-  }
   return (
-<>
-   <Navbar />
-   <div classname="container">{compenent}</div>
-   </>
-  ) 
-} 
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/kaart" element={<Kaart />} />
+        <Route path="/kunstwerken" element={<Kunstwerken />} />
+        <Route path="/kunstenaars" element={<Kunstenaars />} />
+        <Route path="/info-agenda" element={<InfoAgenda />} />
+        <Route path="/inschrijven" element={<Inschrijven />} />
+      </Routes>
+    </>
+  )
+}
 
 export default App
