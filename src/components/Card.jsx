@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 import "./Card.css";
 
 export const Card = ({
@@ -8,24 +8,22 @@ export const Card = ({
   title = "Naam kunstenaar",
   location = "Locatie",
   description = "Korte beschrijving",
-  buttonText = "Aanwezigheid",
+  days = "Dagen Aanwezig",
   link = "#",
 }) => {
   return (
-    <div className="card-container">
-      <div className="card-header">
-        {imgSrc && imgAlt && <img src={imgSrc} alt={imgAlt} />}
-        {title && <h1 className="card-title">{title}</h1>}
-        {location && <div className="card-location">{location}</div>}
+    <Link to={`/artist/${link}`} className="card-link">
+      <div className="card-container">
+        <div className="card-header">
+          {imgSrc && imgAlt && <img src={imgSrc} alt={imgAlt} />}
+          {title && <h1 className="card-title">{title}</h1>}
+          {location && <div className="card-location"> {location}</div>}
+        </div>
+        <div className="card-body">
+          {description && <p className="card-description">{description}</p>}
+          {days && <span className="card-btn">{days}</span>}
+        </div>
       </div>
-      <div className="card-body">
-        {description && <p className="card-description">{description}</p>}
-        {buttonText && link && (
-          <a href={link} className="card-btn">
-            {buttonText}
-          </a>
-        )}
-      </div>
-    </div>
+    </Link>
   );
 };
