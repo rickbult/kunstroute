@@ -3,7 +3,7 @@ import "./App.css";
 import Navbar from "./navbars/navbar";
 import Footer from "./footer/footer";
 import CardList from "./card/cardDetail";
-import { ArtistDetail } from "./ArtistDetail";  // ✅ Fixed: ArtistDetail.jsx
+import { ArtistDetail } from "./ArtistDetail"; 
 import artistsData from "./data/artists.json";
 
 function AppContent() {
