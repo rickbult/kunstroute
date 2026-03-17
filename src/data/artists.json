@@ -1,13 +1,28 @@
 [
   {
-    "link": "card1",
-    "imgSrc": "https://picsum.photos/id/201/300/200",
-    "imgAlt": "Card Image 1",
-    "title": "Jan Kunstenaar",
-    "description": "Biografie...",
-    "location": "Utrecht",
-    "days": "Za & Zo aanwezig",
-    "address": "Straat 1",
-    "wheelchairaccessibility": "Ja"
+    "imgSrc": "https://picsum.photos/seed/anneke-jansen/600/400",
+    "imgAlt": "Schilderijen van Anneke Jansen",
+    "title": "Anneke Jansen",
+    "description": "Anneke maakt kleurrijke landschappen geïnspireerd op de Veluwse bossen en heide.",
+    "address": "Eperweg 12, Elburg",
+    "wheelchairaccessibility": "Ja",
+    "days": "Zaterdag & Zondag 10:00 - 17:00",
+    "phone": "06-23456789",
+    "email": "anneke.jansen@example.com",
+    "website": "https://www.annekejansenart.nl",
+    "link": "anneke-jansen"
+  },
+  {
+    "imgSrc": "https://picsum.photos/seed/gerard-van-dijk/600/400",
+    "imgAlt": "Houten beelden van Gerard van Dijk",
+    "title": "Gerard van Dijk",
+    "description": "Beeldhouwer uit Nunspeet die werkt met eikenhout en brons.",
+    "address": "Harderwijkerweg 88, Nunspeet",
+    "wheelchairaccessibility": "Gedeeltelijk",
+    "days": "Zaterdag 11:00 - 16:00",
+    "phone": "06-87654321",
+    "email": "gerard.vandijk@example.com",
+    "website": "#",
+    "link": "gerard-van-dijk"
   }
 ]
