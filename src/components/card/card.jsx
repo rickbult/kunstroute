@@ -1,19 +1,29 @@
 import React from "react";
-import "./card.css";  // FIXED!
+import { Link } from "react-router-dom";
+import "./Card.css";
 
-export default function Card({ name, title, bio, picture, adres, wheelchairaccessibility, day, phonenumer, email, website }) {
+export const Card = ({
+  imgSrc,
+  imgAlt,
+  title = "Naam kunstenaar",
+  location = "Locatie",
+  description = "Korte beschrijving",
+  days = "Dagen Aanwezig",
+  link = "#",
+}) => {
   return (
-    <div className="card">
-      <img src={picture} alt={name} className="card-picture" />
-      <h2>{name}</h2>
-      <p className="card-title">{title}</p>
-      <p className="bio">{bio}</p>
-      <p><strong>📍 Adres:</strong> {adres}</p>
-      <p><strong>♿ Rolstoel:</strong> {wheelchairaccessibility}</p>
-      <p><strong>📅 Open:</strong> {day}</p>
-      <p><strong>📞 Tel:</strong> {phonenumer}</p>
-      <p><strong>✉️ Email:</strong> {email}</p>
-      <p><strong>🌐 Website:</strong> <a href={website} target="_blank" rel="noopener noreferrer">{website}</a></p>
-    </div>
+    <Link to={`/artist/${link}`} className="card-link">
+      <div className="card-container">
+        <div className="card-header">
+          {imgSrc && imgAlt && <img src={imgSrc} alt={imgAlt} />}
+          {title && <h1 className="card-title">{title}</h1>}
+          {location && <div className="card-location"> {location}</div>}
+        </div>
+        <div className="card-body">
+          {description && <p className="card-description">{description}</p>}
+          {days && <span className="card-btn">{days}</span>}
+        </div>
+      </div>
+    </Link>
   );
-}
+};
