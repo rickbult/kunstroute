@@ -5,6 +5,10 @@
   align-items: stretch;
   gap: 2rem;
   padding: 0 1rem;
+  background-color: #333;  
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .site-title {
@@ -26,17 +30,32 @@
   display: flex;
   align-items: center;
   padding: .25rem;
+  transition: background-color 0.3s;
 }
 
 .navbar li.active {
   background-color: #555;
 }
 
-.navbar li.hover {
+.navbar li:hover {  
   background-color: #777;
 }
 
 .logo-img {
   height: 100px;
   width: 200px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .navbar ul {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 }

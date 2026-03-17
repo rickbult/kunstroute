@@ -4,6 +4,8 @@ import artistsData from "./data/artists.json";
 import "./App.css";
 import { Card } from "./components/Card.jsx"; 
 import { ArtistDetail } from "./components/ArtistDetail.jsx";
+import Navbar from "./components/Navbar.jsx";  
+import Footer from "./components/Footer.jsx";
 
 function CardList({ cards }) {
   const [search, setSearch] = useState("");
@@ -54,10 +56,12 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Navbar />        
       <Routes>
         <Route path="/" element={<CardList cards={cards} />} />
         <Route path="/artist/:id" element={<ArtistDetail artists={cards} />} />
       </Routes>
+      <Footer />        
     </BrowserRouter>
   );
 }
