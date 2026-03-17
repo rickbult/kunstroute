@@ -1,0 +1,30 @@
+[
+  {
+    "link": "card1",
+    "imgSrc": "https://picsum.photos/id/201/300/200",
+    "imgAlt": "Kunstenaar 1",
+    "title": "Jan van Gogh",
+    "description": "Biografie van de kunstenaar zelf...",
+    "location": "Utrecht Centrum",
+    "days": "Za & Zo aanwezig",
+    "address": "Straat 123",
+    "postcode": "3512 AB",
+    "phone": "06-12345678",
+    "email": "jan@vangogh.nl",
+    "website": "https://vangogh.nl",
+    "wheelchairaccessibility": "Ja",
+    "artworks": [
+      {"imgSrc": "https://picsum.photos/id/301/300/200", "name": "Zonnebloemen", "year": "2023", "bio": "Korte bio"}
+    ]
+  },
+  {
+    "link": "card2",
+    "imgSrc": "https://picsum.photos/id/202/300/200",
+    "imgAlt": "Kunstenaar 2",
+    "title": "Anna Picasso",
+    "description": "Creatieve biografie...",
+    "location": "Utrecht Oost",
+    "days": "Zo aanwezig",
+    "wheelchairaccessibility": "Nee"
+  }
+]

@@ -1,5 +1,5 @@
 import React from "react";
-import "./card.css";  // FIXED!
+import "./card.css";  
 
 export default function Card({ name, title, bio, picture, adres, wheelchairaccessibility, day, phonenumer, email, website }) {
   return (
