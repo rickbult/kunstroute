@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 
-
 export default function Navbar() {
   return (
-    <nav className="navbar">
+    <nav className="navbar" role="navigation" aria-label="Hoofdnavigatie">
       <Link to="/" className="logo">
         <span className="logo-top">KUNST ROUTE</span>
         <span className="logo-bottom">NOORDWEST VELUWE</span>
       </Link>
 
-      <ul className="nav-links">
+      <ul className="nav-links" role="list">
         <li><Link to="/kaart" className="tekst-groen">Kaart</Link></li>
         <li><Link to="/kunstwerken" className="tekst-roze">Kunstwerken</Link></li>
         <li><Link to="/kunstenaars" className="tekst-geel">Kunstenaars</Link></li>
@@ -21,8 +20,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
-
-
-
-
