@@ -2,18 +2,26 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Card.css";
 
-export const Card = ({ artist }) => {
+export const Card = ({
+  imgSrc,
+  imgAlt,
+  title = "Naam kunstenaar",
+  location = "Locatie",
+  description = "Korte beschrijving",
+  days = "Dagen Aanwezig",
+  link = "#",
+}) => {
   return (
-    <Link to={`/artist/${artist.id}`} className="card-link">
+    <Link to={`/artist/${link}`} className="card-link">
       <div className="card-container">
         <div className="card-header">
-          <img src={artist.picture} alt={artist.name} />
-          <h1 className="card-title">{artist.name}</h1>
-          <div className="card-location">{artist.adres}</div>
+          {imgSrc && imgAlt && <img src={imgSrc} alt={imgAlt} />}
+          {title && <h1 className="card-title">{title}</h1>}
+          {location && <div className="card-location"> {location}</div>}
         </div>
         <div className="card-body">
-          <p className="card-description">{artist.bio}</p>
-          <span className="card-btn">{artist.day}</span>
+          {description && <p className="card-description">{description}</p>}
+          {days && <span className="card-btn">{days}</span>}
         </div>
       </div>
     </Link>

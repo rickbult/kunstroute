@@ -1,3 +1,4 @@
+artistdetail.css
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import "./ArtistDetail.css";
