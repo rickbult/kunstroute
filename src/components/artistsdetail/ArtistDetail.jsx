@@ -1,9 +1,9 @@
-artistdetail.css
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import "./ArtistDetail.css";
+import artists from "../data/artists.json";
+import "./artiestDetail.css";
 
-export const ArtistDetail = ({ artists }) => {
+export const ArtistDetail = () => {
   const { id } = useParams();
   const artist = artists.find((a) => a.link === id);
 
