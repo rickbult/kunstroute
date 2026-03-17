@@ -1,15 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Navbar from "./navbars/navbar";
-import Footer from "./footer/footer";
-import CardList from "./card/cardDetail";
-import { ArtistDetail } from "./ArtistDetail"; 
-import artistsData from "./data/artists.json";
+// Temporarily comment out missing Navbar/Footer until created
+// import Navbar from "./navbar/navbar";
+// import Footer from "./footer/footer";
+import CardList from "./card";
+import { ArtistDetail } from "./cardDetail";
+import artistsData from "./artists.json";
 
 function AppContent() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path="/" element={<CardList artists={artistsData} />} />
         <Route path="/kaart" element={<div>Kaart pagina</div>} />
@@ -20,7 +21,7 @@ function AppContent() {
         <Route path="/artist/:id" element={<ArtistDetail />} />
         <Route path="*" element={<div>404: Pagina niet gevonden</div>} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
