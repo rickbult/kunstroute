@@ -1,11 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-//import Navbar from "./navbars/navbar";
+import Navbar from "./navbars/navbar";
 import Footer from "./footer/footer";
 import CardList from "./card/cardDetail";
-import { ArtistDetail } from "./artiestDetail";
+import { ArtistDetail } from "./ArtistDetail";  // ✅ Fixed: ArtistDetail.jsx
 import artistsData from "./data/artists.json";
-
 
 function AppContent() {
   return (
