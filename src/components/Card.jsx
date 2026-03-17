@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./card.css";  
+import "./Card.css";  
+
 
 export const Card = React.memo(({ 
   imgSrc,           
@@ -16,6 +17,7 @@ export const Card = React.memo(({
   link = "#"
 }) => {
   return (
+    
     <Link to={`/artist/${link}`} className="card-link-wrapper">
       <div className="card">
         <img src={imgSrc} alt={imgAlt || title} className="card-picture" />
@@ -28,7 +30,7 @@ export const Card = React.memo(({
         {email && <p><strong>✉️ Email:</strong> {email}</p>}
         {website !== "#" && (
           <p><strong>🌐 Website:</strong> 
-            <a href={website} target="_blank" rel="noopener noreferrer">{website}</a>
+            <span className="website-link">{website}</span>
           </p>
         )}
       </div>

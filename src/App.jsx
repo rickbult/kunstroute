@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import artistsData from "./data/artists.json";
 import "./App.css";
-import { Card } from "./components/Card.jsx";
+import { Card } from "./components/Card.jsx"; 
 import { ArtistDetail } from "./components/ArtistDetail.jsx";
 
 function CardList({ cards }) {
