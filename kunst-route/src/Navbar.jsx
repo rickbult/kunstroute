@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
+import logo from "./assets/Kunstroute logo.png";
 
 
 export default function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/" className="logo">
-        <span className="logo-top">KUNST ROUTE</span>
-        <span className="logo-bottom">NOORDWEST VELUWE</span>
+        <img src={logo} alt="Kunst Route Noordwest Veluwe" className="logo-img" />
       </Link>
 
       <ul className="nav-links">

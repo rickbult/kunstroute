@@ -7,6 +7,7 @@ import Kunstenaars from "./pages/Kunstenaars"
 import InfoAgenda from "./pages/InfoAgenda"
 import Inschrijven from "./pages/Inschrijven"
 
+
 function App() {
   return (
     <>
