@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import artistsData from "./data/artists.json";  // ✅ Loads JSON data
+import artistsData from "./data/artists.json";
 import "./App.css";
-import { Card } from "./components/Card";
-import { ArtistDetail } from "./components/ArtistDetail";
+import { Card } from "./components/Card.jsx";
+import { ArtistDetail } from "./components/ArtistDetail.jsx";
 
 function CardList({ cards }) {
   const [search, setSearch] = useState("");
@@ -29,7 +29,7 @@ function CardList({ cards }) {
       <div className="card-grid">
         {filteredCards.length > 0 ? (
           filteredCards.map((card) => (
-            <Card key={card.link} {...card} />  // ✅ Uses card.link as key
+            <Card key={card.link} {...card} />
           ))
         ) : (
           <p>Geen kunstenaars gevonden.</p>
@@ -44,7 +44,6 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate JSON load (instant in dev)
     setCards(artistsData);
     setLoading(false);
   }, []);
