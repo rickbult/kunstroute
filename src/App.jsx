@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { Card } from "./components/Card";
-import { ArtistDetail } from "./components/ArtistDetail";
+import { ArtistDetail } from "./components/artistsdetail/ArtistDetail";
 
 const cards = [
   {
