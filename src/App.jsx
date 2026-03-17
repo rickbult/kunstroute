@@ -1,17 +1,11 @@
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
-import "../Index.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Navbar from "../Navbar/Navbar";
-import Footer from "../Footer/Footer";
-import CardList from "./CardList";
-import ArtistDetail from "../ArtistDetail/ArtistDetail";
-import artistsData from "./pages.json"; 
+//import Navbar from "./navbars/navbar";
+import Footer from "./footer/footer";
+import CardList from "./card/cardDetail";
+import { ArtistDetail } from "./artiestDetail";
+import artistsData from "./data/artists.json";
 
-function ArtistDetailWrapper({ artists }) {
-  const { id } = useParams();
-  const artist = artists.find(a => a.id === id);
-  return <ArtistDetail artist={artist} artists={artists} />;
-}
 
 function AppContent() {
   return (
@@ -19,7 +13,12 @@ function AppContent() {
       <Navbar />
       <Routes>
         <Route path="/" element={<CardList artists={artistsData} />} />
-        <Route path="/artist/:id" element={<ArtistDetailWrapper artists={artistsData} />} />
+        <Route path="/kaart" element={<div>Kaart pagina</div>} />
+        <Route path="/kunstwerken" element={<div>Kunstwerken pagina</div>} />
+        <Route path="/kunstenaars" element={<div>Kunstenaars pagina</div>} />
+        <Route path="/info-agenda" element={<div>Info & Agenda</div>} />
+        <Route path="/inschrijven" element={<div>Inschrijfformulier</div>} />
+        <Route path="/artist/:id" element={<ArtistDetail />} />
         <Route path="*" element={<div>404: Pagina niet gevonden</div>} />
       </Routes>
       <Footer />
