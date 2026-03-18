@@ -1,0 +1,35 @@
+{
+  "artist_id": "",
+  "participation_years": [],
+  "participation_options": ["2022_or_earlier", "2023", "2024", "2025", "never"],
+  "first_name": "",
+  "middle_name": "",
+  "last_name": "",
+  "phone": "",
+  "email": "",
+  "art_discipline": "",
+  "art_discipline_options": [
+    "Schilderijen",
+    "Beeldhouwwerken",
+    "Tekeningen",
+    "Keramisch werk",
+    "Papierobjecten",
+    "Sieraden",
+    "Metaalkunst",
+    "Textiel",
+    "Foto's / fotografie",
+    "Glas",
+    "Grafiek",
+    "Ruimtelijk werk"
+  ],
+  "social_media": {
+    "website": "",
+    "facebook": "",
+    "instagram": ""
+  },
+  "address": "",
+  "postal_code": "",
+  "city": "",
+  "read_and_downloaded": "true/false",
+  "wheelchairaccessibility": ["Goed", "Zeer goed", "Matig", "Slecht"]
+}

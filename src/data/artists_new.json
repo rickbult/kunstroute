@@ -1,0 +1,192 @@
+[
+  {
+    "artist_id": "AR001",
+    "participation_years": [2023, 2025, 2026],
+    "first_name": "Marijke",
+    "middle_name": "",
+    "last_name": "van Dijk",
+    "phone": "+31 6 23456789",
+    "email": "marijke.vandijk@example.com",
+    "art_discipline": "Schilderkunst",
+    "social_media": {
+      "website": "https://www.marijkeschildert.nl",
+      "facebook": "https://facebook.com/marijkeschildert",
+      "instagram": "https://instagram.com/marijkeschildert"
+    },
+    "address": "Dorpsstraat 12",
+    "postal_code": "8081 AB",
+    "city": "Elburg",
+    "read_and_downloaded": true
+  },
+  {
+    "artist_id": "AR002",
+    "participation_years": [2024, 2026],
+    "first_name": "Hans",
+    "middle_name": "de",
+    "last_name": "Groot",
+    "phone": "+31 6 11223344",
+    "email": "hans.degroot@example.com",
+    "art_discipline": "Beeldhouwkunst",
+    "social_media": {
+      "website": "https://www.hansdegroot.nl",
+      "facebook": "",
+      "instagram": "https://instagram.com/hansdegroot.art"
+    },
+    "address": "Molenweg 4",
+    "postal_code": "8071 BP",
+    "city": "Nunspeet",
+    "read_and_downloaded": false
+  },
+  {
+    "artist_id": "AR003",
+    "participation_years": [2025],
+    "first_name": "Sanne",
+    "middle_name": "",
+    "last_name": "Bakker",
+    "phone": "+31 6 99887766",
+    "email": "sanne.bakker@example.com",
+    "art_discipline": "Keramiek",
+    "social_media": {
+      "website": "",
+      "facebook": "https://facebook.com/sannekeramiek",
+      "instagram": "https://instagram.com/sannekeramiek"
+    },
+    "address": "Beeklaan 27",
+    "postal_code": "8072 GH",
+    "city": "Ermelo",
+    "read_and_downloaded": false
+  },
+  {
+    "artist_id": "AR004",
+    "participation_years": [2023, 2024, 2026],
+    "first_name": "Leo",
+    "middle_name": "",
+    "last_name": "Meijer",
+    "phone": "+31 6 44332211",
+    "email": "leo.meijer@example.com",
+    "art_discipline": "Fotografie",
+    "social_media": {
+      "website": "https://www.leomeijerfotografie.nl",
+      "facebook": "",
+      "instagram": "https://instagram.com/leo.meijer"
+    },
+    "address": "Veldweg 9",
+    "postal_code": "8075 KN",
+    "city": "Elspeet",
+    "read_and_downloaded": true
+  },
+  {
+    "artist_id": "AR005",
+    "participation_years": [2022, 2025],
+    "first_name": "Anja",
+    "middle_name": "van der",
+    "last_name": "Linden",
+    "phone": "+31 6 55443322",
+    "email": "anja.vanderlinden@example.com",
+    "art_discipline": "Textielkunst",
+    "social_media": {
+      "website": "https://www.anjavantextiel.nl",
+      "facebook": "https://facebook.com/anjatextiel",
+      "instagram": ""
+    },
+    "address": "Bosrand 3",
+    "postal_code": "8077 PC",
+    "city": "Hulshorst",
+    "read_and_downloaded": false
+  },
+  {
+    "artist_id": "AR006",
+    "participation_years": [2024, 2026],
+    "first_name": "Peter",
+    "middle_name": "van",
+    "last_name": "den Berg",
+    "phone": "+31 6 77665544",
+    "email": "peter.vandenberg@example.com",
+    "art_discipline": "Houtsnijwerk",
+    "social_media": {
+      "website": "",
+      "facebook": "",
+      "instagram": "https://instagram.com/petersnijwerk"
+    },
+    "address": "Zevenhuizerweg 14",
+    "postal_code": "8076 NA",
+    "city": "Vierhouten",
+    "read_and_downloaded": false
+  },
+  {
+    "artist_id": "AR007",
+    "participation_years": [2025],
+    "first_name": "Ilse",
+    "middle_name": "",
+    "last_name": "Verhoeven",
+    "phone": "+31 6 44335522",
+    "email": "ilse.verhoeven@example.com",
+    "art_discipline": "Glaskunst",
+    "social_media": {
+      "website": "https://www.ilsevanglas.nl",
+      "facebook": "",
+      "instagram": "https://instagram.com/ilsevanglas"
+    },
+    "address": "Kerkstraat 18",
+    "postal_code": "8084 BG",
+    "city": "'t Harde",
+    "read_and_downloaded": true
+  },
+  {
+    "artist_id": "AR008",
+    "participation_years": [2022, 2023],
+    "first_name": "Mark",
+    "middle_name": "",
+    "last_name": "Bosch",
+    "phone": "+31 6 99881234",
+    "email": "mark.bosch@example.com",
+    "art_discipline": "Grafisch ontwerp",
+    "social_media": {
+      "website": "https://www.markboschdesign.nl",
+      "facebook": "https://facebook.com/markboschdesign",
+      "instagram": ""
+    },
+    "address": "Heuvelweg 20",
+    "postal_code": "8085 RG",
+    "city": "Doornspijk",
+    "read_and_downloaded": false
+  },
+  {
+    "artist_id": "AR009",
+    "participation_years": [2023, 2026],
+    "first_name": "Femke",
+    "middle_name": "",
+    "last_name": "Jansen",
+    "phone": "+31 6 55447788",
+    "email": "femke.jansen@example.com",
+    "art_discipline": "Multimediakunst",
+    "social_media": {
+      "website": "https://www.femkejansenart.nl",
+      "facebook": "",
+      "instagram": "https://instagram.com/femkejansenart"
+    },
+    "address": "Waterweg 8",
+    "postal_code": "8071 CL",
+    "city": "Nunspeet",
+    "read_and_downloaded": true
+  },
+  {
+    "artist_id": "AR010",
+    "participation_years": [2024, 2025, 2026],
+    "first_name": "Willem",
+    "middle_name": "",
+    "last_name": "Scholten",
+    "phone": "+31 6 67889911",
+    "email": "willem.scholten@example.com",
+    "art_discipline": "Metaalkunst",
+    "social_media": {
+      "website": "",
+      "facebook": "",
+      "instagram": "https://instagram.com/willemmetaal"
+    },
+    "address": "Harderwijkerweg 42",
+    "postal_code": "8081 GK",
+    "city": "Elburg",
+    "read_and_downloaded": false
+  }
+]
