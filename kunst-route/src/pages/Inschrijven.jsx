@@ -1,3 +1,7 @@
 export default function Inschrijven() {
-    return <h1>Inschrijven </h1>
+  return (
+    <div className="page">
+      <h1>Inschrijven</h1>
+    </div>
+  );
 }

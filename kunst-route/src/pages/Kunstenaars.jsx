@@ -1,3 +1,7 @@
 export default function Kunstenaars() {
-    return <h1>Kunstenaars </h1>
+  return (
+    <div className="page">
+      <h1>Kunstenaars</h1>
+    </div>
+  );
 }

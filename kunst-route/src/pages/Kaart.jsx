@@ -1,3 +1,7 @@
 export default function Kaart() {
-    return <h1>Kaart </h1>
+  return (
+    <div className="page">
+      <h1>Kaart</h1>
+    </div>
+  );
 }
