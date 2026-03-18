@@ -21,5 +21,4 @@ export default function Navbar() {
       </ul>
     </nav>
   );
-}
-
+}z
