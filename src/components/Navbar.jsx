@@ -11,10 +11,10 @@ export default function Navbar() {
       </Link>
 
       <ul className="nav-links">
-        <li><Link to="/kaart" className="tekst-groen">Kaart</Link></li>
-        <li><Link to="/kunstwerken" className="tekst-roze">Kunstwerken</Link></li>
-        <li><Link to="/kunstenaars" className="tekst-geel">Kunstenaars</Link></li>
-        <li><Link to="/info-agenda" className="tekst-blauw">Info & Agenda</Link></li>
+        <li><Link to="./Map.jsx" className="tekst-groen">Kaart</Link></li>
+        <li><Link to="/src/pages/Artwork.jsx" className="tekst-roze">Kunstwerken</Link></li>
+        <li><Link to="/src/pages/Artists.jsx" className="tekst-geel">Kunstenaars</Link></li>
+        <li><Link to="/src/pages/Info-agenda.jsx" className="tekst-blauw">Info & Agenda</Link></li>
         <li>
           <Link to="/inschrijven" className="btn-inschrijven">Inschrijven</Link>
         </li>
