@@ -4,7 +4,8 @@ import "./filter.css";
 
 export const FilterBalk = ({
   bijFilterWijziging,
-  geselecteerdeFilters = {}
+  geselecteerdeFilters = {},
+  filterOpties = {}
 }) => {
   const [openKeuzemenu, setOpenKeuzemenu] = useState(null);
   const [toonExtraFilters, setToonExtraFilters] = useState(false);
@@ -173,9 +174,13 @@ export const FilterBalk = ({
     return (geselecteerdeFilters[filterSoort] || []).includes(waarde);
   };
 
-  const plaatsen = ["Elspeet", "Harderwijk", "Elburg", "Ermelo", "Putten", "Nunspeet", "'t Harde", "Uddel", "Hierden", "Nijkerk"];
-  const kunstvormen = ["Schilderkunst", "Fotografie", "Beeldhouwkunst", "Keramiek", "Glaskunst", "Textielkunst", "Digitale kunst", "Mixed Media"];
-  const rolstoelNiveaus = ["zeer goed", "goed", "matig", "slecht"];
+  const {
+    plaatsen = [],
+    kunstvormen = [],
+    rolstoelNiveaus = [],
+    openingsdagen = [],
+  } = filterOpties;
+
   const huidigeSortering = geselecteerdeFilters.sortering?.[0];
   const sorteerLabel = huidigeSortering === "Z-A" ? "Z-A" : "A-Z";
   const sorteringActief = Boolean(huidigeSortering);
@@ -247,7 +252,7 @@ export const FilterBalk = ({
         <FilterKnop
           label="Open Op"
           filterSoort="openingsdagen"
-          opties={["Zaterdag", "Zondag"]}
+          opties={openingsdagen}
         />
 
         <FilterKnop
