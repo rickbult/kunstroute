@@ -1,12 +1,12 @@
-   const filteredCards = cards.filter((card) =>
-    card.title.toLowerCase().includes(search.toLowerCase())
+   const gefilterdeKaarten = kaarten.filter((kaart) =>
+    kaart.title.toLowerCase().includes(zoekterm.toLowerCase())
   );
   
-  <div className="search-bar">
+  <div className="zoekbalk">
         <input
           type="text"
           placeholder="Zoek kunstenaar..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={zoekterm}
+          onChange={(e) => setZoekterm(e.target.value)}
         />
       </div>
