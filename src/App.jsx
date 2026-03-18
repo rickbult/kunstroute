@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import artistsData from "./data/artists.json";
 import "./App.css";
@@ -11,6 +11,40 @@ import Footer from "./components/Footer.jsx";
 function KaartenLijst({ kaarten }) {
   const [zoekterm, setZoekterm] = useState("");
   const [geselecteerdeFilters, setGeselecteerdeFilters] = useState({});
+
+  const filterOpties = useMemo(() => {
+    const uniekeOpeningsdagen = new Set();
+    const uniekePlaatsen = new Set();
+    const uniekeKunstvormen = new Set();
+    const uniekeRolstoelNiveaus = new Set();
+
+    kaarten.forEach((kaart) => {
+      const dagMatches = kaart.days?.match(/[A-Za-zÀ-ÿ]+dag/g) || [];
+      dagMatches.forEach((dag) => uniekeOpeningsdagen.add(dag));
+
+      const plaats = kaart.address?.split(",").pop()?.trim();
+      if (plaats) {
+        uniekePlaatsen.add(plaats);
+      }
+
+      if (kaart.discipline) {
+        uniekeKunstvormen.add(kaart.discipline);
+      }
+
+      if (kaart.wheelchairaccessibility) {
+        uniekeRolstoelNiveaus.add(kaart.wheelchairaccessibility);
+      }
+    });
+
+    const opNederlands = (a, b) => a.localeCompare(b, "nl");
+
+    return {
+      openingsdagen: Array.from(uniekeOpeningsdagen).sort(opNederlands),
+      plaatsen: Array.from(uniekePlaatsen).sort(opNederlands),
+      kunstvormen: Array.from(uniekeKunstvormen).sort(opNederlands),
+      rolstoelNiveaus: Array.from(uniekeRolstoelNiveaus).sort(opNederlands),
+    };
+  }, [kaarten]);
 
   let gefilterdeKaarten = kaarten.filter((kaart) => {
     const voldoetAanZoekterm = kaart.title?.toLowerCase().includes(zoekterm.toLowerCase());
@@ -69,6 +103,7 @@ function KaartenLijst({ kaarten }) {
         <FilterBalk
           geselecteerdeFilters={geselecteerdeFilters}
           bijFilterWijziging={setGeselecteerdeFilters}
+          filterOpties={filterOpties}
         />
       </div>
 
