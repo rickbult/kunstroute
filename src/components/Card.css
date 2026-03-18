@@ -91,14 +91,7 @@
   font-size: 0.8rem;
   font-weight: 500;
 }
-.wheelchairaccessibility{
-  
-}
 
-.openinghours{
-
-  
-}
 @media (max-width: 768px) {
   .card-container { margin: 0.5rem; }
   .card-header { min-height: 10rem; }
