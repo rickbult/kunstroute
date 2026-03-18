@@ -29,23 +29,8 @@ export const Card = React.memo(({
           <h2 className="card-title">{title}</h2>
           <p className="card-location">{address}</p>
           <p className="card-description">{description}</p>
-          <p><strong>♿ Rolstoel:</strong> {wheelchairaccessibility}</p>
-          <p><strong>📅 Openingstijden:</strong> {days}</p>
-
-          {phone && (
-            <p><strong>📞 Telefoon:</strong> {phone}</p>
-          )}
-          {email && (
-            <p><strong>✉️ Email:</strong> <a href={`mailto:${email}`}>{email}</a></p>
-          )}
-          {website !== "#" && (
-            <p>
-              <strong>🌐 Website:</strong>{" "}
-              <a href={website} className="website-link" target="_blank" rel="noreferrer">
-                {website}
-              </a>
-            </p>
-          )}
+          <p className="wheelchairaccessibility"><strong>Rolstoeltoegankelijk:</strong> {wheelchairaccessibility}</p>
+          <p className="openinghours"><strong>Openingstijden:</strong> {days}</p>
         </div>
       </div>
     </Link>
