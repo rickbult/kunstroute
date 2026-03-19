@@ -2,6 +2,18 @@
   "artist_id": "",
   "participation_years": [],
   "participation_options": ["2022_or_earlier", "2023", "2024", "2025", "never"],
+  "preferred_day": "",
+  "preferred_day_options": ["za", "zo"],
+  "paid": false,
+  "paid_options": [true, false],
+  "profile_picture": {
+    "imgSrc": "",
+    "imgAlt": ""
+  },
+  "artwork_picture": {
+    "imgSrc": "",
+    "imgAlt": ""
+  },
   "first_name": "",
   "middle_name": "",
   "last_name": "",
@@ -32,5 +44,5 @@
   "city": "",
   "read_and_downloaded": false,
   "wheelchairaccessibility": ["Goed", "Zeer goed", "Matig", "Slecht"],
-  "required": ["first_name", "last_name", "email", "art_discipline", "read_and_downloaded"]
+  "required": ["first_name", "last_name", "email", "art_discipline", "read_and_downloaded", "profile_picture.imgSrc", "artwork_picture.imgSrc"]
 }
