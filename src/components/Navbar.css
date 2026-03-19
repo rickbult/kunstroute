@@ -10,11 +10,12 @@ body {
 
 
 .navbar {
-  background-color: #e3e3e3;
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.6rem 2rem;
+  border-bottom: 2px solid #2301ba;
 }
 
 .logo {
@@ -51,6 +52,12 @@ body {
   color: #000000;
   padding: 2rem;
   min-height: calc(100vh - 60px);
+}
+
+.nav-links a {
+  font-size : 1.1rem;
+  font-weight: 500;
+  
 }
 
 .nav-links .tekst-blauw {
