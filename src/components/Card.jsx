@@ -19,16 +19,16 @@ export const Card = React.memo(({
     >
       <div className="card-container">
         <div className="card-header">
-          <img src={imgSrc} alt={imgAlt} />
+          <img src={imgSrc} alt={imgAlt} loading="lazy" height="200" />
         </div>
-
+        
         <div className="card-body">
           <h2 className="card-title">{title}</h2>
           <p className="card-location">{address}</p>
           <p className="card-description">{description}</p>
-          <p className="wheelchairaccessibility">
-            <strong>Rolstoeltoegankelijk:</strong> {wheelchairaccessibility}</p>
-          <p className="openinghours"><strong>Openingstijden:</strong> {days}</p>
+          <p  className="wheelchairaccessibility"> ♿{wheelchairaccessibility}</p>
+          <span className="tag tag-days">{days}</span>
+          
         </div>
       </div>
     </Link>
