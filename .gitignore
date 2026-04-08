@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 mijn-react-app/node_modules/
+.env
 
 # Build output
 dist/
