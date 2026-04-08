@@ -1,0 +1,397 @@
+.inschrijven-wrapper {
+  background-color: #faf9f6;
+  min-height: 100vh;
+  padding: 2rem 4rem 6rem;
+}
+
+
+.inschrijven-hero {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  margin-top: 1.5rem;
+}
+
+.inschrijven-image-upload {
+  flex: 0 0 45%;
+  max-width: 500px;
+  min-height: 320px;
+  border-radius: 0.75rem;
+  background-color: #464951;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+
+.inschrijven-image-upload:hover {
+  opacity: 0.85;
+}
+
+.inschrijven-image-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.upload-placeholder {
+  color: #bbb;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.inschrijven-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.inschrijven-name-input {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  border: none;
+  border-bottom: 2px solid #ddd;
+  background: transparent;
+  outline: none;
+  padding: 0.1rem 0;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.inschrijven-name-input::placeholder {
+  color: #bbb;
+}
+
+.inschrijven-name-input:focus {
+  border-bottom-color: #888;
+}
+
+.inschrijven-location-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.location-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.inschrijven-location-input {
+  font-size: 0.9rem;
+  color: #555;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  background: transparent;
+  outline: none;
+  padding: 0.15rem 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.inschrijven-location-input:focus {
+  border-bottom-color: #888;
+}
+
+.inschrijven-days-input {
+  font-size: 0.9rem;
+  color: #27ae60;
+  border: none;
+  border-bottom: 1px solid #c3e6cb;
+  background: transparent;
+  outline: none;
+  padding: 0.15rem 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.inschrijven-days-input::placeholder {
+  color: #2ecc71;
+  opacity: 0.7;
+}
+
+.inschrijven-days-input:focus {
+  border-bottom-color: #2ecc71;
+}
+
+.bio-label {
+  font-size: 0.85rem;
+  color: #888;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.inschrijven-bio-input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 0.4rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+  color: #444;
+  background: #fff;
+  outline: none;
+  resize: vertical;
+  margin-bottom: 1.25rem;
+  font-family: inherit;
+}
+
+.inschrijven-bio-input:focus {
+  border-color: #aaa;
+}
+
+.inschrijven-contact-card {
+  display: flex;
+  gap: 3rem;
+  background-color: #f7f7f7;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.75rem;
+  border: 1px solid #eee;
+}
+
+.contact-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-col h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+}
+
+.contact-col input {
+  border: none;
+  border-bottom: 1px solid #ddd;
+  background: transparent;
+  font-size: 0.85rem;
+  color: #555;
+  padding: 0.25rem 0;
+  outline: none;
+  width: 100%;
+}
+
+.contact-col input:focus {
+  border-bottom-color: #888;
+}
+
+.contact-col input::placeholder {
+  color: #bbb;
+}
+
+.contact-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.contact-input-row input {
+  flex: 1;
+}
+
+.map-link {
+  font-size: 0.8rem;
+  color: #333;
+  text-decoration: underline;
+  margin-top: 0.25rem;
+  display: inline-block;
+}
+
+.inschrijven-works {
+  margin-top: 2rem;
+}
+
+.works-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.works-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.add-artwork-btn {
+  background-color: #1a6fe8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-artwork-btn:hover {
+  background-color: #1558c0;
+}
+
+.inschrijven-works-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.inschrijven-work-card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #eee;
+}
+
+.work-image-upload {
+  background-color: #464951;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+
+.work-image-upload:hover {
+  opacity: 0.85;
+}
+
+.work-image-upload img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.work-fields {
+  padding: 0.6rem 0.85rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.work-field-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  border: none;
+  border-bottom: 1px solid #eee;
+  background: transparent;
+  outline: none;
+  padding: 0.1rem 0;
+  width: 100%;
+}
+
+.work-field-year,
+.work-field-bio {
+  font-size: 0.78rem;
+  color: #888;
+  border: none;
+  border-bottom: 1px solid #eee;
+  background: transparent;
+  outline: none;
+  padding: 0.1rem 0;
+  width: 100%;
+}
+
+.work-field-name::placeholder,
+.work-field-year::placeholder,
+.work-field-bio::placeholder {
+  color: #ccc;
+}
+
+.work-field-name:focus,
+.work-field-year:focus,
+.work-field-bio:focus {
+  border-bottom-color: #aaa;
+}
+
+.save-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  position: sticky;
+  bottom: 1.5rem;
+}
+
+.save-btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(39, 174, 96, 0.35);
+  transition: background-color 0.2s;
+}
+
+.save-btn:hover {
+  background-color: #219150;
+}
+
+.save-feedback {
+  font-size: 0.85rem;
+  color: #27ae60;
+  font-weight: 500;
+}
+
+.back-link {
+  display: inline-block;
+  color: #555;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.back-link:hover {
+  color: #222;
+}
+
+@media (max-width: 900px) {
+  .inschrijven-wrapper {
+    padding: 1.5rem 1.5rem 6rem;
+  }
+
+  .inschrijven-hero {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .inschrijven-image-upload {
+    flex: none;
+    max-width: 100%;
+    min-height: 220px;
+  }
+
+  .inschrijven-contact-card {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .inschrijven-works-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .inschrijven-works-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
