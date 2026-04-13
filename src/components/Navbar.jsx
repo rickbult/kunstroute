@@ -61,7 +61,7 @@ export default function Navbar() {
 
         <li>
           <NavLink
-            to="/signup"
+            to="/login"
             className={({ isActive }) =>
               isActive ? "btn-inschrijven active-link" : "btn-inschrijven"
             }
