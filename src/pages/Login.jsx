@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { initUsers, login, getCurrentUser } from "../utils/auth.js";
 import kunstrouteLogo from "../assets/kunstroutelogo.png";
-import './Signup.css';
-
+import './Login.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -13,27 +12,36 @@ export default function Login() {
 
   useEffect(() => {
     initUsers();
-    if (getCurrentUser()) navigate('/profiel');
+    if (getCurrentUser()) navigate('/profile');
   }, [navigate]);
 
   function handleInloggen(e) {
     e.preventDefault();
     setFout('');
     const result = login(email.trim(), wachtwoord);
+
     if (!result.success) {
       setFout(result.error);
       return;
     }
-    navigate('/profiel');
+
+    navigate('/profile');
   }
 
   return (
     <div className="login-bg">
       <main className="login-main">
         <div className="login-card">
-          <img src={kunstrouteLogo} alt="Kunstroute Noordwest Veluwe" className="login-logo" />
+          <img
+            src={kunstrouteLogo}
+            alt="Kunstroute Noordwest Veluwe"
+            className="login-logo"
+          />
+
           <h1 className="login-heading">Inloggen</h1>
-          <p className="login-subtitle">met je Kunstroute account om door te gaan</p>
+          <p className="login-subtitle">
+            met je Kunstroute account om door te gaan
+          </p>
 
           <form onSubmit={handleInloggen} noValidate>
             <div className="floating-group">
@@ -43,11 +51,16 @@ export default function Login() {
                 className={`floating-input${fout ? ' has-error' : ''}`}
                 placeholder=" "
                 value={email}
-                onChange={e => { setEmail(e.target.value); setFout(''); }}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setFout('');
+                }}
                 autoComplete="email"
                 autoFocus
               />
-              <label htmlFor="login-email" className="floating-label">E-mailadres</label>
+              <label htmlFor="login-email" className="floating-label">
+                E-mailadres
+              </label>
             </div>
 
             <div className="floating-group">
@@ -57,10 +70,15 @@ export default function Login() {
                 className={`floating-input${fout ? ' has-error' : ''}`}
                 placeholder=" "
                 value={wachtwoord}
-                onChange={e => { setWachtwoord(e.target.value); setFout(''); }}
+                onChange={(e) => {
+                  setWachtwoord(e.target.value);
+                  setFout('');
+                }}
                 autoComplete="current-password"
               />
-              <label htmlFor="login-wachtwoord" className="floating-label">Wachtwoord</label>
+              <label htmlFor="login-wachtwoord" className="floating-label">
+                Wachtwoord
+              </label>
             </div>
 
             {fout && <p className="login-fout">{fout}</p>}
@@ -69,11 +87,14 @@ export default function Login() {
               <button
                 type="button"
                 className="login-btn-sec"
-                onClick={() => navigate('/registreren')}
+                onClick={() => navigate('/register')}
               >
                 Account maken
               </button>
-              <button type="submit" className="login-btn-prim">Inloggen</button>
+
+              <button type="submit" className="login-btn-prim">
+                Inloggen
+              </button>
             </div>
           </form>
         </div>

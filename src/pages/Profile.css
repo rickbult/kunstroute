@@ -1,0 +1,153 @@
+.profiel-page {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.profiel-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #2301ba;
+  flex-wrap: wrap;
+}
+
+.profiel-avatar {
+  width: 72px;
+  height: 72px;
+  background-color: #2301ba;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profiel-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profiel-naam {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2301ba;
+}
+
+.profiel-email {
+  color: #555;
+  font-size: 0.95rem;
+  margin-top: 0.15rem;
+}
+
+.profiel-kunstrichting {
+  color: #e07b00;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 0.15rem;
+}
+
+.profiel-uitloggen {
+  background: transparent;
+  color: #e01b68;
+  border: 1.5px solid #e01b68;
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.profiel-uitloggen:hover {
+  background: #fff0f5;
+}
+
+.profiel-melding {
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.profiel-succes {
+  background: #e8f5e9;
+  border: 1px solid #4caf50;
+  color: #1b5e20;
+}
+
+.profiel-fout {
+  background: #fde8e8;
+  border: 1px solid #f28b82;
+  color: #c62828;
+}
+
+.profiel-sectie {
+  margin-bottom: 2rem;
+}
+
+.profiel-sectie h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2301ba;
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #dde;
+}
+
+.profiel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem 2rem;
+}
+
+.profiel-grid-wide {
+  grid-template-columns: 1fr 1fr;
+}
+
+.profiel-grid-full {
+  grid-column: 1 / -1;
+}
+
+.profiel-grid > div,
+.profiel-grid-full {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.profiel-key {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.profiel-bewerk-btn {
+  background-color: #2301ba;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.65rem 1.8rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.profiel-bewerk-btn:hover {
+  background-color: #1a0090;
+}
+
+.profiel-form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
