@@ -6,6 +6,8 @@ import { Card } from "./components/Card.jsx";
 import { ArtistDetail } from "./components/ArtistDetail.jsx";
 import Navbar from "./components/Navbar.jsx";  
 import Footer from "./components/Footer.jsx";
+import Signup from './pages/Signup';
+import Login from './pages/Login';
 
 function CardList({ cards }) {
   const [search, setSearch] = useState("");
@@ -56,12 +58,20 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar />        
+      <Navbar />
       <Routes>
         <Route path="/" element={<CardList cards={cards} />} />
+        <Route path="/inschrijven" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/kaart" element={<div>🗺️ Kaart Pagina</div>} />
+        <Route path="/kunstwerken" element={<div>🎨 Kunstwerken</div>} />
+        <Route path="/kunstenaars" element={<CardList cards={cards} />} />
+        <Route path="/info-agenda" element={<div>📅 Info & Agenda</div>} />
         <Route path="/artist/:id" element={<ArtistDetail artists={cards} />} />
+        <Route path="*" element={<div>Pagina niet gevonden</div>} />
       </Routes>
-      <Footer />        
+      <Footer />
     </BrowserRouter>
   );
 }
