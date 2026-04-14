@@ -12,3 +12,11 @@ Remove-Item -Force package-lock.json
 npm cache verify
 npm install
 npm run dev
+
+frontend starten \kunstroute\
+
+npm run dev
+
+backend starten 
+cd \kunstroute\server
+node server.js
