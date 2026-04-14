@@ -58,6 +58,17 @@ export default function Navbar() {
             Info & Agenda
           </NavLink>
         </li>
+
+        <li>
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              isActive ? "btn-inschrijven active-link" : "btn-inschrijven"
+            }
+          >
+            Inloggen
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );

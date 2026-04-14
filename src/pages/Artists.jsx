@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import artistsData from "../data/artists.json";
 import { Card } from "../components/Card.jsx";
 
@@ -27,7 +28,13 @@ function Artists() {
 
       <div className="card-grid">
         {filteredCards.map((card) => (
-          <Card key={card.link} {...card} />
+          <Link
+            key={card.link}
+            to={`/artist/${card.link}`}
+            className="card-link"
+          >
+            <Card {...card} />
+          </Link>
         ))}
       </div>
     </div>

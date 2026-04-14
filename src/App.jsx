@@ -1,13 +1,16 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import artistsData from "./data/artists.json";
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Artists from "./pages/Artists.jsx";
 import Artwork from "./pages/Artwork.jsx";
 import Map from "./pages/Map.jsx";
-import ArtistDetail from "./components/ArtistDetail.jsx";
+import { ArtistDetail } from "./components/ArtistDetail.jsx";
 import InfoAgenda from "./pages/Info-agenda.jsx";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 
 function App() {
   return (
@@ -19,7 +22,12 @@ function App() {
         <Route path="/artwork" element={<Artwork />} />
         <Route path="/map" element={<Map />} />
         <Route path="/info-agenda" element={<InfoAgenda />} />
-        <Route path="/artist/:id" element={<ArtistDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/artist/:id"
+          element={<ArtistDetail artists={artistsData} />}
+        />
         <Route path="*" element={<Artists />} />
       </Routes>
       <Footer />

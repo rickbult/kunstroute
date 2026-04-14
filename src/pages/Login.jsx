@@ -1,31 +1,60 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { initUsers, login, getCurrentUser } from "../utils/auth.js";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import kunstrouteLogo from "../assets/kunstroutelogo.png";
-import './Login.css';
+import "./Login.css";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [wachtwoord, setWachtwoord] = useState('');
-  const [fout, setFout] = useState('');
+  const [email, setEmail] = useState("");
+  const [wachtwoord, setWachtwoord] = useState("");
+  const [fout, setFout] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    initUsers();
-    if (getCurrentUser()) navigate('/profile');
+    const token = localStorage.getItem("token");
+    if (token) navigate("/profile");
   }, [navigate]);
 
-  function handleInloggen(e) {
+  async function handleInloggen(e) {
     e.preventDefault();
-    setFout('');
-    const result = login(email.trim(), wachtwoord);
+    setFout("");
 
-    if (!result.success) {
-      setFout(result.error);
+    if (!email.trim() || !wachtwoord.trim()) {
+      setFout("Vul je e-mailadres en wachtwoord in.");
       return;
     }
 
-    navigate('/profile');
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: wachtwoord,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setFout(data.error || "Inloggen mislukt.");
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/profile");
+    } catch (err) {
+      console.error(err);
+      setFout("Serverfout, probeer later opnieuw.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -48,12 +77,12 @@ export default function Login() {
               <input
                 id="login-email"
                 type="email"
-                className={`floating-input${fout ? ' has-error' : ''}`}
+                className={`floating-input${fout ? " has-error" : ""}`}
                 placeholder=" "
                 value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                  setFout('');
+                  setFout("");
                 }}
                 autoComplete="email"
                 autoFocus
@@ -67,12 +96,12 @@ export default function Login() {
               <input
                 id="login-wachtwoord"
                 type="password"
-                className={`floating-input${fout ? ' has-error' : ''}`}
+                className={`floating-input${fout ? " has-error" : ""}`}
                 placeholder=" "
                 value={wachtwoord}
                 onChange={(e) => {
                   setWachtwoord(e.target.value);
-                  setFout('');
+                  setFout("");
                 }}
                 autoComplete="current-password"
               />
@@ -87,13 +116,17 @@ export default function Login() {
               <button
                 type="button"
                 className="login-btn-sec"
-                onClick={() => navigate('/register')}
+                onClick={() => navigate("/register")}
               >
                 Account maken
               </button>
 
-              <button type="submit" className="login-btn-prim">
-                Inloggen
+              <button
+                type="submit"
+                className="login-btn-prim"
+                disabled={loading}
+              >
+                {loading ? "Bezig..." : "Inloggen"}
               </button>
             </div>
           </form>

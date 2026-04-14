@@ -9,6 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.13.1"
@@ -18,5 +23,18 @@
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^6.0.1",
     "vite": "^8.0.8"
-  }
+  },
+  "description": "Cash legen:\r cd ..                    # ← NAAR /kunstroute/\r npm cache clean --force\r rm -rf node_modules package-lock.json\r npm install\r npm run dev",
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rickbult/kunstroute.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rickbult/kunstroute/issues"
+  },
+  "homepage": "https://github.com/rickbult/kunstroute#readme"
 }
