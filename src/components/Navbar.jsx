@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
-import logo from "/src/assets/kunstroutelogo.png";
+import logo from "../assets/kunstroutelogo.png";  // Fix pad
 
 export default function Navbar() {
   return (
@@ -16,10 +16,9 @@ export default function Navbar() {
         <li><Link to="/kunstenaars" className="tekst-geel">Kunstenaars</Link></li>
         <li><Link to="/info-agenda" className="tekst-blauw">Info & Agenda</Link></li>
         <li>
-          <Link to="/inschrijven" className="btn-inschrijven">Inschrijven</Link>
+          <Link to="/signup" className="btn-inschrijven">Inschrijven</Link>  
         </li>
       </ul>
     </nav>
   );
 }
-

@@ -2,49 +2,40 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import '../pages/signup.css';  // Importeer je CSS
+import '../pages/login.css';  // Je login.css
 
-const Signup = () => {
+const Login = () => {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSignup = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', {
+      const res = await axios.post('http://localhost:5000/api/auth/login', {
         username,
-        email,
         password
       });
-      setMessage('✅ Account aangemaakt! Ga naar login.');
+      localStorage.setItem('token', res.data.token);  // Sla token op
+      setMessage('✅ Login succes! Token opgeslagen.');
+      console.log('TEST TOKEN:', res.data.token);
       // Reset form
       setUsername('');
-      setEmail('');
       setPassword('');
-      // Redirect optioneel: window.location.href = '/login';
     } catch (err) {
       setMessage('❌ Fout: ' + (err.response?.data?.error || 'Probeer opnieuw'));
     }
   };
 
   return (
-    <div className="signup-container">
-      <h2>🖼️ Kunstroute Signup</h2>
-      <form onSubmit={handleSignup}>
+    <div className="login-container">
+      <h2>🔐 Kunstroute Login</h2>
+      <form onSubmit={handleLogin}>
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
@@ -54,17 +45,17 @@ const Signup = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Signup</button>
+        <button type="submit">Inloggen</button>
       </form>
       {message && <p className={message.startsWith('✅') ? 'success' : 'error'}>{message}</p>}
       
-      <div className="login-link">
-        <Link to="/login">👉 Heb je al een account? Login hier</Link>
+      <div className="signup-link">
+        <Link to="/signup">👉 Nog geen account? Registreer hier</Link>
       </div>
       
-      <p>Test met unieke data (backend MongoDB).</p>
+      <p>Test met backend credentials (MongoDB).</p>
     </div>
   );
 };
 
-export default Signup;
+export default Login;
