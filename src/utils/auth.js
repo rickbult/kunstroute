@@ -9,3 +9,7 @@ export function login() {
 export function getCurrentUser() {
   return null;
 }
+
+export function register() {
+  return null;
+}
