@@ -215,3 +215,22 @@
     width: 100%;
   }
 }
+.reg-file-input {
+  padding: 10px;
+}
+
+.reg-file-input::file-selector-button {
+  margin-right: 10px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #0f766e;
+  color: white;
+  cursor: pointer;
+}
+
+.reg-file-help {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #666;
+}

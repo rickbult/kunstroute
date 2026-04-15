@@ -20,6 +20,8 @@ const LEEG = {
   postcode: "",
   woonplaats: "",
   voorwaarden: false,
+  profielfoto: null,
+  kunstFoto: null,
 };
 
 export default function Registreren() {
@@ -29,10 +31,18 @@ export default function Registreren() {
   const [loading, setLoading] = useState(false);
 
   function handleChange(e) {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
+
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : type === "file"
+          ? files && files[0]
+            ? files[0]
+            : null
+          : value,
     }));
   }
 
@@ -53,7 +63,7 @@ export default function Registreren() {
     ];
 
     for (const veld of verplicht) {
-      if (!form[veld].trim()) {
+      if (!String(form[veld] || "").trim()) {
         setFout("Vul alle verplichte velden in (*).");
         return;
       }
@@ -74,32 +84,44 @@ export default function Registreren() {
       return;
     }
 
-    const payload = {
-      voornaam: form.voornaam,
-      achternaam: form.achternaam,
-      email: form.email,
-      password: form.wachtwoord,
-      telefoon: form.telefoon,
-      kunstrichting: form.kunstrichting,
-      bio: form.bio,
-      website: form.website,
-      facebook: form.facebook,
-      instagram: form.instagram,
-      adres: form.adres,
-      postcode: form.postcode,
-      woonplaats: form.woonplaats,
-    };
+    const formData = new FormData();
+    formData.append("voornaam", form.voornaam);
+    formData.append("achternaam", form.achternaam);
+    formData.append("email", form.email);
+    formData.append("password", form.wachtwoord);
+    formData.append("telefoon", form.telefoon);
+    formData.append("kunstrichting", form.kunstrichting);
+    formData.append("bio", form.bio || "");
+    formData.append("website", form.website || "");
+    formData.append("facebook", form.facebook || "");
+    formData.append("instagram", form.instagram || "");
+    formData.append("adres", form.adres);
+    formData.append("postcode", form.postcode);
+    formData.append("woonplaats", form.woonplaats);
 
-    setLoading(true);
-    const result = await register(payload);
-    setLoading(false);
-
-    if (!result.success) {
-      setFout(result.error);
-      return;
+    if (form.profielfoto) {
+      formData.append("profielfoto", form.profielfoto);
     }
 
-    navigate("/profile");
+    if (form.kunstFoto) {
+      formData.append("kunstFoto", form.kunstFoto);
+    }
+
+    try {
+      setLoading(true);
+      const result = await register(formData);
+
+      if (!result.success) {
+        setFout(result.error || "Registreren mislukt.");
+        return;
+      }
+
+      navigate("/profile");
+    } catch (error) {
+      setFout("Er ging iets mis bij het registreren.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -121,8 +143,9 @@ export default function Registreren() {
 
             <div className="reg-row">
               <div className="reg-field">
-                <label className="reg-label">Voornaam *</label>
+                <label className="reg-label" htmlFor="voornaam">Voornaam *</label>
                 <input
+                  id="voornaam"
                   className="reg-input"
                   name="voornaam"
                   value={form.voornaam}
@@ -131,8 +154,9 @@ export default function Registreren() {
               </div>
 
               <div className="reg-field">
-                <label className="reg-label">Achternaam *</label>
+                <label className="reg-label" htmlFor="achternaam">Achternaam *</label>
                 <input
+                  id="achternaam"
                   className="reg-input"
                   name="achternaam"
                   value={form.achternaam}
@@ -142,8 +166,9 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">E-mailadres *</label>
+              <label className="reg-label" htmlFor="email">E-mailadres *</label>
               <input
+                id="email"
                 className="reg-input"
                 type="email"
                 name="email"
@@ -154,8 +179,11 @@ export default function Registreren() {
 
             <div className="reg-row">
               <div className="reg-field">
-                <label className="reg-label">Wachtwoord * (min. 8 tekens)</label>
+                <label className="reg-label" htmlFor="wachtwoord">
+                  Wachtwoord * (min. 8 tekens)
+                </label>
                 <input
+                  id="wachtwoord"
                   className="reg-input"
                   type="password"
                   name="wachtwoord"
@@ -165,8 +193,11 @@ export default function Registreren() {
               </div>
 
               <div className="reg-field">
-                <label className="reg-label">Bevestig wachtwoord *</label>
+                <label className="reg-label" htmlFor="wachtwoordBevestig">
+                  Bevestig wachtwoord *
+                </label>
                 <input
+                  id="wachtwoordBevestig"
                   className="reg-input"
                   type="password"
                   name="wachtwoordBevestig"
@@ -177,8 +208,9 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Telefoonnummer *</label>
+              <label className="reg-label" htmlFor="telefoon">Telefoonnummer *</label>
               <input
+                id="telefoon"
                 className="reg-input"
                 type="tel"
                 name="telefoon"
@@ -192,8 +224,11 @@ export default function Registreren() {
             <h2 className="reg-section-title">Kunstenaars informatie</h2>
 
             <div className="reg-field">
-              <label className="reg-label">Kunstrichting / discipline *</label>
+              <label className="reg-label" htmlFor="kunstrichting">
+                Kunstrichting / discipline *
+              </label>
               <input
+                id="kunstrichting"
                 className="reg-input"
                 name="kunstrichting"
                 value={form.kunstrichting}
@@ -203,8 +238,9 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Biografie / beschrijving</label>
+              <label className="reg-label" htmlFor="bio">Biografie / beschrijving</label>
               <textarea
+                id="bio"
                 className="reg-input reg-textarea"
                 name="bio"
                 value={form.bio}
@@ -215,8 +251,39 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Website</label>
+              <label className="reg-label" htmlFor="profielfoto">Profielfoto</label>
               <input
+                id="profielfoto"
+                className="reg-input"
+                type="file"
+                name="profielfoto"
+                accept="image/*"
+                onChange={handleChange}
+              />
+              <p className="reg-info">
+                {form.profielfoto ? form.profielfoto.name : "Geen bestand gekozen"}
+              </p>
+            </div>
+
+            <div className="reg-field">
+              <label className="reg-label" htmlFor="kunstFoto">Foto van kunstwerk</label>
+              <input
+                id="kunstFoto"
+                className="reg-input"
+                type="file"
+                name="kunstFoto"
+                accept="image/*"
+                onChange={handleChange}
+              />
+              <p className="reg-info">
+                {form.kunstFoto ? form.kunstFoto.name : "Geen bestand gekozen"}
+              </p>
+            </div>
+
+            <div className="reg-field">
+              <label className="reg-label" htmlFor="website">Website</label>
+              <input
+                id="website"
                 className="reg-input"
                 name="website"
                 value={form.website}
@@ -226,8 +293,9 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Facebook</label>
+              <label className="reg-label" htmlFor="facebook">Facebook</label>
               <input
+                id="facebook"
                 className="reg-input"
                 name="facebook"
                 value={form.facebook}
@@ -236,8 +304,9 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Instagram</label>
+              <label className="reg-label" htmlFor="instagram">Instagram</label>
               <input
+                id="instagram"
                 className="reg-input"
                 name="instagram"
                 value={form.instagram}
@@ -253,10 +322,11 @@ export default function Registreren() {
             </p>
 
             <div className="reg-field">
-              <label className="reg-label">
+              <label className="reg-label" htmlFor="adres">
                 Adres met huisnummer en (eventueel) toevoeging: *
               </label>
               <input
+                id="adres"
                 className="reg-input"
                 name="adres"
                 value={form.adres}
@@ -265,8 +335,9 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Postcode *</label>
+              <label className="reg-label" htmlFor="postcode">Postcode *</label>
               <input
+                id="postcode"
                 className="reg-input"
                 name="postcode"
                 value={form.postcode}
@@ -275,8 +346,9 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Woonplaats *</label>
+              <label className="reg-label" htmlFor="woonplaats">Woonplaats *</label>
               <input
+                id="woonplaats"
                 className="reg-input"
                 name="woonplaats"
                 value={form.woonplaats}

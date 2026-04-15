@@ -151,3 +151,19 @@
   margin-top: 1.5rem;
   flex-wrap: wrap;
 }
+.profiel-avatar-image {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+}
+
+.profiel-foto {
+  display: block;
+  margin-top: 8px;
+  width: 220px;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}

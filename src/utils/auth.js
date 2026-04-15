@@ -1,13 +1,10 @@
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = "http://localhost:5000/api/auth";
 
 export async function register(formData) {
   try {
     const response = await fetch(`${API_URL}/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
+      method: "POST",
+      body: formData,
     });
 
     const data = await response.json();
@@ -15,21 +12,21 @@ export async function register(formData) {
     if (!response.ok) {
       return {
         success: false,
-        error: data.message || 'Registreren mislukt.'
+        error: data.message || "Registreren mislukt.",
       };
     }
 
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('currentUser', JSON.stringify(data.user));
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("currentUser", JSON.stringify(data.user));
 
     return {
       success: true,
-      user: data.user
+      user: data.user,
     };
   } catch (error) {
     return {
       success: false,
-      error: 'Kan geen verbinding maken met de server.'
+      error: "Kan geen verbinding maken met de server.",
     };
   }
 }
@@ -37,11 +34,11 @@ export async function register(formData) {
 export async function login(email, password) {
   try {
     const response = await fetch(`${API_URL}/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await response.json();
@@ -49,34 +46,34 @@ export async function login(email, password) {
     if (!response.ok) {
       return {
         success: false,
-        error: data.message || 'Inloggen mislukt.'
+        error: data.message || "Inloggen mislukt.",
       };
     }
 
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('currentUser', JSON.stringify(data.user));
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("currentUser", JSON.stringify(data.user));
 
     return {
       success: true,
-      user: data.user
+      user: data.user,
     };
   } catch (error) {
     return {
       success: false,
-      error: 'Kan geen verbinding maken met de server.'
+      error: "Kan geen verbinding maken met de server.",
     };
   }
 }
 
 export async function getCurrentUser() {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (!token) return null;
 
   try {
     const response = await fetch(`${API_URL}/me`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!response.ok) {
@@ -85,32 +82,31 @@ export async function getCurrentUser() {
     }
 
     const user = await response.json();
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem("currentUser", JSON.stringify(user));
     return user;
   } catch (error) {
-    const savedUser = localStorage.getItem('currentUser');
+    const savedUser = localStorage.getItem("currentUser");
     return savedUser ? JSON.parse(savedUser) : null;
   }
 }
 
 export async function updateCurrentUser(formData) {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   if (!token) {
     return {
       success: false,
-      error: 'Niet ingelogd.'
+      error: "Niet ingelogd.",
     };
   }
 
   try {
     const response = await fetch(`${API_URL}/me`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(formData)
+      body: formData,
     });
 
     const data = await response.json();
@@ -118,25 +114,25 @@ export async function updateCurrentUser(formData) {
     if (!response.ok) {
       return {
         success: false,
-        error: data.message || 'Opslaan mislukt.'
+        error: data.message || "Opslaan mislukt.",
       };
     }
 
-    localStorage.setItem('currentUser', JSON.stringify(data.user));
+    localStorage.setItem("currentUser", JSON.stringify(data.user));
 
     return {
       success: true,
-      user: data.user
+      user: data.user,
     };
   } catch (error) {
     return {
       success: false,
-      error: 'Kan profiel niet opslaan.'
+      error: "Kan profiel niet opslaan.",
     };
   }
 }
 
 export function logout() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('currentUser');
+  localStorage.removeItem("token");
+  localStorage.removeItem("currentUser");
 }
