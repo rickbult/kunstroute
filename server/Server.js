@@ -21,23 +21,17 @@ const userSchema = new mongoose.Schema(
   {
     voornaam: { type: String, required: true, trim: true },
     achternaam: { type: String, required: true, trim: true },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      lowercase: true
-    },
+    email: { type: String, required: true, unique: true, trim: true, lowercase: true },
     password: { type: String, required: true },
-    telefoon: { type: String, required: true, trim: true },
-    kunstrichting: { type: String, required: true, trim: true },
-    website: { type: String, default: '', trim: true },
-    facebook: { type: String, default: '', trim: true },
-    instagram: { type: String, default: '', trim: true },
-    bio: { type: String, default: '', trim: true },
-    adres: { type: String, required: true, trim: true },
-    postcode: { type: String, required: true, trim: true },
-    woonplaats: { type: String, required: true, trim: true }
+    telefoon: { type: String, default: '' },
+    kunstrichting: { type: String, default: '' },
+    website: { type: String, default: '' },
+    facebook: { type: String, default: '' },
+    instagram: { type: String, default: '' },
+    bio: { type: String, default: '' },
+    adres: { type: String, default: '' },
+    postcode: { type: String, default: '' },
+    woonplaats: { type: String, default: '' }
   },
   { timestamps: true }
 );
@@ -45,10 +39,6 @@ const userSchema = new mongoose.Schema(
 const User = mongoose.model('User', userSchema);
 
 function createToken(user) {
-  if (!process.env.JWT_SECRET) {
-    throw new Error('JWT_SECRET ontbreekt in .env');
-  }
-
   return jwt.sign(
     { userId: user._id },
     process.env.JWT_SECRET,
@@ -80,7 +70,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/auth/register', async (req, res) => {
   try {
-    let {
+    const {
       voornaam,
       achternaam,
       email,
@@ -96,47 +86,15 @@ app.post('/api/auth/register', async (req, res) => {
       woonplaats
     } = req.body;
 
-    voornaam = voornaam?.trim();
-    achternaam = achternaam?.trim();
-    email = email?.trim().toLowerCase();
-    password = password?.trim();
-    telefoon = telefoon?.trim();
-    kunstrichting = kunstrichting?.trim();
-    website = website?.trim() || '';
-    facebook = facebook?.trim() || '';
-    instagram = instagram?.trim() || '';
-    bio = bio?.trim() || '';
-    adres = adres?.trim();
-    postcode = postcode?.trim();
-    woonplaats = woonplaats?.trim();
-
-    if (
-      !voornaam ||
-      !achternaam ||
-      !email ||
-      !password ||
-      !telefoon ||
-      !kunstrichting ||
-      !adres ||
-      !postcode ||
-      !woonplaats
-    ) {
+    if (!voornaam || !achternaam || !email || !password || !telefoon) {
       return res.status(400).json({
-        message: 'Vul alle verplichte velden in.'
+        message: 'Voornaam, achternaam, email, wachtwoord en telefoon zijn verplicht.'
       });
     }
 
-    if (password.length < 8) {
-      return res.status(400).json({
-        message: 'Wachtwoord moet minimaal 8 tekens bevatten.'
-      });
-    }
-
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
-      return res.status(400).json({
-        message: 'Dit e-mailadres is al geregistreerd.'
-      });
+      return res.status(400).json({ message: 'Email bestaat al.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -144,7 +102,7 @@ app.post('/api/auth/register', async (req, res) => {
     const user = await User.create({
       voornaam,
       achternaam,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
       telefoon,
       kunstrichting,
@@ -159,7 +117,7 @@ app.post('/api/auth/register', async (req, res) => {
 
     const token = createToken(user);
 
-    return res.status(201).json({
+    res.status(201).json({
       token,
       user: {
         id: user._id,
@@ -178,38 +136,15 @@ app.post('/api/auth/register', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('REGISTER ERROR:', error);
-
-    if (error.code === 11000) {
-      return res.status(400).json({
-        message: 'Dit e-mailadres is al geregistreerd.'
-      });
-    }
-
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({
-        message: 'Controleer of alle verplichte velden correct zijn ingevuld.'
-      });
-    }
-
-    return res.status(500).json({
-      message: 'Serverfout bij registreren.'
-    });
+    res.status(500).json({ message: 'Serverfout bij registreren.', error: error.message });
   }
 });
 
 app.post('/api/auth/login', async (req, res) => {
   try {
-    let { email, password } = req.body;
+    const { email, password } = req.body;
 
-    email = email?.trim().toLowerCase();
-    password = password?.trim();
-
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email en wachtwoord zijn verplicht.' });
-    }
-
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
       return res.status(400).json({ message: 'Ongeldige logingegevens.' });
     }
@@ -221,7 +156,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     const token = createToken(user);
 
-    return res.json({
+    res.json({
       token,
       user: {
         id: user._id,
@@ -240,8 +175,7 @@ app.post('/api/auth/login', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('LOGIN ERROR:', error);
-    return res.status(500).json({ message: 'Serverfout bij inloggen.' });
+    res.status(500).json({ message: 'Serverfout bij inloggen.', error: error.message });
   }
 });
 
@@ -253,10 +187,9 @@ app.get('/api/auth/me', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Gebruiker niet gevonden.' });
     }
 
-    return res.json(user);
+    res.json(user);
   } catch (error) {
-    console.error('ME ERROR:', error);
-    return res.status(500).json({ message: 'Serverfout bij ophalen profiel.' });
+    res.status(500).json({ message: 'Serverfout bij ophalen profiel.', error: error.message });
   }
 });
 
@@ -275,13 +208,12 @@ app.put('/api/auth/me', authMiddleware, async (req, res) => {
       return res.status(404).json({ message: 'Gebruiker niet gevonden.' });
     }
 
-    return res.json({
+    res.json({
       success: true,
       user
     });
   } catch (error) {
-    console.error('UPDATE PROFILE ERROR:', error);
-    return res.status(500).json({ message: 'Serverfout bij opslaan profiel.' });
+    res.status(500).json({ message: 'Serverfout bij opslaan profiel.', error: error.message });
   }
 });
 
