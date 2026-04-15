@@ -11,7 +11,7 @@ import { ArtistDetail } from "./components/ArtistDetail.jsx";
 import InfoAgenda from "./pages/Info-agenda.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
-//import Profile from "./pages/Profile.jsx";
+import Profile from "./pages/Profile.jsx";
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
         <Route path="/info-agenda" element={<InfoAgenda />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
       
         <Route
           path="/artist/:id"

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import kunstrouteLogo from "../assets/kunstroutelogo.png";
+import { register } from "../utils/auth";
 import "./Register.css";
 
 const LEEG = {
@@ -73,47 +74,32 @@ export default function Registreren() {
       return;
     }
 
-   const payload = {
-  voornaam: form.voornaam,
-  achternaam: form.achternaam,
-  email: form.email,
-  password: form.wachtwoord,
-  telefoon: form.telefoon,
-  kunstrichting: form.kunstrichting,
-  bio: form.bio,
-  website: form.website,
-  facebook: form.facebook,
-  instagram: form.instagram,
-  adres: form.adres,
-  postcode: form.postcode,
-  woonplaats: form.woonplaats,
-};
+    const payload = {
+      voornaam: form.voornaam,
+      achternaam: form.achternaam,
+      email: form.email,
+      password: form.wachtwoord,
+      telefoon: form.telefoon,
+      kunstrichting: form.kunstrichting,
+      bio: form.bio,
+      website: form.website,
+      facebook: form.facebook,
+      instagram: form.instagram,
+      adres: form.adres,
+      postcode: form.postcode,
+      woonplaats: form.woonplaats,
+    };
 
     setLoading(true);
+    const result = await register(payload);
+    setLoading(false);
 
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setFout(data.error || data.message || "Registratie mislukt.");
-        return;
-      }
-
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-      setFout("Serverfout, probeer later opnieuw.");
-    } finally {
-      setLoading(false);
+    if (!result.success) {
+      setFout(result.error);
+      return;
     }
+
+    navigate("/profile");
   }
 
   return (
@@ -168,9 +154,7 @@ export default function Registreren() {
 
             <div className="reg-row">
               <div className="reg-field">
-                <label className="reg-label">
-                  Wachtwoord * (min. 8 tekens)
-                </label>
+                <label className="reg-label">Wachtwoord * (min. 8 tekens)</label>
                 <input
                   className="reg-input"
                   type="password"
@@ -231,7 +215,7 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Website:</label>
+              <label className="reg-label">Website</label>
               <input
                 className="reg-input"
                 name="website"
@@ -242,7 +226,7 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Facebook:</label>
+              <label className="reg-label">Facebook</label>
               <input
                 className="reg-input"
                 name="facebook"
@@ -252,7 +236,7 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Instagram:</label>
+              <label className="reg-label">Instagram</label>
               <input
                 className="reg-input"
                 name="instagram"
@@ -265,10 +249,7 @@ export default function Registreren() {
           <section className="reg-section">
             <h2 className="reg-section-title">Adres (voor ballotage)</h2>
             <p className="reg-info">
-              Doe je voor het eerst mee of heb je in 2022 of eerder voor het
-              laatst meegedaan aan de kunstroute, dan vindt er een ballotage
-              plaats. Vul dan hieronder het adres in waar we jou kunnen
-              balloteren:
+              Doe je voor het eerst mee of heb je in 2022 of eerder voor het laatst meegedaan aan de kunstroute, dan vindt er een ballotage plaats. Vul dan hieronder het adres in waar we jou kunnen balloteren:
             </p>
 
             <div className="reg-field">
@@ -284,7 +265,7 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Postcode: *</label>
+              <label className="reg-label">Postcode *</label>
               <input
                 className="reg-input"
                 name="postcode"
@@ -294,7 +275,7 @@ export default function Registreren() {
             </div>
 
             <div className="reg-field">
-              <label className="reg-label">Woonplaats: *</label>
+              <label className="reg-label">Woonplaats *</label>
               <input
                 className="reg-input"
                 name="woonplaats"
