@@ -12,9 +12,27 @@ L.Icon.Default.mergeOptions({
 });
 
 const locations = [
-  { id: 1, name: 'Locatie A', position: [52.0907, 5.1214] },
-  { id: 2, name: 'Locatie B', position: [52.0845, 5.1397] },
-  { id: 3, name: 'Locatie C', position: [52.1000, 5.1100] },
+  {
+  id: 1,
+  name: 'Locatie A',
+  artist: 'Maarten Hollander',
+  artwork: 'Licht in de stad',
+  position: [52.0907, 5.1214]
+  },
+  {
+  id: 2,
+  name: 'Locatie B',
+  artist: 'Jan Jansen',
+  artwork: 'Stadslucht',
+  position: [52.0845, 5.1397]
+  },
+  {
+  id: 3,
+  name: 'Locatie C',
+  artist: 'Pieter de Vries',
+  artwork: 'Kunst in beweging',
+  position: [52.1000, 5.1100]
+ },
 ];
 
 export default function Map() {
@@ -26,7 +44,7 @@ export default function Map() {
     />
     {locations.map((location) => (
   <Marker key={location.id} position={location.position}>
-    <Popup>{location.name}</Popup>
+    <Popup> <div> <strong>{location.name}</strong> <br /> Kunstenaar: {location.artist} <br /> Werk: {location.artwork} </div> </Popup>
   </Marker>
 ))}
   </MapContainer>
