@@ -65,7 +65,7 @@ function App() {
         <Route path="/inschrijven" element={<Signup />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/kaart" element={<div>🗺️ Kaart Pagina</div>} />
+        <Route path="/kaart" element={<Map />} />
         <Route path="/kunstwerken" element={<div>🎨 Kunstwerken</div>} />
         <Route path="/kunstenaars" element={<CardList cards={cards} />} />
         <Route path="/info-agenda" element={<div>📅 Info & Agenda</div>} />
