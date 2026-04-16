@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import KaartPunt from "./LocationModel.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -88,6 +89,15 @@ app.get("/api/data", async (req, res, next) => {
   try {
     const data = await DataModel.find();
     res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/kaartpunten", async (req, res, next) => {
+  try {
+    const alleKaartpunten = await KaartPunt.find();
+    res.json(alleKaartpunten);
   } catch (error) {
     next(error);
   }
