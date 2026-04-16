@@ -103,6 +103,21 @@ app.get("/api/kaartpunten", async (req, res, next) => {
   }
 });
 
+app.post("/api/kaartpunten", async (req, res, next) => {
+  try {
+    const nieuwKaartpunt = await KaartPunt.create({
+      naam: req.body.naam,
+      kunstenaar: req.body.kunstenaar,
+      kunstwerk: req.body.kunstwerk,
+      breedtegraad: req.body.breedtegraad,
+      lengtegraad: req.body.lengtegraad
+    });
+    res.status(201).json(nieuwKaartpunt);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // --- ERROR HANDLER (MOET 4 PARAMETERS HEBBEN) ---
 app.use((err, req, res, next) => {
   console.error("❌ Error stack:", err.stack);
