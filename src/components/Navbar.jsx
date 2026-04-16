@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
-import logo from "/src/assets/kunstroutelogo.png";
+import logo from "../assets/kunstroutelogo.png"; // adjust if needed
 
 export default function Navbar() {
   return (
@@ -50,12 +50,23 @@ export default function Navbar() {
 
         <li>
           <NavLink
-            to="/info-agenda"
+            to="/info"
             className={({ isActive }) =>
               isActive ? "tekst-blauw active-link" : "tekst-blauw"
             }
           >
-            Info & Agenda
+            Info
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/agenda"
+            className={({ isActive }) =>
+              isActive ? "tekst-blauw active-link" : "tekst-blauw"
+            }
+          >
+            Agenda
           </NavLink>
         </li>
 
@@ -66,7 +77,7 @@ export default function Navbar() {
               isActive ? "btn-inschrijven active-link" : "btn-inschrijven"
             }
           >
-            Inloggen
+            Account
           </NavLink>
         </li>
       </ul>

@@ -8,10 +8,12 @@ import Artists from "./pages/Artists.jsx";
 import Artwork from "./pages/Artwork.jsx";
 import Map from "./pages/Map.jsx";
 import { ArtistDetail } from "./components/ArtistDetail.jsx";
-import InfoAgenda from "./pages/Info-agenda.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
+import Info from "./pages/Info.jsx";
+import Agenda from "./pages/Agenda.jsx";
+// import InfoAgenda from "./pages/InfoAgenda.jsx"; // only if this file really exists
 
 function App() {
   return (
@@ -22,11 +24,11 @@ function App() {
         <Route path="/artists" element={<Artists />} />
         <Route path="/artwork" element={<Artwork />} />
         <Route path="/map" element={<Map />} />
-        <Route path="/info-agenda" element={<InfoAgenda />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
-      
+        <Route path="/info" element={<Info />} />
+        <Route path="/agenda" element={<Agenda />} />
         <Route
           path="/artist/:id"
           element={<ArtistDetail artists={artistsData} />}
