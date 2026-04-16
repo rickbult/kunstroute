@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import '../pages/signup.css';  // Importeer je CSS
+import './Signup.css';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
