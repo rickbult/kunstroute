@@ -5,8 +5,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import KaartPunt from "./LocationModel.js";
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+const serverApplicatie = express();
+const SERVER_POORT = process.env.PORT || 5000;
 
 // MongoDB Verbinding
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/kunstroute')
@@ -14,119 +14,126 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/kunstrout
   .catch(error => console.error("💥 MongoDB error:", error.message));
 
 // Schemas
-const userSchema = new mongoose.Schema({
+const gebruikerSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }
 });
-const User = mongoose.model('User', userSchema);
+const Gebruiker = mongoose.model('User', gebruikerSchema);
 
-const dataSchema = new mongoose.Schema({
+const gegevensSchema = new mongoose.Schema({
   content: { type: String, required: true }
 });
-const DataModel = mongoose.model("DataModel", dataSchema);
+const GegevensModel = mongoose.model("DataModel", gegevensSchema);
 
 // --- MIDDLEWARE ---
-app.use(express.json());
+serverApplicatie.use(express.json());
 
 // CORS Middleware (Correcte implementatie)
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+serverApplicatie.use((verzoek, antwoord, volgende) => {
+  antwoord.header("Access-Control-Allow-Origin", "*");
+  antwoord.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  antwoord.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+  if (verzoek.method === 'OPTIONS') {
+    return antwoord.sendStatus(200);
   }
-  next(); // Hier gaat het vaak mis als dit niet wordt aangeroepen
+  volgende(); // Hier gaat het vaak mis als dit niet wordt aangeroepen
 });
 
 // --- ROUTES ---
-app.get("/", (req, res) => res.json({ message: "Kunstroute API OK" }));
+serverApplicatie.get("/", (verzoek, antwoord) => antwoord.json({ message: "Kunstroute API OK" }));
 
 // AUTH ROUTES
-app.post("/api/auth/register", async (req, res, next) => {
+serverApplicatie.post("/api/auth/register", async (verzoek, antwoord, volgende) => {
   try {
-    const { username, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ username, email, password: hashedPassword });
-    await user.save();
-    res.status(201).json({ message: 'User aangemaakt', user: { username } });
-  } catch (error) {
-    next(error); // Geef de fout door aan de error handler
+    const { username, email, password } = verzoek.body;
+    const gehashtWachtwoord = await bcrypt.hash(password, 12);
+    const gebruiker = new Gebruiker({ username, email, password: gehashtWachtwoord });
+    await gebruiker.save();
+    antwoord.status(201).json({ message: 'User aangemaakt', user: { username } });
+  } catch (fout) {
+    volgende(fout); // Geef de fout door aan de error handler
   }
 });
 
-app.post("/api/auth/login", async (req, res, next) => {
+serverApplicatie.post("/api/auth/login", async (verzoek, antwoord, volgende) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: 'Ongeldige credentials' });
+    const { username, password } = verzoek.body;
+    const gebruiker = await Gebruiker.findOne({ username });
+    if (!gebruiker || !(await bcrypt.compare(password, gebruiker.password))) {
+      return antwoord.status(401).json({ error: 'Ongeldige credentials' });
     }
     const token = jwt.sign(
-      { id: user._id, username }, 
+      { id: gebruiker._id, username }, 
       process.env.JWT_SECRET || 'kunstroute_secret_2026',
       { expiresIn: '1h' }
     );
-    res.json({ token, user: { id: user._id, username } });
-  } catch (error) {
-    next(error);
+    antwoord.json({ token, user: { id: gebruiker._id, username } });
+  } catch (fout) {
+    volgende(fout);
   }
 });
 
 // DATA ROUTES
-app.post("/api/data", async (req, res, next) => {
+serverApplicatie.post("/api/data", async (verzoek, antwoord, volgende) => {
   try {
-    const newData = await DataModel.create({ content: req.body.content });
-    res.status(201).json(newData);
-  } catch (error) {
-    next(error);
+    const nieuweGegevens = await GegevensModel.create({ content: verzoek.body.content });
+    antwoord.status(201).json(nieuweGegevens);
+  } catch (fout) {
+    volgende(fout);
   }
 });
 
-app.get("/api/data", async (req, res, next) => {
+serverApplicatie.get("/api/data", async (verzoek, antwoord, volgende) => {
   try {
-    const data = await DataModel.find();
-    res.json(data);
-  } catch (error) {
-    next(error);
+    const gegevens = await GegevensModel.find();
+    antwoord.json(gegevens);
+  } catch (fout) {
+    volgende(fout);
   }
 });
 
-app.get("/api/kaartpunten", async (req, res, next) => {
+serverApplicatie.get("/api/kaartpunten", async (verzoek, antwoord, volgende) => {
   try {
     const alleKaartpunten = await KaartPunt.find();
-    res.json(alleKaartpunten);
-  } catch (error) {
-    next(error);
+    antwoord.json(alleKaartpunten);
+  } catch (fout) {
+    volgende(fout);
   }
 });
 
-app.post("/api/kaartpunten", async (req, res, next) => {
+serverApplicatie.post("/api/kaartpunten", async (verzoek, antwoord, volgende) => {
   try {
     const nieuwKaartpunt = await KaartPunt.create({
-      naam: req.body.naam,
-      kunstenaar: req.body.kunstenaar,
-      kunstwerk: req.body.kunstwerk,
-      breedtegraad: req.body.breedtegraad,
-      lengtegraad: req.body.lengtegraad
+      naamKunstenaar: verzoek.body.naamKunstenaar,
+      volledigAdres: verzoek.body.volledigAdres,
+      googleMapsUrl: verzoek.body.googleMapsUrl,
+      openDagenKunstroute2026: verzoek.body.openDagenKunstroute2026,
+      rolstoeltoegankelijkheid: verzoek.body.rolstoeltoegankelijkheid,
+      detailPaginaUrl: verzoek.body.detailPaginaUrl,
+      stad: verzoek.body.stad,
+      titelWerk: verzoek.body.titelWerk,
+      breedtegraad: verzoek.body.breedtegraad,
+      lengtegraad: verzoek.body.lengtegraad,
+      geocodeWeergaveNaam: verzoek.body.geocodeWeergaveNaam,
+      geocodeZoekopdracht: verzoek.body.geocodeZoekopdracht
     });
-    res.status(201).json(nieuwKaartpunt);
-  } catch (error) {
-    next(error);
+    antwoord.status(201).json(nieuwKaartpunt);
+  } catch (fout) {
+    volgende(fout);
   }
 });
 
 // --- ERROR HANDLER (MOET 4 PARAMETERS HEBBEN) ---
-app.use((err, req, res, next) => {
-  console.error("❌ Error stack:", err.stack);
-  res.status(err.status || 500).json({ 
-    error: err.message || 'Interne server fout' 
+serverApplicatie.use((fout, verzoek, antwoord, volgende) => {
+  console.error("❌ Error stack:", fout.stack);
+  antwoord.status(fout.status || 500).json({ 
+    error: fout.message || 'Interne server fout' 
   });
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server draait op http://localhost:${PORT}`);
+serverApplicatie.listen(SERVER_POORT, () => {
+  console.log(`🚀 Server draait op http://localhost:${SERVER_POORT}`);
 });
