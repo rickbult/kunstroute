@@ -1,52 +1,68 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useEffect, useState } from 'react';
+import {
+  MapContainer as KaartContainer,
+  TileLayer as TegelLaag,
+  Marker as MarkerPunt,
+  Popup as InformatieVenster,
+} from 'react-leaflet';
 import L from 'leaflet';
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerIcoon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcoon from 'leaflet/dist/images/marker-icon.png';
+import markerSchaduw from 'leaflet/dist/images/marker-shadow.png';
+import './map.css';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
+  iconRetinaUrl: markerIcoon2x,
+  iconUrl: markerIcoon,
+  shadowUrl: markerSchaduw,
 });
 
-const locations = [
-  {
-  id: 1,
-  name: 'Locatie A',
-  artist: 'Maarten Hollander',
-  artwork: 'Licht in de stad',
-  position: [52.0907, 5.1214]
-  },
-  {
-  id: 2,
-  name: 'Locatie B',
-  artist: 'Jan Jansen',
-  artwork: 'Stadslucht',
-  position: [52.0845, 5.1397]
-  },
-  {
-  id: 3,
-  name: 'Locatie C',
-  artist: 'Pieter de Vries',
-  artwork: 'Kunst in beweging',
-  position: [52.1000, 5.1100]
- },
-];
+export default function KaartComponent() {
+  const [kaartPuntenLijst, stelKaartPuntenLijstIn] = useState([]);
 
-export default function Map() {
+  useEffect(() => {
+    fetch('http://localhost:5000/api/kaartpunten')
+      .then((antwoord) => antwoord.json())
+      .then((opgehaaldePunten) => {
+        const geldigePunten = opgehaaldePunten.filter(
+          (kaartPunt) =>
+            Number.isFinite(kaartPunt.breedtegraad) && Number.isFinite(kaartPunt.lengtegraad)
+        );
+        stelKaartPuntenLijstIn(geldigePunten);
+      })
+      .catch((fout) => {
+        console.error('Fout bij ophalen kaartpunten:', fout);
+      });
+  }, []);
+
   return (
-  <MapContainer center={[52.0907, 5.1214]} zoom={13} style={{ height: '400px' }}>
-    <TileLayer
+  <KaartContainer className="kaart-canvas" center={[52.2518, 5.6928]} zoom={11} style={{ height: '400px' }}>
+    <TegelLaag
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       attribution="&copy; OpenStreetMap contributors"
     />
-    {locations.map((location) => (
-  <Marker key={location.id} position={location.position}>
-    <Popup> <div> <strong>{location.name}</strong> <br /> Kunstenaar: {location.artist} <br /> Werk: {location.artwork} </div> </Popup>
-  </Marker>
+    {kaartPuntenLijst.map((kaartPunt) => (
+  <MarkerPunt key={kaartPunt.detailPaginaUrl || kaartPunt.naamKunstenaar} position={[kaartPunt.breedtegraad, kaartPunt.lengtegraad]}>
+    <InformatieVenster>
+      <div className="kaart-popup">
+        <strong>{kaartPunt.naamKunstenaar}</strong>
+        <br />
+        <a href={kaartPunt.googleMapsUrl} target="_blank" rel="noreferrer">
+          {kaartPunt.volledigAdres}
+        </a>
+        <br />
+        Open: {kaartPunt.openDagenKunstroute2026}
+        <br />
+        Rolstoeltoegankelijkheid: {kaartPunt.rolstoeltoegankelijkheid}
+        <br />
+        <a href={kaartPunt.detailPaginaUrl} target="_blank" rel="noreferrer">
+          Detailpagina
+        </a>
+      </div>
+    </InformatieVenster>
+  </MarkerPunt>
 ))}
-  </MapContainer>
+  </KaartContainer>
 );
 }
