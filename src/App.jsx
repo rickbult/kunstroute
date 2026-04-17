@@ -13,7 +13,7 @@ import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Info from "./pages/Info.jsx";
 import Agenda from "./pages/Agenda.jsx";
-// import InfoAgenda from "./pages/InfoAgenda.jsx"; // only if this file really exists
+
 
 function App() {
   return (
