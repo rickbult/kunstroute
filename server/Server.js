@@ -1,9 +1,11 @@
-import 'dotenv/config';
 import express from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import KaartPunt from "./LocationModel.js";
+
+dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const serverApplicatie = express();
 const SERVER_POORT = process.env.PORT || 5000;

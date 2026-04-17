@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start:api": "npm --prefix server start",
+    "seed:kaartpunten": "npm --prefix server run seed:kaartpunten",
     "build": "vite build",
     "preview": "vite preview"
   },

@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import Map from './components/ui/map.jsx';
+import KaartComponent from './components/ui/map.jsx';
 
 function CardList({ cards }) {
   const [search, setSearch] = useState("");
@@ -65,7 +65,7 @@ function App() {
         <Route path="/inschrijven" element={<Signup />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/kaart" element={<Map />} />
+        <Route path="/kaart" element={<KaartComponent />} />
         <Route path="/kunstwerken" element={<div>🎨 Kunstwerken</div>} />
         <Route path="/kunstenaars" element={<CardList cards={cards} />} />
         <Route path="/info-agenda" element={<div>📅 Info & Agenda</div>} />

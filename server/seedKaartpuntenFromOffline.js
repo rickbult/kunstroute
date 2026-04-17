@@ -1,8 +1,10 @@
-import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import KaartPunt from './LocationModel.js';
+
+dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const mongoVerbindingUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/kunstroute';
 const gegevensPad = path.resolve('../src/data/kunstroute_2026_marker_ready.json');
