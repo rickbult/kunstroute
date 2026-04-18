@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import {
-  MapContainer as KaartContainer,
-  TileLayer as TegelLaag,
-  Marker as MarkerPunt,
-  Popup as InformatieVenster,
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
 } from 'react-leaflet';
+
 import L from 'leaflet';
 import markerIcoon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcoon from 'leaflet/dist/images/marker-icon.png';
@@ -36,22 +37,47 @@ export default function KaartComponent() {
       });
   }, []);
 
+  const coordinaatLijst = kaartPuntenLijst.map((p) => [p.breedtegraad, p.lengtegraad]);
+
+  let kaartBounds = null;
+
+  if (coordinaatLijst.length > 0) {
+    const latitudes = coordinaatLijst.map((c) => c[0]);
+    const longitudes = coordinaatLijst.map((c) => c[1]);
+
+    const minLat = Math.min(...latitudes);
+    const maxLat = Math.max(...latitudes);
+    const minLng = Math.min(...longitudes);
+    const maxLng = Math.max(...longitudes);
+
+    kaartBounds = [
+      [minLat, minLng],
+      [maxLat, maxLng],
+    ];
+  }
+
+  if (!kaartBounds) {
+    return <div>Kaart laden...</div>;
+  }
+
   return (
-    <KaartContainer
+    <MapContainer
       className="kaart-canvas"
-      center={[52.2518, 5.6928]}
-      zoom={11}
+      dragging={false}
+      zoomControl={false}
+      bounds={kaartBounds}
+      boundsOptions={{ paddingTopLeft: [20, 90], paddingBottomRight: [20, 20] }}
     >
-      <TegelLaag
+      <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; OpenStreetMap contributors"
       />
       {kaartPuntenLijst.map((kaartPunt) => (
-        <MarkerPunt
+        <Marker
           key={kaartPunt.detailPaginaUrl || kaartPunt.naamKunstenaar}
           position={[kaartPunt.breedtegraad, kaartPunt.lengtegraad]}
         >
-          <InformatieVenster>
+          <Popup>
             <div className="kaart-popup">
               <strong>{kaartPunt.naamKunstenaar}</strong>
               <br />
@@ -67,9 +93,9 @@ export default function KaartComponent() {
                 Detailpagina
               </a>
             </div>
-          </InformatieVenster>
-        </MarkerPunt>
+          </Popup>
+        </Marker>
       ))}
-    </KaartContainer>
+    </MapContainer>
   );
 }
