@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import KaartComponent from './components/ui/map.jsx';
+import KaartComponent from './pages/Map.jsx';
 
 function CardList({ cards }) {
   const [search, setSearch] = useState("");
