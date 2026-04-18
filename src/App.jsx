@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import artistsData from "./data/artists.json";
 import "./App.css";
 import { Card } from "./components/Card.jsx"; 
@@ -12,6 +12,31 @@ import KaartComponent from './pages/Map.jsx';
 
 function CardList({ cards }) {
   const [search, setSearch] = useState("");
+
+function AppInhoud({ cards }) {
+const location = useLocation();
+const opKaartPagina = location.pathname === "/kaart";
+
+return (
+<>
+<Navbar />
+<Routes>
+<Route path="/" element={<CardList cards={cards} />} />
+<Route path="/inschrijven" element={<Signup />} />
+<Route path="/signup" element={<Signup />} />
+<Route path="/login" element={<Login />} />
+<Route path="/kaart" element={<KaartComponent />} />
+<Route path="/kunstwerken" element={<div>🎨 Kunstwerken</div>} />
+<Route path="/kunstenaars" element={<CardList cards={cards} />} />
+<Route path="/info-agenda" element={<div>📅 Info & Agenda</div>} />
+<Route path="/artist/:id" element={<ArtistDetail artists={cards} />} />
+<Route path="*" element={<div>Pagina niet gevonden</div>} />
+</Routes>
+
+{!opKaartPagina && <Footer />}
+</>
+);
+}
 
   const filteredCards = cards.filter((card) =>
     card.title?.toLowerCase().includes(search.toLowerCase())
@@ -58,22 +83,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<CardList cards={cards} />} />
-        <Route path="/inschrijven" element={<Signup />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/kaart" element={<KaartComponent />} />
-        <Route path="/kunstwerken" element={<div>🎨 Kunstwerken</div>} />
-        <Route path="/kunstenaars" element={<CardList cards={cards} />} />
-        <Route path="/info-agenda" element={<div>📅 Info & Agenda</div>} />
-        <Route path="/artist/:id" element={<ArtistDetail artists={cards} />} />
-        <Route path="*" element={<div>Pagina niet gevonden</div>} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <BrowserRouter> <AppInhoud cards={cards} /> </BrowserRouter>
   );
 }
 
