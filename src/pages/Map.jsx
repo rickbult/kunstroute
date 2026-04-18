@@ -41,7 +41,6 @@ export default function KaartComponent() {
       className="kaart-canvas"
       center={[52.2518, 5.6928]}
       zoom={11}
-      style={{ height: '400px' }}
     >
       <TegelLaag
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
