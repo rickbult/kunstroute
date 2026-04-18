@@ -3,17 +3,31 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
 import KaartPunt from "./LocationModel.js";
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const serverApplicatie = express();
 const SERVER_POORT = process.env.PORT || 5000;
+const fallbackKaartpuntenPad = path.resolve(new URL('./kaartpuntenFallback.json', import.meta.url).pathname);
+let fallbackKaartpunten = [];
+
+try {
+  const fallbackBestand = fs.readFileSync(fallbackKaartpuntenPad, 'utf8');
+  fallbackKaartpunten = JSON.parse(fallbackBestand);
+} catch (fout) {
+  console.warn('⚠️ Lokale fallback kaartpunten niet geladen:', fout.message);
+}
 
 // MongoDB Verbinding
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/kunstroute')
-  .then(() => console.log("✅ MongoDB Connected!"))
-  .catch(error => console.error("💥 MongoDB error:", error.message));
+const mongoVerbinding = process.env.MONGODB_URI;
+
+if (!mongoVerbinding) {
+  console.error("💥 MONGODB_URI ontbreekt in server/.env");
+  process.exit(1);
+}
 
 // Schemas
 const gebruikerSchema = new mongoose.Schema({
@@ -98,9 +112,18 @@ serverApplicatie.get("/api/data", async (verzoek, antwoord, volgende) => {
 
 serverApplicatie.get("/api/kaartpunten", async (verzoek, antwoord, volgende) => {
   try {
-    const alleKaartpunten = await KaartPunt.find();
-    antwoord.json(alleKaartpunten);
+    if (mongoose.connection.readyState === 1) {
+      const alleKaartpunten = await KaartPunt.find().lean();
+      if (Array.isArray(alleKaartpunten) && alleKaartpunten.length > 0) {
+        return antwoord.json(alleKaartpunten);
+      }
+    }
+
+    antwoord.json(fallbackKaartpunten);
   } catch (fout) {
+    if (fallbackKaartpunten.length > 0) {
+      return antwoord.json(fallbackKaartpunten);
+    }
     volgende(fout);
   }
 });
@@ -135,7 +158,17 @@ serverApplicatie.use((fout, verzoek, antwoord, volgende) => {
   });
 });
 
-// Start server
-serverApplicatie.listen(SERVER_POORT, () => {
-  console.log(`🚀 Server draait op http://localhost:${SERVER_POORT}`);
-});
+async function startServer() {
+  try {
+    await mongoose.connect(mongoVerbinding);
+    console.log("✅ MongoDB Connected!");
+  } catch (error) {
+    console.warn("⚠️ MongoDB niet bereikbaar, fallback wordt gebruikt:", error.message);
+  }
+
+  serverApplicatie.listen(SERVER_POORT, () => {
+    console.log(`🚀 Server draait op http://localhost:${SERVER_POORT}`);
+  });
+}
+
+startServer();
