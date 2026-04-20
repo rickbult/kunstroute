@@ -1,0 +1,59 @@
+.kaart-canvas .leaflet-popup-content-wrapper {
+  background: #fff6b3;
+  color: rgb(9, 255, 0);
+}
+
+.kaart-canvas .leaflet-popup-tip {
+  background: #ffffff;
+}
+
+.kaart-canvas .leaflet-popup-content {
+  color: #1f1f1f;
+}
+
+.kaart-popup a {
+  color: #0b5cad;
+}
+
+.kaart-canvas {
+    position: fixed;
+    inset: 0;
+	width: 100vw;
+	height: 100vh;
+	border-radius: 0px;
+	overflow: hidden;
+    z-index: 1;
+}
+
+.kaart-popup {
+	max-width: 260px;
+	line-height: 1.35;
+	font-size: 0.92rem;
+}
+
+.leaflet-popup-content-wrapper {
+	background-color:000;
+}
+
+.kaart-popup strong {
+	display: inline-block;
+	margin-bottom: 6px;
+	font-size: 1rem;
+}
+
+.kaart-popup a {
+	color: #0b5cad;
+	text-decoration: none;
+	word-break: break-word;
+}
+
+.kaart-popup a:hover {
+	text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+	.kaart-popup {
+		max-width: 210px;
+		font-size: 0.88rem;
+	}
+}
