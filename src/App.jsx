@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Card } from "./components/Card";
-import { ArtistDetail } from "./components/ArtistDetail";
-import { InschrijvenPage } from "./components/InschrijvenPage";
-import { Navbar } from "./components/Navbar";
+import { Card } from "./Card";
+import { ArtistDetail } from "./ArtistDetail";
+import { InschrijvenPage } from "./InschrijvenPage";
+import { InfoPage } from "./InfoPage";
+import { AgendaPage } from "./Agenda";
+import { Navbar } from "./Navbar";
 import { cards } from "./data";
 
 function CardList({ cards }) {
@@ -45,6 +47,8 @@ function App() {
         <Route path="/" element={<CardList cards={cards} />} />
         <Route path="/artist/:id" element={<ArtistDetail artists={cards} />} />
         <Route path="/inschrijven" element={<InschrijvenPage />} />
+        <Route path="/info" element={<InfoPage />} />
+        <Route path="/agenda" element={<AgendaPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -16,7 +16,10 @@ export const Navbar = () => {
           Kunstenaars
         </NavLink>
         <NavLink to="/info" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
-          Info &amp; Agenda
+          Info
+        </NavLink>
+        <NavLink to="/agenda" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          Agenda
         </NavLink>
         <NavLink to="/inschrijven" className="navbar-btn">
           Inschrijven
