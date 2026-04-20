@@ -17,7 +17,7 @@ export default function Navbar() {
       <ul className="nav-links">
         <li>
           <NavLink
-            to="/map"
+            to="/kaart"
             className={({ isActive }) =>
               isActive ? "tekst-groen active-link" : "tekst-groen"
             }

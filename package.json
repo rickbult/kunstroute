@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start:api": "npm --prefix server start",
+    "dev:all": "concurrently \"npm run dev\" \"npm run start:api\"",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -25,6 +27,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
     "vite": "^8.0.8"
   },
   "description": "Cash legen:\r cd ..                    # ← NAAR /kunstroute/\r npm cache clean --force\r rm -rf node_modules package-lock.json\r npm install\r npm run dev",

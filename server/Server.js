@@ -8,6 +8,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import KaartPunt from './LocationModel.js';
 
 dotenv.config();
 
@@ -253,6 +254,15 @@ app.get('/api/auth/me', authMiddleware, async (req, res) => {
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: 'Serverfout bij ophalen profiel.', error: error.message });
+  }
+});
+
+app.get('/api/kaartpunten', async (req, res) => {
+  try {
+    const kaartpunten = await KaartPunt.find();
+    res.json(kaartpunten);
+  } catch (error) {
+    res.status(500).json({ message: 'Serverfout bij ophalen kaartpunten.', error: error.message });
   }
 });
 
