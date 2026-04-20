@@ -23,6 +23,7 @@ function App() {
         <Route path="/" element={<Artists />} />
         <Route path="/artists" element={<Artists />} />
         <Route path="/artwork" element={<Artwork />} />
+        <Route path="/kaart" element={<Map />} />
         <Route path="/map" element={<Map />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
