@@ -15,7 +15,6 @@
   color: #0b5cad;
 }
 
-/* Hoofdkaartvlak: vaste laag met volledige hoogte en eigen breedte voor ruimte naast de kaart. */
 .kaart-canvas {
     position: fixed;
     inset: 0;
@@ -26,7 +25,6 @@
     z-index: 1;
 }
 
-/* Basisopmaak van de popuptekst met goed leesbare grootte. */
 .kaart-popup {
 	max-width: 260px;
 	line-height: 1.35;
@@ -37,26 +35,22 @@
 	background-color:000;
 }
 
-/* Opmaak van de artiestnaam in de popup. */
 .kaart-popup strong {
 	display: inline-block;
 	margin-bottom: 6px;
 	font-size: 1rem;
 }
 
-/* Linkopmaak voor adres en detailpagina in de popup. */
 .kaart-popup a {
 	color: #0b5cad;
 	text-decoration: none;
 	word-break: break-word;
 }
 
-/* Onderstreep de link bij hover zodat klikbaarheid duidelijker is. */
 .kaart-popup a:hover {
 	text-decoration: underline;
 }
 
-/* Iets kleinere popuptekst en breedte op mobiele schermen. */
 @media (max-width: 640px) {
 	.kaart-popup {
 		max-width: 210px;
