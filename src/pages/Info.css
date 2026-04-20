@@ -1,0 +1,397 @@
+
+.info-page-layout {
+  display: flex;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+  gap: 2.5rem;
+}
+
+.info-sidebar {
+  flex: 0 0 210px;
+  position: sticky;
+  top: 4rem;
+  background: #fff;
+  border-right: 3px solid #000000;
+  padding-right: 0;
+}
+
+.sidebar-heading {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #7c3fa0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0 1rem 0.6rem 1rem;
+  border-bottom: 2px solid #000000;
+  margin: 0 0 0.25rem 0;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+  transition: color 0.15s, background 0.15s;
+}
+
+.sidebar-link:hover {
+  color: #7c3fa0;
+  background: #faf8ff;
+}
+
+.info-wrapper {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+}
+
+.info-section {
+  margin-bottom: 3.5rem;
+}
+.logo-story {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 2.5rem;
+}
+
+.logo-story-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2c2f7a;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.logo-story p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.history {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 2.5rem;
+}
+
+.history h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 1.5rem 0 0.6rem 0;
+}
+
+.history h3:first-child {
+  margin-top: 0;
+}
+
+.history p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.bestuur {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 2.5rem;
+}
+
+.bestuur-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2c2f7a;
+  margin-bottom: 2rem;
+}
+
+.bestuur-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.bestuur-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.bestuur-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c2f7a;
+  margin: 0 0 0.2rem 0;
+}
+
+.bestuur-role {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2c2f7a;
+  margin: 0 0 1rem 0;
+}
+
+.bestuur-photo {
+  width: 100%;
+  max-width: 220px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+
+.bestuur-photo img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+}
+
+.bestuur-contact {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.contact-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #2c2f7a;
+  flex-shrink: 0;
+}
+
+.contact-row a {
+  color: #333;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.contact-row a:hover {
+  text-decoration: underline;
+}
+
+.doelstelling {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 2.5rem;
+}
+
+.doelstelling-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.doelstelling-body {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.doelstelling-text {
+  flex: 1;
+}
+
+.doelstelling-text p {
+  font-size: 1rem;
+  color: #000000;
+  line-height: 1.75;
+  margin-bottom: 0.9rem;
+}
+
+.doelstelling-meer {
+  font-weight: 600;
+}
+
+.doelstelling-text a {
+  color: #000000;
+}
+
+.doelstelling-image {
+  flex-shrink: 0;
+  width: 260px;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.doelstelling-image img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+
+.voorwaarden {
+  border-top: 3px solid #000000;
+  padding-top: 2rem;
+}
+
+.voorwaarden-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2c2f7a;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.voorwaarden p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.voorwaarden h4 {
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 1.5rem 0 0.5rem 0;
+}
+
+.voorwaarden-list {
+  margin: 0.5rem 0 1rem 1.5rem;
+  padding: 0;
+}
+
+.voorwaarden-list li {
+  font-size: 1rem;
+  color: #333;
+  font-style: italic;
+  line-height: 1.75;
+  margin-bottom: 0.25rem;
+}
+
+.voorwaarden a {
+  color: #2c2f7a;
+}
+
+.overzicht {
+  border-top: 1px solid #eee;
+  padding-top: 2.5rem;
+}
+
+.overzicht-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2c2f7a;
+  margin-bottom: 1rem;
+}
+
+.overzicht p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.75;
+  margin-bottom: 1.25rem;
+}
+
+.overzicht-image {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.overzicht-image img {
+  max-width: 500px;
+  width: 100%;
+  border-radius: 0.5rem;
+  display: block;
+}
+.verspreiding {
+  border-top: 3px solid #f0c000;
+  padding-top: 2rem;
+}
+
+.verspreiding-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2c2f7a;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.verspreiding p {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.verspreiding-list {
+  list-style: circle;
+  margin: 0.5rem 0 1rem 1.75rem;
+  padding: 0;
+}
+
+.verspreiding-list li {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.75;
+  margin-bottom: 0.2rem;
+}
+
+@media (max-width: 860px) {
+  .info-page-layout {
+    flex-direction: column;
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .info-sidebar {
+    flex: none;
+    position: static;
+    width: 100%;
+    border-right: none;
+    border-bottom: 3px solid #f0c000;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-sidebar nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+
+  .sidebar-link {
+    border-bottom: none;
+    border-right: 1px solid #eee;
+    padding: 0.4rem 0.75rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .bestuur-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .bestuur-card {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .doelstelling-body {
+    flex-direction: column;
+  }
+
+  .doelstelling-image {
+    width: 100%;
+  }
+}
