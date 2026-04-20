@@ -79,7 +79,7 @@ export default function KaartComponent() {
       // Verberg de + en - zoomknoppen in de hoek.
       zoomControl={false}
       // Sta niet toe dat bezoekers verder uitzoomen dan dit niveau.
-      minZoom={15}
+      minZoom={10}
       // Pas het kaartbeeld automatisch aan zodat alle markers zichtbaar zijn.
       bounds={kaartBounds}
       // Voeg extra bovenruimte toe zodat markers onder de vaste navbar blijven.
