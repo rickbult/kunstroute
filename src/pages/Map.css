@@ -1,35 +1,62 @@
+.kaart-canvas .leaflet-popup-content-wrapper {
+  background: #fff6b3;
+  color: #1f1f1f;
+}
+
+.kaart-canvas .leaflet-popup-tip {
+  background: #ffffff;
+}
+
+.kaart-canvas .leaflet-popup-content {
+  color: #1f1f1f;
+}
+
+.kaart-popup a {
+  color: #0b5cad;
+}
+
+/* Hoofdkaartvlak: vaste laag met volledige hoogte en eigen breedte voor ruimte naast de kaart. */
 .kaart-canvas {
     position: fixed;
     inset: 0;
-    width: 100vw;
+	width: 100vw;
 	height: 100vh;
 	border-radius: 0px;
 	overflow: hidden;
     z-index: 1;
 }
 
+/* Basisopmaak van de popuptekst met goed leesbare grootte. */
 .kaart-popup {
 	max-width: 260px;
 	line-height: 1.35;
 	font-size: 0.92rem;
 }
 
+.leaflet-popup-content-wrapper {
+	background-color:000;
+}
+
+/* Opmaak van de artiestnaam in de popup. */
 .kaart-popup strong {
 	display: inline-block;
 	margin-bottom: 6px;
 	font-size: 1rem;
 }
 
+/* Linkopmaak voor adres en detailpagina in de popup. */
 .kaart-popup a {
 	color: #0b5cad;
 	text-decoration: none;
 	word-break: break-word;
 }
 
+/* Onderstreep de link bij hover zodat klikbaarheid duidelijker is. */
 .kaart-popup a:hover {
 	text-decoration: underline;
 }
 
+/* Iets kleinere popuptekst en breedte op mobiele schermen. */
 @media (max-width: 640px) {
 	.kaart-popup {
 		max-width: 210px;
