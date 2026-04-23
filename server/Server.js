@@ -330,3 +330,4 @@ app.use((error, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server draait op poort ${PORT}`);
 });
+

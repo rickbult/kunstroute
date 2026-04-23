@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FaWheelchair } from "react-icons/fa";
-import "./filter.css";
+import "./Filter.css";
 
 export const FilterBalk = ({
   bijFilterWijziging,
