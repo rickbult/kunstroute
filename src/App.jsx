@@ -12,7 +12,7 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Info from "./pages/Info.jsx";
-import Agenda from "./pages/Agenda.jsx";
+import { AgendaPage } from "./pages/Agenda.jsx";
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/info" element={<Info />} />
-        <Route path="/agenda" element={<Agenda />} />
+        <Route path="/agenda" element={<AgendaPage />} />
         <Route
           path="/artist/:id"
           element={<ArtistDetail artists={artistsData} />}
