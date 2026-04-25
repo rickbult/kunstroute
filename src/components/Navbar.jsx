@@ -1,86 +1,25 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
-import logo from "../assets/kunstroutelogo.png"; // adjust if needed
+import logo from "/src/assets/kunstroutelogo.png";
 
 export default function Navbar() {
   return (
     <nav className="navbar">
-      <NavLink to="/" className="logo">
-        <img
-          src={logo}
-          alt="Kunst Route Noordwest Veluwe"
-          className="logo-img"
-        />
-      </NavLink>
+      <Link to="/" className="logo">
+        <img src={logo} alt="Kunst Route Noordwest Veluwe" className="logo-img" />
+      </Link>
 
       <ul className="nav-links">
+        <li><Link to="/kaart" className="tekst-groen">Kaart</Link></li>
+        <li><Link to="/kunstwerken" className="tekst-roze">Kunstwerken</Link></li>
+        <li><Link to="/kunstenaars" className="tekst-geel">Kunstenaars</Link></li>
+        <li><Link to="/info-agenda" className="tekst-blauw">Info & Agenda</Link></li>
         <li>
-          <NavLink
-            to="/kaart"
-            className={({ isActive }) =>
-              isActive ? "tekst-groen active-link" : "tekst-groen"
-            }
-          >
-            Kaart
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/artwork"
-            className={({ isActive }) =>
-              isActive ? "tekst-roze active-link" : "tekst-roze"
-            }
-          >
-            Kunstwerken
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/artists"
-            className={({ isActive }) =>
-              isActive ? "tekst-geel active-link" : "tekst-geel"
-            }
-          >
-            Kunstenaars
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/info"
-            className={({ isActive }) =>
-              isActive ? "tekst-blauw active-link" : "tekst-blauw"
-            }
-          >
-            Info
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/agenda"
-            className={({ isActive }) =>
-              isActive ? "tekst-blauw active-link" : "tekst-blauw"
-            }
-          >
-            Agenda
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              isActive ? "btn-inschrijven active-link" : "btn-inschrijven"
-            }
-          >
-            Account
-          </NavLink>
+          <Link to="/inschrijven" className="btn-inschrijven">Inschrijven</Link>
         </li>
       </ul>
     </nav>
   );
 }
+
