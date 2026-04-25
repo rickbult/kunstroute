@@ -4,38 +4,31 @@ import "./ArtistDetail.css";
 
 export const ArtistDetail = ({ artists }) => {
   const { id } = useParams();
-  const artist = artists?.find((a) => a.link === id);
+  const artist = artists.find((a) => a.link === id);
 
   if (!artist) {
     return (
       <div className="detail-wrapper">
         <p>Kunstenaar niet gevonden.</p>
-        <Link to="/" className="back-link">
-          ← Terug naar kunstenaars
-        </Link>
+        <Link to="/" className="back-link">← Terug naar kunstenaars</Link>
       </div>
     );
   }
 
   return (
     <div className="detail-wrapper">
-      <Link to="/" className="back-link">
-        ← Terug naar kunstenaars
-      </Link>
+      <Link to="/" className="back-link">← Terug naar kunstenaars</Link>
 
       <div className="artist-hero">
         <div className="artist-image">
           <img src={artist.imgSrc} alt={artist.imgAlt} />
         </div>
-
         <div className="artist-info">
           <h1 className="artist-name">{artist.title}</h1>
-
           <div className="artist-tags">
-            <span className="tag tag-location">{artist.location}</span>
+            <span className="tag tag-location"> {artist.location}</span>
             <span className="tag tag-days">{artist.days}</span>
           </div>
-
           <p className="artist-bio">{artist.description}</p>
 
           <div className="artist-contact-card">
@@ -43,15 +36,12 @@ export const ArtistDetail = ({ artists }) => {
               <h3>Bezoekadres</h3>
               <p>{artist.address || "Straatnaam/Huisnummer"}</p>
               <p>{artist.postcode || "Postcode/Locatie"}</p>
-              <a href="#" className="map-link">
-                Bekijk op kaart
-              </a>
+              <a href="#" className="map-link">Bekijk op kaart</a>
             </div>
-
             <div className="contact-section">
               <h3>Contact</h3>
-              <p>{artist.phone || "Telefoon nummer"}</p>
-              <p>{artist.email || "Email"}</p>
+              <p> {artist.phone || "Telefoon nummer"}</p>
+              <p> {artist.email || "Email"}</p>
             </div>
           </div>
         </div>

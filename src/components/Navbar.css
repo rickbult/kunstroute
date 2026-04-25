@@ -16,8 +16,6 @@ body {
   align-items: center;
   padding: 0.6rem 2rem;
   border-bottom: 2px solid #2301ba;
-  position: relative;
-  z-index: 1000;
 }
 
 .logo {
