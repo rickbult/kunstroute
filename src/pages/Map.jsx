@@ -66,7 +66,11 @@ function MapController({ bounds }) {
   useEffect(() => {
     if (bounds) {
       try {
+        map.setMaxBounds(bounds);
         map.fitBounds(bounds, { paddingTopLeft: [20, 90], paddingBottomRight: [20, 20] });
+        map.once('moveend', () => {
+          map.setMinZoom(map.getZoom());
+        });
       } catch (e) {}
     }
   }, [bounds, map]);
@@ -141,12 +145,17 @@ export default function KaartComponent() {
         {/* Gebruik center/zoom totdat bounds beschikbaar is to avoid blank map */}
         <MapContainer
           className="kaart-canvas"
-          dragging={false}
-          zoomControl={false}
+          dragging={true}
+          zoomControl={true}
           keyboard={false}
-          minZoom={11.5}
+          minZoom={11.25}
           {...(kaartBounds
-            ? { bounds: kaartBounds, boundsOptions: { paddingTopLeft: [20, 90], paddingBottomRight: [20, 20] } }
+            ? {
+                bounds: kaartBounds,
+                boundsOptions: { paddingTopLeft: [20, 90], paddingBottomRight: [20, 20] },
+                maxBounds: kaartBounds,
+                maxBoundsViscosity: 1.0,
+              }
             : { center: defaultCenter, zoom: 11 })}
         >
           <TileLayer

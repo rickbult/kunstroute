@@ -8,6 +8,9 @@
 	--brand-muted: #f5f6fb;
 	--brand-border: rgba(46, 43, 118, 0.2);
 	--brand-shadow: rgba(46, 43, 118, 0.14);
+	height: 100%;
+	padding-top: 0;
+	overflow: hidden;
 }
 
 .kaart-canvas .leaflet-popup-content-wrapper {
@@ -22,12 +25,10 @@
 }
 
 .kaart-container {
-	--navbar-height: 82px;
-  display: flex;
-	height: 100vh;
-	padding-top: var(--navbar-height);
+	display: flex;
+	height: 100%;
 	box-sizing: border-box;
-  width: 100%;
+	width: 100%;
 }
 
 .kaart-wrapper {
@@ -122,6 +123,10 @@
 	justify-content: center;
 	cursor: pointer;
 	position: relative;
+	border-radius: 50%;
+	overflow: hidden;
+	border: 2px solid var(--brand-surface);
+	box-shadow: 0 2px 8px var(--brand-shadow);
 }
 
 .profiel-marker.selected {
