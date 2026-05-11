@@ -45,17 +45,17 @@ const filterGeldigeKaartpunten = (kaartpunten) =>
 
 const maakProfielfotoMarker = (fotoUrl, naamKunstenaar, isSelected) => {
   const html = fotoUrl
-    ? `<div class="profiel-marker ${isSelected ? 'selected' : ''}"><img src="${fotoUrl}" alt="${naamKunstenaar}" class="profiel-foto"/></div>`
-    : `<div class="profiel-marker profiel-initialen ${isSelected ? 'selected' : ''}"><span class="initialen-text">${haalInitialenOp(
+    ? `<div class="profiel-marker ${isSelected ? 'selected' : ''}"><div class="profiel-marker-body"><img src="${fotoUrl}" alt="${naamKunstenaar}" class="profiel-foto"/></div><div class="profiel-marker-tail"></div></div>`
+    : `<div class="profiel-marker profiel-initialen ${isSelected ? 'selected' : ''}"><div class="profiel-marker-body"><span class="initialen-text">${haalInitialenOp(
         naamKunstenaar
-      )}</span></div>`;
+      )}</span></div><div class="profiel-marker-tail"></div></div>`;
 
   return L.divIcon({
     html,
     className: `custom-div-icon${isSelected ? ' selected' : ''}`,
-    iconSize: [50, 50],
-    iconAnchor: [25, 25],
-    popupAnchor: [0, -25],
+    iconSize: [50, 66],
+    iconAnchor: [25, 66],
+    popupAnchor: [0, -58],
   });
 };
 
@@ -83,6 +83,7 @@ export default function KaartComponent() {
   const [geselecteerdeLocatie, stelGeselecteerdeLocatieIn] = useState(null);
   const containerRef = useRef(null);
   const cardRefs = useRef({});
+  const huidigJaar = new Date().getFullYear();
 
   useEffect(() => {
     let actief = true;
@@ -224,6 +225,7 @@ export default function KaartComponent() {
             );
           })}
         </div>
+        <div className="kaart-sidebar-note">ⓒ KunstRoute Noord-West Veluwe - {huidigJaar}</div>
       </aside>
     </div>
   );

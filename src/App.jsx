@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import artistsData from "./data/artists.json";
 
@@ -16,36 +16,43 @@ import { AgendaPage } from "./pages/Agenda.jsx";
 
 
 function App() {
+  const location = useLocation();
+  const toonFooter = location.pathname !== '/kaart' && location.pathname !== '/map';
+
   return (
-    <BrowserRouter>
-      <div className="app-shell">
-        <Navbar />
-        <main className="app-main">
-          <Routes>
-            <Route path="/" element={<Artists />} />
-            <Route path="/artists" element={<Artists />} />
-            <Route path="/kunstenaars" element={<Artists />} />
-            <Route path="/artwork" element={<Artwork />} />
-            <Route path="/kunstwerken" element={<Artwork />} />
-            <Route path="/kaart" element={<Map />} />
-            <Route path="/map" element={<Map />} />
-            <Route path="/signup" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/info" element={<Info />} />
-            <Route path="/agenda" element={<AgendaPage />} />
-            <Route
-              path="/artist/:id"
-              element={<ArtistDetail artists={artistsData} />}
-            />
-            <Route path="*" element={<Artists />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <div className="app-shell">
+      <Navbar />
+      <main className="app-main">
+        <Routes>
+          <Route path="/" element={<Artists />} />
+          <Route path="/artists" element={<Artists />} />
+          <Route path="/kunstenaars" element={<Artists />} />
+          <Route path="/artwork" element={<Artwork />} />
+          <Route path="/kunstwerken" element={<Artwork />} />
+          <Route path="/kaart" element={<Map />} />
+          <Route path="/map" element={<Map />} />
+          <Route path="/signup" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/info" element={<Info />} />
+          <Route path="/agenda" element={<AgendaPage />} />
+          <Route
+            path="/artist/:id"
+            element={<ArtistDetail artists={artistsData} />}
+          />
+          <Route path="*" element={<Artists />} />
+        </Routes>
+      </main>
+      {toonFooter && <Footer />}
+    </div>
   );
 }
 
-export default App;
+export default function AppWrapper() {
+  return (
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  );
+}
