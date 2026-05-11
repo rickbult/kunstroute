@@ -4,13 +4,13 @@
   padding: 2rem;
 }
 
-.search-bar {
+.zoekbalk {
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
 }
 
-.search-bar input {
+.zoekbalk input {
   width: 100%;
   max-width: 500px;
   padding: 0.6rem 1rem;
@@ -20,7 +20,7 @@
   outline: none;
 }
 
-.search-bar input:focus {
+.zoekbalk input:focus {
   border-color: #999;
 }
 
