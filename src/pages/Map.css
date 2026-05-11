@@ -29,14 +29,23 @@
 	height: 100%;
 	box-sizing: border-box;
 	width: 100%;
+	position: relative;
 }
 
 .kaart-wrapper {
-	flex: 0 0 75vw;
-	width: 75vw;
+	flex: 1 1 0%;
+	width: auto;
+	min-width: 0;
 	position: relative;
 	height: 100%;
 	min-height: 0;
+	transition: width 0.25s ease, flex-basis 0.25s ease;
+}
+
+.kaart-container.sidebar-collapsed .kaart-wrapper {
+	flex: 1 1 100vw;
+	width: 100vw;
+	min-width: 100vw;
 }
 
 
@@ -52,7 +61,16 @@
 }
 
 .kaart-canvas .leaflet-tile-pane {
-	filter: none;
+	position: relative;
+}
+
+.kaart-canvas .leaflet-tile-pane::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: rgba(255, 255, 255, 0.38);
+	pointer-events: none;
+	z-index: 500;
 }
 
 .kaart-popup {
@@ -74,6 +92,18 @@
 	z-index: 10;
 	height: 100%;
 	min-height: 0;
+	transition: width 0.25s ease, flex-basis 0.25s ease, padding 0.25s ease, border 0.25s ease;
+}
+
+.kaart-container.sidebar-collapsed .kaart-sidebar {
+	flex: 0 0 0;
+	flex-basis: 0;
+	width: 0;
+	min-width: 0;
+	padding: 0;
+	border-left: 0;
+	overflow: hidden;
+	pointer-events: none;
 }
 
 .sidebar-content {
@@ -92,6 +122,35 @@
 	color: #7a7f90;
 	border-top: 1px solid rgba(46, 43, 118, 0.08);
 	background: rgba(255, 255, 255, 0.4);
+}
+
+.kaart-sidebar-toggle {
+	position: absolute;
+	top: 16px;
+	right: calc(25vw + 12px);
+	z-index: 20;
+	width: 30px;
+	height: 40px;
+	border: 1px solid var(--brand-border);
+	border-right: none;
+	border-radius: 10px 0 0 10px;
+	background: rgba(255, 255, 255, 0.9);
+	color: var(--brand-ink);
+	font-size: 24px;
+	line-height: 1;
+	font-weight: 700;
+	cursor: pointer;
+	box-shadow: 0 2px 10px rgba(46, 43, 118, 0.12);
+	transition: right 0.25s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.kaart-sidebar-toggle:hover {
+	background: #ffffff;
+	transform: translateX(-1px);
+}
+
+.kaart-container.sidebar-collapsed .kaart-sidebar-toggle {
+	right: 12px;
 }
 
 .leaflet-popup-content-wrapper {

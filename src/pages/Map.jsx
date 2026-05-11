@@ -60,7 +60,7 @@ const maakProfielfotoMarker = (fotoUrl, naamKunstenaar, isSelected) => {
 };
 
 // Component die de kaart eenmaal op de punten afstemt
-function MapController({ bounds }) {
+function MapController({ bounds, sidebarIngeklapt }) {
   const map = useMap();
 
   useEffect(() => {
@@ -75,15 +75,32 @@ function MapController({ bounds }) {
     }
   }, [bounds, map]);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      map.invalidateSize({ animate: false });
+      if (bounds) {
+        map.fitBounds(bounds, { paddingTopLeft: [20, 90], paddingBottomRight: [20, 20] });
+      }
+    }, 280);
+
+    return () => window.clearTimeout(timer);
+  }, [sidebarIngeklapt, bounds, map]);
+
   return null;
 }
 
 export default function KaartComponent() {
   const [kaartPuntenLijst, stelKaartPuntenLijstIn] = useState(() => filterGeldigeKaartpunten(fallbackKaartpunten));
   const [geselecteerdeLocatie, stelGeselecteerdeLocatieIn] = useState(null);
+  const [sidebarIngeklapt, zetSidebarIngeklapt] = useState(false);
   const containerRef = useRef(null);
   const cardRefs = useRef({});
   const huidigJaar = new Date().getFullYear();
+
+  const selecteerLocatie = (kaartPunt) => {
+    zetSidebarIngeklapt(false);
+    stelGeselecteerdeLocatieIn(kaartPunt);
+  };
 
   useEffect(() => {
     let actief = true;
@@ -112,12 +129,20 @@ export default function KaartComponent() {
   // Scroll sidebar to selected card when selection changes
   useEffect(() => {
     if (!geselecteerdeLocatie) return;
+
+    if (sidebarIngeklapt) {
+      zetSidebarIngeklapt(false);
+      return;
+    }
+
     const key = geselecteerdeLocatie.detailPaginaUrl || geselecteerdeLocatie.naamKunstenaar;
     const el = cardRefs.current[key];
     if (el && el.scrollIntoView) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      requestAnimationFrame(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
     }
-  }, [geselecteerdeLocatie]);
+  }, [geselecteerdeLocatie, sidebarIngeklapt]);
 
   // voorkom keyboard navigation (extra safety)
   useEffect(() => {
@@ -141,7 +166,15 @@ export default function KaartComponent() {
   const defaultCenter = [52.35, 5.6];
 
   return (
-    <div className="kaart-container">
+    <div className={`kaart-container ${sidebarIngeklapt ? 'sidebar-collapsed' : ''}`}>
+      <button
+        type="button"
+        className="kaart-sidebar-toggle"
+        aria-label={sidebarIngeklapt ? 'Open sidebar' : 'Sluit sidebar'}
+        onClick={() => zetSidebarIngeklapt((waarde) => !waarde)}
+      >
+        {sidebarIngeklapt ? '‹' : '›'}
+      </button>
       <div className={`kaart-wrapper ${geselecteerdeLocatie ? 'has-selection' : ''}`} ref={containerRef} tabIndex={0}>
         {/* Gebruik center/zoom totdat bounds beschikbaar is to avoid blank map */}
         <MapContainer
@@ -174,12 +207,12 @@ export default function KaartComponent() {
                 key={kaartPunt.detailPaginaUrl || kaartPunt.naamKunstenaar}
                 position={[kaartPunt.breedtegraad, kaartPunt.lengtegraad]}
                 icon={markerIcon}
-                eventHandlers={{ click: () => stelGeselecteerdeLocatieIn(kaartPunt) }}
+                eventHandlers={{ click: () => selecteerLocatie(kaartPunt) }}
               />
             );
           })}
               {/* Map controller to fit the available points once */}
-              <MapController bounds={kaartBounds} />
+              <MapController bounds={kaartBounds} sidebarIngeklapt={sidebarIngeklapt} />
         </MapContainer>
       </div>
 
@@ -195,7 +228,7 @@ export default function KaartComponent() {
                 key={kaartPunt.detailPaginaUrl || kaartPunt.naamKunstenaar}
                   ref={(el) => (cardRefs.current[key] = el)}
                   className={`locatie-card ${isSelected ? 'selected' : ''}`}
-                  onClick={() => stelGeselecteerdeLocatieIn(kaartPunt)}
+                  onClick={() => selecteerLocatie(kaartPunt)}
               >
                   {isSelected && (
                     <button
