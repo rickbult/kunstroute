@@ -1,38 +1,88 @@
+.kaart-container {
+	--brand-blue: #2e2b76;
+	--brand-pink: #e42a6a;
+	--brand-green: #2ba44a;
+	--brand-lime: #a6d51e;
+	--brand-ink: #2e2b76;
+	--brand-surface: #ffffff;
+	--brand-muted: #f5f6fb;
+	--brand-border: rgba(46, 43, 118, 0.2);
+	--brand-shadow: rgba(46, 43, 118, 0.14);
+}
+
 .kaart-canvas .leaflet-popup-content-wrapper {
-  background: #fff6b3;
-  color: rgb(9, 255, 0);
+	background: var(--brand-surface);
+	color: var(--brand-ink);
+	border: 1px solid var(--brand-border);
+	box-shadow: 0 10px 30px var(--brand-shadow);
 }
 
 .kaart-canvas .leaflet-popup-tip {
-  background: #ffffff;
+	background: var(--brand-surface);
 }
 
-.kaart-canvas .leaflet-popup-content {
-  color: #1f1f1f;
+.kaart-container {
+	--navbar-height: 82px;
+  display: flex;
+	height: 100vh;
+	padding-top: var(--navbar-height);
+	box-sizing: border-box;
+  width: 100%;
 }
 
-.kaart-popup a {
-  color: #0b5cad;
+.kaart-wrapper {
+	flex: 1;
+	width: 80vw;
+	position: relative;
+	height: 100%;
+	min-height: 0;
 }
+
 
 .kaart-canvas {
-    position: fixed;
-    inset: 0;
-	width: 100vw;
-	height: 100vh;
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
 	border-radius: 0px;
 	overflow: hidden;
-    z-index: 1;
+	z-index: 1;
+	background: #ffffff;
+}
+
+.kaart-canvas .leaflet-tile-pane {
+	filter: none;
 }
 
 .kaart-popup {
 	max-width: 260px;
 	line-height: 1.35;
+	left: 0;
+	top: 0;
 	font-size: 0.92rem;
 }
 
+
+.kaart-sidebar {
+	width: 20vw;
+	background: var(--brand-muted);
+	border-left: 1px solid var(--brand-border);
+	display: flex;
+	flex-direction: column;
+	z-index: 10;
+	height: 100%;
+	min-height: 0;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  height: 100%;
+  min-height: 0;
+}
 .leaflet-popup-content-wrapper {
-	background-color:000;
+	background-color: transparent;
 }
 
 .kaart-popup strong {
@@ -49,6 +99,217 @@
 
 .kaart-popup a:hover {
 	text-decoration: underline;
+}
+
+/* Custom marker met ronde profielfoto */
+.custom-div-icon {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.profiel-marker {
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	position: relative;
+}
+
+.profiel-marker.selected {
+	z-index: 999;
+}
+
+.profiel-marker.selected .profiel-foto,
+.profiel-marker.selected.profiel-initialen {
+	box-shadow: 0 0 0 3px rgba(228, 42, 106, 0.95), 0 6px 18px rgba(46, 43, 118, 0.22);
+}
+
+.profiel-foto {
+	width: 100%;
+	height: 100%;
+	aspect-ratio: 1 / 1;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid var(--brand-surface);
+	box-shadow: 0 2px 8px var(--brand-shadow);
+	transition: transform 0.2s;
+	position: relative;
+	z-index: 1;
+}
+
+.profiel-foto:hover {
+	transform: scale(1.1);
+	box-shadow: 0 4px 14px rgba(63, 55, 155, 0.28);
+}
+
+/* Fallback: initialen */
+.profiel-marker.profiel-initialen {
+	width: 50px;
+	height: 50px;
+	background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-green) 100%);
+	border-radius: 50%;
+	border: 2px solid var(--brand-surface);
+	box-shadow: 0 2px 8px var(--brand-shadow);
+	transition: transform 0.2s;
+}
+
+.profiel-marker.profiel-initialen:hover {
+	transform: scale(1.1);
+	box-shadow: 0 4px 14px rgba(63, 55, 155, 0.28);
+}
+
+/* When a selection exists, dim non-selected markers */
+.kaart-wrapper.has-selection .profiel-marker {
+	opacity: 0.5;
+	transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.kaart-wrapper.has-selection .profiel-marker.selected {
+	opacity: 1;
+	transform: translateY(-2px);
+}
+
+.initialen-text {
+	font-weight: bold;
+	font-size: 18px;
+	color: white;
+	text-transform: uppercase;
+	user-select: none;
+	position: relative;
+	z-index: 1;
+}
+
+/* Locatie kaarten in sidebar */
+.locatie-card {
+	background: var(--brand-surface);
+	border: 1px solid var(--brand-border);
+	border-radius: 8px;
+	margin-bottom: 8px;
+	padding: 12px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: flex;
+	gap: 10px;
+	position: relative;
+}
+
+.locatie-card:hover {
+	border-color: var(--brand-blue);
+	box-shadow: 0 2px 10px var(--brand-shadow);
+	transform: translateY(-2px);
+}
+
+.locatie-card.selected {
+	border-color: var(--brand-pink);
+	background: linear-gradient(180deg, #ffffff 0%, rgba(228, 42, 106, 0.06) 100%);
+	box-shadow: 0 0 0 1px rgba(228, 42, 106, 0.12), 0 8px 18px rgba(228, 42, 106, 0.12);
+}
+
+.card-foto {
+	width: 50px;
+	height: 50px;
+	min-width: 50px;
+	border-radius: 50%;
+	overflow: hidden;
+	background: #eee;
+}
+
+.card-foto img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.card-initialen {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(135deg, var(--brand-green) 0%, var(--brand-lime) 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--brand-ink);
+	font-weight: bold;
+	font-size: 16px;
+}
+
+.card-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.card-info h3 {
+	margin: 0 0 4px 0;
+	font-size: 0.95rem;
+	color: var(--brand-ink);
+}
+
+.card-address {
+	margin: 4px 0;
+	font-size: 0.8rem;
+	color: #5d6277;
+	word-break: break-word;
+}
+
+.card-days,
+.card-accessibility {
+	margin: 4px 0;
+	font-size: 0.8rem;
+	color: #5d6277;
+}
+
+.card-link {
+	margin-top: 6px;
+	font-size: 0.85rem;
+	color: var(--brand-blue);
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.card-link:hover {
+	text-decoration: underline;
+}
+
+/* close button in selected card */
+.card-close {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	background: transparent;
+	border: none;
+	font-size: 18px;
+	line-height: 1;
+	cursor: pointer;
+	color: var(--brand-ink);
+	padding: 4px;
+	border-radius: 4px;
+}
+
+.card-close:hover {
+	background: rgba(46, 43, 118, 0.08);
+	color: var(--brand-pink);
+}
+
+/* Scrollbar styling */
+.sidebar-content::-webkit-scrollbar {
+	width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+	background: #eceef7;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+	background: var(--brand-blue);
+	border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+	background: var(--brand-pink);
 }
 
 @media (max-width: 640px) {
