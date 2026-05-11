@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.15.2",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -20,7 +21,9 @@
     "mongoose": "^9.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.6.0",
     "react-leaflet": "^4.2.1",
+    "react-router": "^6.26.1",
     "react-router-dom": "^7.13.1"
   },
   "devDependencies": {
@@ -30,7 +33,7 @@
     "concurrently": "^9.2.1",
     "vite": "^8.0.8"
   },
-  "description": "Cash legen:\r cd ..                    # ← NAAR /kunstroute/\r npm cache clean --force\r rm -rf node_modules package-lock.json\r npm install\r npm run dev",
+  "description": "Kunstroute Noord-west Veluwe - interactive art route application",
   "main": "vite.config.js",
   "repository": {
     "type": "git",
