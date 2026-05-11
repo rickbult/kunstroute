@@ -1,16 +1,74 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import "./ArtistDetail.css";
+import kaartpuntenFallback from "../../server/kaartpuntenFallback.json";
+
+const maakSlug = (waarde) =>
+  (waarde || "")
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/https?:\/\/[^/]+\//, "")
+    .replace(/\/+$/, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const haalArtistUitKaartpunten = (id) =>
+  kaartpuntenFallback.find((punt) => {
+    const naamSlug = maakSlug(punt.naamKunstenaar);
+    const urlSlug = (() => {
+      try {
+        return new URL(punt.detailPaginaUrl).pathname.split("/").filter(Boolean).pop() || "";
+      } catch (e) {
+        return "";
+      }
+    })();
+    return naamSlug === id || urlSlug === id;
+  });
 
 export const ArtistDetail = ({ artists }) => {
   const { id } = useParams();
   const artist = artists.find((a) => a.link === id);
+  const kaartpunt = artist ? null : haalArtistUitKaartpunten(id);
 
-  if (!artist) {
+  if (!artist && !kaartpunt) {
     return (
       <div className="detail-wrapper">
         <p>Kunstenaar niet gevonden.</p>
         <Link to="/" className="back-link">← Terug naar kunstenaars</Link>
+      </div>
+    );
+  }
+
+  if (kaartpunt) {
+    return (
+      <div className="detail-wrapper">
+        <Link to="/kaart" className="back-link">← Terug naar kaart</Link>
+
+        <div className="artist-hero">
+          <div className="artist-info" style={{ width: '100%' }}>
+            <h1 className="artist-name">{kaartpunt.naamKunstenaar}</h1>
+            <div className="artist-tags">
+              <span className="tag tag-location">{kaartpunt.stad}</span>
+              <span className="tag tag-days">{kaartpunt.openDagenKunstroute2026}</span>
+            </div>
+            <p className="artist-bio">{kaartpunt.titelWerk || kaartpunt.volledigAdres}</p>
+
+            <div className="artist-contact-card">
+              <div className="contact-section">
+                <h3>Bezoekadres</h3>
+                <p>{kaartpunt.volledigAdres}</p>
+                <p>{kaartpunt.stad}</p>
+                <a href={kaartpunt.googleMapsUrl || "#"} className="map-link" target="_blank" rel="noreferrer">Bekijk op kaart</a>
+              </div>
+              <div className="contact-section">
+                <h3>Toegankelijkheid</h3>
+                <p>{kaartpunt.rolstoeltoegankelijkheid}</p>
+                <p>{kaartpunt.openDagenKunstroute2026}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
