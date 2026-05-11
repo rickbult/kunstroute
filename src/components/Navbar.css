@@ -88,10 +88,21 @@ body {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+}
+
+.route-link {
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.route-label {
+  display: inline-block;
+  line-height: 1;
 }
 
 .badge-nieuw {
+  display: inline-flex;
+  align-items: center;
   background-color: #382F88;
   color: #ffffff;
   font-family: 'Bebas Neue', sans-serif;
@@ -102,7 +113,8 @@ body {
   border-radius: 5px;
   white-space: nowrap;
   line-height: 1;
-  margin-left: -2rem;
-  margin-bottom: 1.5rem;
-  transform: scale(85%);
+  margin-left: -1.5rem;
+  margin-right: -1.25rem;
+  margin-bottom: 1.75rem;
+  transform: scale(0.85);
 }

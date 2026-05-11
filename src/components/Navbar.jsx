@@ -12,8 +12,8 @@ export default function Navbar() {
 
       <ul className="nav-links">
         <li>
-          <Link to="/kaart" className="tekst-groen">
-            Route
+          <Link to="/kaart" className="tekst-groen route-link">
+            <span className="route-label">Route</span>
             <span className="badge-nieuw">NIEUW!</span>
           </Link>
         </li>
