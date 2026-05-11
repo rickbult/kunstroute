@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import artistsData from "./data/artists.json";
 
@@ -17,14 +17,17 @@ import { AgendaPage } from "./pages/Agenda.jsx";
 
 function App() {
   return (
-    <>
+    <BrowserRouter>
       <Navbar />
       <Routes>
         <Route path="/" element={<Artists />} />
         <Route path="/artists" element={<Artists />} />
+        <Route path="/kunstenaars" element={<Artists />} />
         <Route path="/artwork" element={<Artwork />} />
+        <Route path="/kunstwerken" element={<Artwork />} />
         <Route path="/kaart" element={<Map />} />
         <Route path="/map" element={<Map />} />
+        <Route path="/signup" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
@@ -37,7 +40,7 @@ function App() {
         <Route path="*" element={<Artists />} />
       </Routes>
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 

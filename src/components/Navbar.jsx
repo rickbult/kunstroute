@@ -14,9 +14,10 @@ export default function Navbar() {
         <li><Link to="/kaart" className="tekst-groen">Kaart</Link></li>
         <li><Link to="/kunstwerken" className="tekst-roze">Kunstwerken</Link></li>
         <li><Link to="/kunstenaars" className="tekst-geel">Kunstenaars</Link></li>
-        <li><Link to="/info-agenda" className="tekst-blauw">Info & Agenda</Link></li>
+        <li><Link to="/info" className="tekst-blauw">Info</Link></li>
+        <li><Link to="/agenda" className="tekst-blauw">Agenda</Link></li>
         <li>
-          <Link to="/signup" className="btn-inschrijven">Inschrijven</Link>  
+          <Link to="/register" className="btn-inschrijven">Inschrijven</Link>
         </li>
       </ul>
     </nav>
