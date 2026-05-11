@@ -127,10 +127,10 @@ export default function KaartComponent() {
           dragging={false}
           zoomControl={false}
           keyboard={false}
-          minZoom={10}
+          minZoom={11.5}
           {...(kaartBounds
             ? { bounds: kaartBounds, boundsOptions: { paddingTopLeft: [20, 90], paddingBottomRight: [20, 20] } }
-            : { center: defaultCenter, zoom: 10 })}
+            : { center: defaultCenter, zoom: 11 })}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
