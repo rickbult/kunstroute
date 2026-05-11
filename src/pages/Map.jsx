@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import './Map.css';
 import mapArtistPhotos from '../data/mapArtistPhotos.json';
+import fallbackKaartpunten from '../../server/kaartpuntenFallback.json';
 
 const maakSlug = (waarde) =>
   (waarde || '')
@@ -39,6 +40,9 @@ const zoekKaartpuntLink = (kaartPunt) => {
   return maakSlug(kaartPunt?.naamKunstenaar);
 };
 
+const filterGeldigeKaartpunten = (kaartpunten) =>
+  kaartpunten.filter((d) => Number.isFinite(d.breedtegraad) && Number.isFinite(d.lengtegraad));
+
 const maakProfielfotoMarker = (fotoUrl, naamKunstenaar, isSelected) => {
   const html = fotoUrl
     ? `<div class="profiel-marker ${isSelected ? 'selected' : ''}"><img src="${fotoUrl}" alt="${naamKunstenaar}" class="profiel-foto"/></div>`
@@ -71,20 +75,33 @@ function MapController({ bounds }) {
 }
 
 export default function KaartComponent() {
-  const [kaartPuntenLijst, stelKaartPuntenLijstIn] = useState([]);
+  const [kaartPuntenLijst, stelKaartPuntenLijstIn] = useState(() => filterGeldigeKaartpunten(fallbackKaartpunten));
   const [geselecteerdeLocatie, stelGeselecteerdeLocatieIn] = useState(null);
   const containerRef = useRef(null);
   const cardRefs = useRef({});
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/kaartpunten')
-      .then((r) => r.json())
-      .then((data) =>
-        stelKaartPuntenLijstIn(
-          data.filter((d) => Number.isFinite(d.breedtegraad) && Number.isFinite(d.lengtegraad))
-        )
-      )
-      .catch((e) => console.error('Fout bij ophalen kaartpunten:', e));
+    let actief = true;
+
+    fetch('/api/kaartpunten')
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((data) => {
+        if (!actief || !Array.isArray(data)) {
+          return;
+        }
+
+        const geldigePunten = filterGeldigeKaartpunten(data);
+        if (geldigePunten.length > 0) {
+          stelKaartPuntenLijstIn(geldigePunten);
+        }
+      })
+      .catch((e) => {
+        console.warn('Fout bij ophalen kaartpunten, fallback wordt gebruikt:', e.message);
+      });
+
+    return () => {
+      actief = false;
+    };
   }, []);
 
   // Scroll sidebar to selected card when selection changes

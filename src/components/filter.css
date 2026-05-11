@@ -1,4 +1,4 @@
-.zoekfilter-balk {
+.filter-widget .zoekfilter-balk {
   display: flex;
   gap: 0;
   width: fit-content;
@@ -16,7 +16,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.zoekbalk {
+.filter-widget .zoekbalk {
   flex: 0 1 auto;
   min-width: 0;
   display: flex;
@@ -24,7 +24,7 @@
   padding-right: 0.5rem;
 }
 
-.zoekbalk input {
+.filter-widget .zoekbalk input {
   width: 100%;
   max-width: 560px;
   padding: 0.5rem 0.8rem 0.5rem 2.3rem;
@@ -36,21 +36,21 @@
   color: #333;
 }
 
-.zoekbalk input::placeholder {
+.filter-widget .zoekbalk input::placeholder {
   color: #aaa;
 }
 
-.zoekbalk input:focus {
+.filter-widget .zoekbalk input:focus {
   outline: none;
 }
 
-.filtergebied {
+.filter-widget .filtergebied {
   position: relative;
   display: inline-block;
   width: fit-content;
 }
 
-.filterknoppen-rij {
+.filter-widget .filterknoppen-rij {
   display: flex;
   gap: 0;
   flex-wrap: nowrap;
@@ -62,7 +62,7 @@
   z-index: 1;
 }
 
-.filterknop-omhulsel {
+.filter-widget .filterknop-omhulsel {
   position: relative;
   flex-shrink: 0;
   display: flex;
@@ -71,12 +71,12 @@
   padding-right: 0.5rem;
 }
 
-.filterknop-omhulsel:last-child {
+.filter-widget .filterknop-omhulsel:last-child {
   border-right: none;
   padding-right: 0;
 }
 
-.filterknop {
+.filter-widget .filterknop {
   display: flex;
   align-items: center;
   gap: 0.3rem;
@@ -92,28 +92,28 @@
   white-space: nowrap;
 }
 
-.filterknop:hover {
+.filter-widget .filterknop:hover {
   background-color: #f0f0f0;
   color: #007bff;
 }
 
-.filterknop.actief {
+.filter-widget .filterknop.actief {
   background-color: transparent;
   color: #007bff;
   font-weight: 600;
 }
 
-.filterknop .uitklap-icoon {
+.filter-widget .filterknop .uitklap-icoon {
   font-size: 0.65rem;
   display: inline-block;
   transition: transform 0.2s ease;
 }
 
-.filterknop-omhulsel:has(> .filter-keuzemenu) .filterknop .uitklap-icoon {
+.filter-widget .filterknop-omhulsel:has(> .filter-keuzemenu) .filterknop .uitklap-icoon {
   transform: rotate(180deg);
 }
 
-.extra-filters-knop {
+.filter-widget .extra-filters-knop {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -131,32 +131,32 @@
   flex-shrink: 0;
 }
 
-.extra-filters-knop:hover {
+.filter-widget .extra-filters-knop:hover {
   background-color: #f0f0f0;
   color: #007bff;
 }
 
-.extra-filters-knop.actief {
+.filter-widget .extra-filters-knop.actief {
   color: #007bff;
   font-weight: 600;
 }
 
-.extra-filters-knop .wissel-icoon {
+.filter-widget .extra-filters-knop .wissel-icoon {
   font-size: 0.65rem;
   font-weight: 500;
   display: inline-block;
 }
 
-.filterknoppen-rij > .extra-filters-knop:last-child {
+.filter-widget .filterknoppen-rij > .extra-filters-knop:last-child {
   border-right: none;
 }
 
-.filterknop-omhulsel:last-child {
+.filter-widget .filterknop-omhulsel:last-child {
   border-right: none;
   padding-right: 0;
 }
 
-.filter-keuzemenu {
+.filter-widget .filter-keuzemenu {
   position: fixed;
   background: linear-gradient(180deg, #ffffff 0%, #fcfcfc 100%);
   border: 1px solid #e7e7e7;
@@ -172,18 +172,18 @@
 }
 
 
-.filterlabel-met-icoon {
+.filter-widget .filterlabel-met-icoon {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
 }
 
-.filterlabel-met-icoon .rolstoel-icoon {
+.filter-widget .filterlabel-met-icoon .rolstoel-icoon {
   font-size: 0.85rem;
   flex-shrink: 0;
 }
 
-.filteroptie {
+.filter-widget .filteroptie {
   display: flex;
   align-items: center;
   padding: 0.45rem 0.6rem;
@@ -195,12 +195,12 @@
   user-select: none;
 }
 
-.filteroptie:hover {
+.filter-widget .filteroptie:hover {
   background-color: #f1f1f1;
 }
 
-.filteroptie input[type="checkbox"],
-.filteroptie input[type="radio"] {
+.filter-widget .filteroptie input[type="checkbox"],
+.filter-widget .filteroptie input[type="radio"] {
   width: 16px;
   height: 16px;
   margin-right: 0.6rem;
@@ -209,11 +209,11 @@
   flex-shrink: 0;
 }
 
-.filteroptie span {
+.filter-widget .filteroptie span {
   flex: 1;
 }
 
-.extra-filters-venster {
+.filter-widget .extra-filters-venster {
   position: absolute;
   top: 100%;
   left: 0;
@@ -243,7 +243,7 @@
   }
 }
 
-.extra-filters-inhoud {
+.filter-widget .extra-filters-inhoud {
   display: flex;
   flex-wrap: nowrap;
   gap: 0;
@@ -251,36 +251,36 @@
   align-items: center;
 }
 
-.extra-filters-inhoud .filterknop {
+.filter-widget .extra-filters-inhoud .filterknop {
   margin-right: 0;
   margin-bottom: 0;
   padding: 0.38rem 0.78rem;
   border-radius: 8px;
 }
 
-.extra-filters-inhoud .filterknop-omhulsel {
+.filter-widget .extra-filters-inhoud .filterknop-omhulsel {
   border-right: 1px solid #e6e6e6;
   padding-right: 0.55rem;
 }
 
-.extra-filters-inhoud .filterknop-omhulsel:last-child {
+.filter-widget .extra-filters-inhoud .filterknop-omhulsel:last-child {
   border-right: none;
   padding-right: 0;
 }
 
 @media (max-width: 1024px) {
-  .filterknop {
+  .filter-widget .filterknop {
     padding: 0.3rem 0.6rem;
     font-size: 0.75rem;
   }
 
-  .filter-keuzemenu {
+  .filter-widget .filter-keuzemenu {
     min-width: 160px;
   }
 }
 
 @media (max-width: 768px) {
-  .zoekfilter-balk {
+  .filter-widget .zoekfilter-balk {
     flex-direction: column;
     width: 100%;
     gap: 0.5rem;
@@ -289,7 +289,7 @@
     align-items: stretch;
   }
 
-  .zoekbalk {
+  .filter-widget .zoekbalk {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid #e5e5e5;
@@ -297,42 +297,42 @@
     padding-bottom: 0.5rem;
   }
 
-  .zoekbalk input {
+  .filter-widget .zoekbalk input {
     width: 100%;
     max-width: none;
   }
 
-  .filterknoppen-rij {
+  .filter-widget .filterknoppen-rij {
     width: 100%;
     max-width: none;
     padding: 0;
     gap: 0;
   }
 
-  .filterknop-omhulsel {
+  .filter-widget .filterknop-omhulsel {
     border-right: 1px solid #e5e5e5;
     padding-right: 0.5rem;
     flex: 1;
   }
 
-  .filterknop-omhulsel:last-child {
+  .filter-widget .filterknop-omhulsel:last-child {
     border-right: none;
     padding-right: 0;
   }
 
-  .filterknop {
+  .filter-widget .filterknop {
     padding: 0.3rem 0.5rem;
     font-size: 0.75rem;
     width: 100%;
     justify-content: center;
   }
 
-  .filter-keuzemenu {
+  .filter-widget .filter-keuzemenu {
     position: fixed;
     min-width: 200px;
   }
 
-  .extra-filters-venster {
+  .filter-widget .extra-filters-venster {
     left: 50%;
     transform: translateX(-50%);
     width: 90vw;
@@ -341,7 +341,7 @@
     padding: 0.5rem;
   }
 
-  .extra-filters-inhoud {
+  .filter-widget .extra-filters-inhoud {
     flex-direction: column;
     gap: 0.5rem;
   }
