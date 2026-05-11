@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import { useState, useEffect, useMemo } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-=======
-import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
->>>>>>> origin/main
 import artistsData from "./data/artists.json";
 import "./App.css";
 import { Card } from "./components/Card.jsx"; 
@@ -128,7 +123,7 @@ function KaartenLijst({ kaarten }) {
   );
 }
 
-function AppInhoud({ cards }) {
+function AppInhoud({ kaarten }) {
   const location = useLocation();
   const opKaartPagina = location.pathname === "/kaart";
 
@@ -136,15 +131,15 @@ function AppInhoud({ cards }) {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<CardList cards={cards} />} />
+        <Route path="/" element={<KaartenLijst kaarten={kaarten} />} />
         <Route path="/inschrijven" element={<Signup />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/kaart" element={<KaartComponent />} />
         <Route path="/kunstwerken" element={<div>🎨 Kunstwerken</div>} />
-        <Route path="/kunstenaars" element={<CardList cards={cards} />} />
+        <Route path="/kunstenaars" element={<KaartenLijst kaarten={kaarten} />} />
         <Route path="/info-agenda" element={<div>📅 Info & Agenda</div>} />
-        <Route path="/artist/:id" element={<ArtistDetail artists={cards} />} />
+        <Route path="/artist/:id" element={<ArtistDetail artists={kaarten} />} />
         <Route path="*" element={<div>Pagina niet gevonden</div>} />
       </Routes>
 
@@ -168,16 +163,7 @@ function App() {
 
   return (
     <BrowserRouter>
-<<<<<<< HEAD
-      <Navbar />        
-      <Routes>
-        <Route path="/" element={<KaartenLijst kaarten={kaarten} />} />
-        <Route path="/artist/:id" element={<ArtistDetail artists={kaarten} />} />
-      </Routes>
-      <Footer />        
-=======
-      <AppInhoud cards={cards} />
->>>>>>> origin/main
+      <AppInhoud kaarten={kaarten} />
     </BrowserRouter>
   );
 }

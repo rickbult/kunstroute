@@ -38,16 +38,12 @@
 }
 
 .card-title {
-<<<<<<< HEAD
-  margin: 0 0.9rem 0.55rem;
-  color: #2d5e8d;
-=======
   position: relative;
   margin: 0 1rem 0.25rem 1rem;
   font-size: 1rem;
   font-weight: 600;
   z-index: 1;
-  color: black;
+  color: #2d5e8d;
 }
 
 .card-location {
@@ -66,7 +62,6 @@
 }
 
 .card-description {
->>>>>>> origin/main
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -95,12 +90,18 @@
   text-decoration: underline;
 }
 
-<<<<<<< HEAD
 @media (max-width: 900px) {
   .card h2 {
     font-size: 1rem;
   }
-=======
+
+  .card p,
+  .bio,
+  .card-title {
+    font-size: 0.84rem;
+  }
+}
+
 .card-btn {
   display: inline-block;
   width: auto;
@@ -125,12 +126,4 @@
   color: #555;
   margin-bottom: auto;
 
-}
->>>>>>> origin/main
-
-  .card p,
-  .bio,
-  .card-title {
-    font-size: 0.84rem;
-  }
 }
