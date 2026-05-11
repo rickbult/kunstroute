@@ -13,11 +13,15 @@ import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
 import Info from "./pages/Info.jsx";
 import { AgendaPage } from "./pages/Agenda.jsx";
+import NotFoundPage from "./pages/404.jsx";
 
 
 function App() {
   const location = useLocation();
-  const toonFooter = location.pathname !== '/kaart' && location.pathname !== '/map';
+  const toonFooter =
+    location.pathname !== "/kaart" &&
+    location.pathname !== "/map" &&
+    location.pathname !== "/404";
 
   return (
     <div className="app-shell">
@@ -41,7 +45,7 @@ function App() {
             path="/artist/:id"
             element={<ArtistDetail artists={artistsData} />}
           />
-          <Route path="*" element={<Artists />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       {toonFooter && <Footer />}
