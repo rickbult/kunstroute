@@ -1,170 +1,43 @@
-import { useState, useEffect, useMemo } from "react";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import artistsData from "./data/artists.json";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Card } from "./components/Card.jsx"; 
-import { ArtistDetail } from "./components/ArtistDetail.jsx";
-import { FilterBalk } from "./components/filter.jsx";
-import Navbar from "./components/Navbar.jsx";  
+import artistsData from "./data/artists.json";
+
+import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
-import Signup from './pages/Signup';
-import Login from './pages/Login';
-import KaartComponent from './pages/Map.jsx';
+import Artists from "./pages/Artists.jsx";
+import Artwork from "./pages/Artwork.jsx";
+import Map from "./pages/Map.jsx";
+import { ArtistDetail } from "./components/ArtistDetail.jsx";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Profile from "./pages/Profile.jsx";
+import Info from "./pages/Info.jsx";
+import { AgendaPage } from "./pages/Agenda.jsx";
 
-function KaartenLijst({ kaarten }) {
-  const [zoekterm, setZoekterm] = useState("");
-  const [geselecteerdeFilters, setGeselecteerdeFilters] = useState({});
 
-  const filterOpties = useMemo(() => {
-    const uniekeOpeningsdagen = new Set();
-    const uniekePlaatsen = new Set();
-    const uniekeKunstvormen = new Set();
-    const uniekeRolstoelNiveaus = new Set();
-
-    kaarten.forEach((kaart) => {
-      const dagMatches = kaart.days?.match(/[A-Za-zÀ-ÿ]+dag/g) || [];
-      dagMatches.forEach((dag) => uniekeOpeningsdagen.add(dag));
-
-      const plaats = kaart.address?.split(",").pop()?.trim();
-      if (plaats) {
-        uniekePlaatsen.add(plaats);
-      }
-
-      if (kaart.discipline) {
-        uniekeKunstvormen.add(kaart.discipline);
-      }
-
-      if (kaart.wheelchairaccessibility) {
-        uniekeRolstoelNiveaus.add(kaart.wheelchairaccessibility);
-      }
-    });
-
-    const opNederlands = (a, b) => a.localeCompare(b, "nl");
-
-    return {
-      openingsdagen: Array.from(uniekeOpeningsdagen).sort(opNederlands),
-      plaatsen: Array.from(uniekePlaatsen).sort(opNederlands),
-      kunstvormen: Array.from(uniekeKunstvormen).sort(opNederlands),
-      rolstoelNiveaus: Array.from(uniekeRolstoelNiveaus).sort(opNederlands),
-    };
-  }, [kaarten]);
-
-  let gefilterdeKaarten = kaarten.filter((kaart) => {
-    const voldoetAanZoekterm = kaart.title?.toLowerCase().includes(zoekterm.toLowerCase());
-
-    const rolstoelFilter = geselecteerdeFilters.rolstoelToegang || [];
-    const voldoetAanRolstoel =
-      rolstoelFilter.length === 0 ||
-      rolstoelFilter.includes(kaart.wheelchairaccessibility);
-
-    const plaatsFilter = geselecteerdeFilters.plaats || [];
-    const voldoetAanPlaats =
-      plaatsFilter.length === 0 ||
-      plaatsFilter.some((plaats) => kaart.address?.includes(plaats));
-
-    const kunstvormFilter = geselecteerdeFilters.kunstvorm || [];
-    const voldoetAanKunstvorm =
-      kunstvormFilter.length === 0 ||
-      kunstvormFilter.includes(kaart.discipline);
-
-    const dagenFilter = geselecteerdeFilters.openingsdagen || [];
-    const voldoetAanDagen =
-      dagenFilter.length === 0 ||
-      dagenFilter.some((dag) => kaart.days?.includes(dag));
-
-    return (
-      voldoetAanZoekterm &&
-      voldoetAanRolstoel &&
-      voldoetAanPlaats &&
-      voldoetAanKunstvorm &&
-      voldoetAanDagen
-    );
-  });
-
-  const sorteervolgorde = geselecteerdeFilters.sortering?.[0];
-  if (sorteervolgorde === "A-Z") {
-    gefilterdeKaarten = [...gefilterdeKaarten].sort((a, b) => a.title.localeCompare(b.title));
-  } else if (sorteervolgorde === "Z-A") {
-    gefilterdeKaarten = [...gefilterdeKaarten].sort((a, b) => b.title.localeCompare(a.title));
-  }
-
-  return (
-    <div className="page-wrapper">
-      <div className="page-header">
-        <h1>Onze Kunstenaars</h1>
-        <p>Maak kennis met de creatieve geesten achter de kunstwerken.</p>
-      </div>
-      <div className="zoekfilter-balk">
-        <div className="zoekbalk">
-          <input
-            type="text"
-            placeholder="Zoek een kunstenaar..."
-            value={zoekterm}
-            onChange={(e) => setZoekterm(e.target.value)}
-          />
-        </div>
-        <FilterBalk
-          geselecteerdeFilters={geselecteerdeFilters}
-          bijFilterWijziging={setGeselecteerdeFilters}
-          filterOpties={filterOpties}
-        />
-      </div>
-
-      <div className="card-grid">
-        {gefilterdeKaarten.length > 0 ? (
-          gefilterdeKaarten.map((kaart) => (
-            <Card key={kaart.link} {...kaart} />
-          ))
-        ) : (
-          <p>Geen kunstenaars gevonden met de geselecteerde filters.</p>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function AppInhoud({ kaarten }) {
-  const location = useLocation();
-  const opKaartPagina = location.pathname === "/kaart";
-
+function App() {
   return (
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<KaartenLijst kaarten={kaarten} />} />
-        <Route path="/inschrijven" element={<Signup />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Artists />} />
+        <Route path="/artists" element={<Artists />} />
+        <Route path="/artwork" element={<Artwork />} />
+        <Route path="/kaart" element={<Map />} />
+        <Route path="/map" element={<Map />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/kaart" element={<KaartComponent />} />
-        <Route path="/kunstwerken" element={<div>🎨 Kunstwerken</div>} />
-        <Route path="/kunstenaars" element={<KaartenLijst kaarten={kaarten} />} />
-        <Route path="/info-agenda" element={<div>📅 Info & Agenda</div>} />
-        <Route path="/artist/:id" element={<ArtistDetail artists={kaarten} />} />
-        <Route path="*" element={<div>Pagina niet gevonden</div>} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/info" element={<Info />} />
+        <Route path="/agenda" element={<AgendaPage />} />
+        <Route
+          path="/artist/:id"
+          element={<ArtistDetail artists={artistsData} />}
+        />
+        <Route path="*" element={<Artists />} />
       </Routes>
-
-      {!opKaartPagina && <Footer />}
+      <Footer />
     </>
-  );
-}
-
-function App() {
-  const [kaarten, setKaarten] = useState([]);
-  const [laden, setLaden] = useState(true);
-
-  useEffect(() => {
-    setKaarten(artistsData);
-    setLaden(false);
-  }, []);
-
-  if (laden) {
-    return <div className="loading">Laden...</div>;
-  }
-
-  return (
-    <BrowserRouter>
-      <AppInhoud kaarten={kaarten} />
-    </BrowserRouter>
   );
 }
 
