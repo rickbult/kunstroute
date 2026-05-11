@@ -3,6 +3,17 @@ import { Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import './Map.css';
+import mapArtistPhotos from '../data/mapArtistPhotos.json';
+
+const maakSlug = (waarde) =>
+  (waarde || '')
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/https?:\/\/[^/]+\//, '')
+    .replace(/\/+$/, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
 // Functie om initialen uit naam te halen
 const haalInitialenOp = (naam) =>
@@ -13,31 +24,19 @@ const haalInitialenOp = (naam) =>
     .slice(0, 2)
     .join('');
 
-// Functie om kunstenaar foto te zoeken
-const zoekKunstenaarFoto = (naamKunstenaar, artists) => {
-  if (!artists || artists.length === 0) return null;
-  const n = naamKunstenaar.toLowerCase().trim();
-  const exacte = artists.find((a) => a.title.toLowerCase().trim() === n);
-  if (exacte) return exacte.imgSrc;
-  const delen = n.split(' ');
-  const gedeeltelijk = artists.find((a) => {
-    const ad = a.title.toLowerCase();
-    return delen.some((d) => ad.includes(d));
-  });
-  return gedeeltelijk ? gedeeltelijk.imgSrc : null;
-};
+const zoekKunstenaarFoto = (naamKunstenaar) => mapArtistPhotos[maakSlug(naamKunstenaar)] || null;
 
-const zoekKunstenaarLink = (naamKunstenaar, artists) => {
-  if (!artists || artists.length === 0) return null;
-  const n = naamKunstenaar.toLowerCase().trim();
-  const exacte = artists.find((a) => a.title.toLowerCase().trim() === n);
-  if (exacte) return exacte.link;
-  const delen = n.split(' ');
-  const gedeeltelijk = artists.find((a) => {
-    const ad = a.title.toLowerCase();
-    return delen.some((d) => ad.includes(d));
-  });
-  return gedeeltelijk ? gedeeltelijk.link : null;
+const zoekKaartpuntLink = (kaartPunt) => {
+  if (kaartPunt?.detailPaginaUrl) {
+    try {
+      const url = new URL(kaartPunt.detailPaginaUrl);
+      const slug = url.pathname.split('/').filter(Boolean).pop();
+      return slug || maakSlug(kaartPunt.naamKunstenaar);
+    } catch (e) {
+      return maakSlug(kaartPunt.naamKunstenaar);
+    }
+  }
+  return maakSlug(kaartPunt?.naamKunstenaar);
 };
 
 const maakProfielfotoMarker = (fotoUrl, naamKunstenaar, isSelected) => {
@@ -49,47 +48,35 @@ const maakProfielfotoMarker = (fotoUrl, naamKunstenaar, isSelected) => {
 
   return L.divIcon({
     html,
-    className: 'custom-div-icon',
+    className: `custom-div-icon${isSelected ? ' selected' : ''}`,
     iconSize: [50, 50],
     iconAnchor: [25, 25],
     popupAnchor: [0, -25],
   });
 };
 
-// Component die de kaart bestuurt (pannen/zoomen) op selectie
-function MapController({ selected, bounds }) {
+// Component die de kaart eenmaal op de punten afstemt
+function MapController({ bounds }) {
   const map = useMap();
 
   useEffect(() => {
-    if (selected && Number.isFinite(selected.breedtegraad) && Number.isFinite(selected.lengtegraad)) {
-      const lat = selected.breedtegraad;
-      const lng = selected.lengtegraad;
-      // Pan gently to the selected location without forcing a zoom change
-      try {
-        map.panTo([lat, lng], { animate: true, duration: 0.4 });
-      } catch (e) {
-        // fallback to setView with same zoom if panTo fails
-        map.setView([lat, lng], map.getZoom(), { animate: true });
-      }
-    } else if (bounds) {
+    if (bounds) {
       try {
         map.fitBounds(bounds, { paddingTopLeft: [20, 90], paddingBottomRight: [20, 20] });
       } catch (e) {}
     }
-  }, [selected, bounds, map]);
+  }, [bounds, map]);
 
   return null;
 }
 
 export default function KaartComponent() {
   const [kaartPuntenLijst, stelKaartPuntenLijstIn] = useState([]);
-  const [artists, stelArtistsIn] = useState([]);
   const [geselecteerdeLocatie, stelGeselecteerdeLocatieIn] = useState(null);
   const containerRef = useRef(null);
   const cardRefs = useRef({});
 
   useEffect(() => {
-    import('../data/artists.json').then((m) => stelArtistsIn(m.default || m));
     fetch('http://localhost:5000/api/kaartpunten')
       .then((r) => r.json())
       .then((data) =>
@@ -151,7 +138,7 @@ export default function KaartComponent() {
           />
 
           {kaartPuntenLijst.map((kaartPunt) => {
-            const fotoUrl = zoekKunstenaarFoto(kaartPunt.naamKunstenaar, artists);
+            const fotoUrl = zoekKunstenaarFoto(kaartPunt.naamKunstenaar);
             const isSelected = geselecteerdeLocatie?.detailPaginaUrl === kaartPunt.detailPaginaUrl;
             const markerIcon = maakProfielfotoMarker(fotoUrl, kaartPunt.naamKunstenaar, isSelected);
 
@@ -164,8 +151,8 @@ export default function KaartComponent() {
               />
             );
           })}
-              {/* Map controller to center/zoom on selected location */}
-              <MapController selected={geselecteerdeLocatie} bounds={kaartBounds} />
+              {/* Map controller to fit the available points once */}
+              <MapController bounds={kaartBounds} />
         </MapContainer>
       </div>
 
@@ -173,8 +160,8 @@ export default function KaartComponent() {
         <div className="sidebar-content">
           {kaartPuntenLijst.map((kaartPunt) => {
             const isSelected = geselecteerdeLocatie?.detailPaginaUrl === kaartPunt.detailPaginaUrl;
-            const fotoUrl = zoekKunstenaarFoto(kaartPunt.naamKunstenaar, artists);
-            const artiestLink = zoekKunstenaarLink(kaartPunt.naamKunstenaar, artists);
+            const fotoUrl = zoekKunstenaarFoto(kaartPunt.naamKunstenaar);
+            const kaartpuntLink = zoekKaartpuntLink(kaartPunt);
             const key = kaartPunt.detailPaginaUrl || kaartPunt.naamKunstenaar;
             return (
               <div
@@ -203,11 +190,9 @@ export default function KaartComponent() {
                   <p className="card-address">{kaartPunt.volledigAdres}</p>
                   <p className="card-days"><strong>Open:</strong> {kaartPunt.openDagenKunstroute2026}</p>
                   <p className="card-accessibility"><strong>Toegankelijk:</strong> {kaartPunt.rolstoeltoegankelijkheid}</p>
-                  {artiestLink ? (
-                    <Link to={`/artist/${artiestLink}`} className="card-link">
-                      Detailpagina →
-                    </Link>
-                  ) : null}
+                  <Link to={`/artist/${kaartpuntLink}`} className="card-link">
+                    Detailpagina →
+                  </Link>
                 </div>
               </div>
             );
