@@ -171,7 +171,12 @@ export default function KaartComponent() {
         type="button"
         className="kaart-sidebar-toggle"
         aria-label={sidebarIngeklapt ? 'Open sidebar' : 'Sluit sidebar'}
-        onClick={() => zetSidebarIngeklapt((waarde) => !waarde)}
+        onClick={() => {
+          if (!sidebarIngeklapt) {
+            stelGeselecteerdeLocatieIn(null);
+          }
+          zetSidebarIngeklapt((waarde) => !waarde);
+        }}
       >
         {sidebarIngeklapt ? '‹' : '›'}
       </button>
