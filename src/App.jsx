@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { useState, useEffect, useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+=======
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+>>>>>>> origin/main
 import artistsData from "./data/artists.json";
 import "./App.css";
 import { Card } from "./components/Card.jsx"; 
@@ -7,6 +12,9 @@ import { ArtistDetail } from "./components/ArtistDetail.jsx";
 import { FilterBalk } from "./components/filter.jsx";
 import Navbar from "./components/Navbar.jsx";  
 import Footer from "./components/Footer.jsx";
+import Signup from './pages/Signup';
+import Login from './pages/Login';
+import KaartComponent from './pages/Map.jsx';
 
 function KaartenLijst({ kaarten }) {
   const [zoekterm, setZoekterm] = useState("");
@@ -120,6 +128,31 @@ function KaartenLijst({ kaarten }) {
   );
 }
 
+function AppInhoud({ cards }) {
+  const location = useLocation();
+  const opKaartPagina = location.pathname === "/kaart";
+
+  return (
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<CardList cards={cards} />} />
+        <Route path="/inschrijven" element={<Signup />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/kaart" element={<KaartComponent />} />
+        <Route path="/kunstwerken" element={<div>🎨 Kunstwerken</div>} />
+        <Route path="/kunstenaars" element={<CardList cards={cards} />} />
+        <Route path="/info-agenda" element={<div>📅 Info & Agenda</div>} />
+        <Route path="/artist/:id" element={<ArtistDetail artists={cards} />} />
+        <Route path="*" element={<div>Pagina niet gevonden</div>} />
+      </Routes>
+
+      {!opKaartPagina && <Footer />}
+    </>
+  );
+}
+
 function App() {
   const [kaarten, setKaarten] = useState([]);
   const [laden, setLaden] = useState(true);
@@ -135,12 +168,16 @@ function App() {
 
   return (
     <BrowserRouter>
+<<<<<<< HEAD
       <Navbar />        
       <Routes>
         <Route path="/" element={<KaartenLijst kaarten={kaarten} />} />
         <Route path="/artist/:id" element={<ArtistDetail artists={kaarten} />} />
       </Routes>
       <Footer />        
+=======
+      <AppInhoud cards={cards} />
+>>>>>>> origin/main
     </BrowserRouter>
   );
 }

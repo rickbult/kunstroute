@@ -1,41 +1,38 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Card.css";  
-
+import "./Card.css";
 
 export const Card = React.memo(({ 
-  imgSrc,           
+  imgSrc,                 
   imgAlt = "Artist",
-  title,             
-  description,      
-  address,          
+  title,                 
+  description = "",      
+  address = "",          
   wheelchairaccessibility = "Onbekend",
-  days,             
-  phone,            
-  email,
-  website = "#",
-  link = "#"
+  days = "",             
+  link,        
 }) => {
   return (
-    
-    <Link to={`/artist/${link}`} className="card-link-wrapper">
-      <div className="card">
-        <img src={imgSrc} alt={imgAlt || title} className="card-picture" />
-        <h2>{title}</h2>
-        <p className="card-title">{days}</p>
-        <p className="bio">{description}</p>
-        {address && <p><strong>📍 Adres:</strong> {address}</p>}
-        <p><strong>♿ Rolstoel:</strong> {wheelchairaccessibility}</p>
-        {phone && <p><strong>📞 Tel:</strong> {phone}</p>}
-        {email && <p><strong>✉️ Email:</strong> {email}</p>}
-        {website !== "#" && (
-          <p><strong>🌐 Website:</strong> 
-            <span className="website-link">{website}</span>
-          </p>
-        )}
+    <Link
+      to={`/artist/${link}`}
+      className="card-link"
+    >
+      <div className="card-container">
+        <div className="card-header">
+          <img src={imgSrc} alt={imgAlt} loading="lazy" height="200" />
+        </div>
+        
+        <div className="card-body">
+          <h2 className="card-title">{title}</h2>
+          <p className="card-location">{address}</p>
+          <p className="card-description">{description}</p>
+          <p  className="wheelchairaccessibility"> ♿{wheelchairaccessibility}</p>
+          <span className="tag tag-days">{days}</span>
+          
+        </div>
       </div>
     </Link>
   );
 });
 
-Card.displayName = 'Card';
+Card.displayName = "Card";

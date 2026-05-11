@@ -38,8 +38,35 @@
 }
 
 .card-title {
+<<<<<<< HEAD
   margin: 0 0.9rem 0.55rem;
   color: #2d5e8d;
+=======
+  position: relative;
+  margin: 0 1rem 0.25rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  z-index: 1;
+  color: black;
+}
+
+.card-location {
+  position: relative;
+  font-size: 0.75rem;
+  margin: 0 1rem 0.5rem 1rem;
+  z-index: 1;
+}
+
+.card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.card-description {
+>>>>>>> origin/main
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -68,10 +95,38 @@
   text-decoration: underline;
 }
 
+<<<<<<< HEAD
 @media (max-width: 900px) {
   .card h2 {
     font-size: 1rem;
   }
+=======
+.card-btn {
+  display: inline-block;
+  width: auto;
+  align-self: flex-start;
+  border-radius: 4px;
+  padding: 0.3rem 0.75rem;
+  background-color: transparent;
+  color: #2ecc40;
+  border: 1px solid #2ecc40;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.wheelchairaccessibility{
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: auto;
+
+}
+.openinghours{
+   font-size: 0.85rem;
+  color: #555;
+  margin-bottom: auto;
+
+}
+>>>>>>> origin/main
 
   .card p,
   .bio,
