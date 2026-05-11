@@ -7,7 +7,6 @@
     "dev": "vite",
     "start:api": "npm --prefix server start",
     "dev:all": "concurrently \"npm run dev\" \"npm run start:api\"",
-    "seed:kaartpunten": "npm --prefix server run seed:kaartpunten",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -15,7 +14,7 @@
     "axios": "^1.15.2",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
-    "dotenv": "^17.4.1",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "leaflet": "^1.9.4",
@@ -25,7 +24,7 @@
     "react-icons": "^5.6.0",
     "react-leaflet": "^4.2.1",
     "react-router": "^6.26.1",
-    "react-router-dom": "^6.26.1"
+    "react-router-dom": "^7.13.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
@@ -33,5 +32,18 @@
     "@vitejs/plugin-react": "^6.0.1",
     "concurrently": "^9.2.1",
     "vite": "^8.0.8"
-  }
+  },
+  "description": "Kunstroute Noord-west Veluwe - interactive art route application",
+  "main": "vite.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rickbult/kunstroute.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rickbult/kunstroute/issues"
+  },
+  "homepage": "https://github.com/rickbult/kunstroute#readme"
 }
