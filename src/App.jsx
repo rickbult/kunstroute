@@ -18,15 +18,15 @@ import NotFoundPage from "./pages/404.jsx";
 
 function App() {
   const location = useLocation();
+  const isMapRoute = location.pathname === '/kaart' || location.pathname === '/map';
   const toonFooter =
-    location.pathname !== "/kaart" &&
-    location.pathname !== "/map" &&
+    !isMapRoute &&
     location.pathname !== "/404";
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${isMapRoute ? 'app-shell-map' : 'app-shell-page'}`}>
       <Navbar />
-      <main className="app-main">
+      <main className={`app-main ${isMapRoute ? 'app-main-map' : 'app-main-page'}`}>
         <Routes>
           <Route path="/" element={<Artists />} />
           <Route path="/artists" element={<Artists />} />
