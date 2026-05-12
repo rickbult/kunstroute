@@ -3,18 +3,29 @@
 }
 
 .app-shell {
-  height: 100dvh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   box-sizing: border-box;
   padding-top: var(--navbar-height);
+}
+
+.app-shell-map {
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .app-main {
   flex: 1 1 auto;
   min-height: 0;
+}
+
+.app-main-map {
   overflow: hidden;
+}
+
+.app-main-page {
+  overflow: visible;
 }
 
 * {
@@ -26,7 +37,7 @@
 body {
   background-color: #faf9f6;
   font-family: sans-serif;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .page-wrapper {
