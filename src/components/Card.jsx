@@ -15,13 +15,10 @@ export const Card = React.memo(({
   return (
     <Link
       to={`/artist/${link}`}
-      className="card-link"
+      className="card-link-wrapper"
     >
-      <div className="card-container">
-        <div className="card-header">
-          <img src={imgSrc} alt={imgAlt} loading="lazy" height="200" />
-        </div>
-        
+      <div className="card">
+        <img src={imgSrc} alt={imgAlt} loading="lazy" className="card-picture" />
         <div className="card-body">
           <h2 className="card-title">{title}</h2>
           <p className="card-location">{address}</p>
