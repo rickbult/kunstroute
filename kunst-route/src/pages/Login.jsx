@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { initUsers, login, getCurrentUser } from '../utils/auth';
+import { initUsers, login, getCurrentUser } from '../../Utils/auth';
 import kunstrouteLogo from '../assets/Kunstroute logo.png';
 import './Login.css';
 

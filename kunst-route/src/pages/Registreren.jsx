@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from '../utils/auth';
+import { register } from '../../Utils/auth';
 import kunstrouteLogo from '../assets/Kunstroute logo.png';
 import './Registreren.css';
 

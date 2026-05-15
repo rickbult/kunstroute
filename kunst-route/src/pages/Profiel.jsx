@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser, updateCurrentUser, logout } from '../utils/auth';
+import { getCurrentUser, updateCurrentUser, logout } from '../../Utils/auth';
 import './FormStyles.css';
 import './Profiel.css';
 

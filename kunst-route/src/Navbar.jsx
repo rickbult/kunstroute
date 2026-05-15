@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import logo from "./assets/Kunstroute logo.png";
-import { getCurrentUser } from './utils/auth';
+import { getCurrentUser } from '../Utils/auth';
 import './Navbar.css';
 
 export default function Navbar() {

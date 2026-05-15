@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { register } from '../utils/auth';
+import { register } from '../../Utils/auth';
 import './Voorwaarden.css';
 
 export default function Voorwaarden() {
