@@ -1,0 +1,160 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #000000;
+    line-height: 1.5;
+}
+
+.navbar {
+    background: #ffffff;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: #000000;
+    text-decoration: none;
+    margin-left: 16px;
+    font-size: 1.05rem;
+}
+
+.navbar a:hover,
+.navbar a:focus {
+    text-decoration: underline;
+}
+
+.container {
+    max-width: 760px;
+    margin: 32px auto;
+    padding: 0 18px 24px;
+}
+
+.centered-container {
+    min-height: calc(100vh - 120px);
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border: 2px solid #d0d0d0;
+    border-radius: 10px;
+    padding: 24px;
+    width: min(100%, 560px);
+}
+
+h1,
+h2,
+h3 {
+    color: #0057b8;
+    margin-top: 0;
+}
+
+label {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="file"] {
+    width: 100%;
+    min-height: 48px;
+    border: 2px solid #666666;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 1rem;
+    margin-bottom: 18px;
+}
+
+input:focus,
+button:focus,
+a:focus,
+summary:focus {
+    outline: 3px solid #0057b8;
+    outline-offset: 2px;
+}
+
+.btn {
+    display: inline-block;
+    background: #0057b8;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    min-height: 48px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #004899;
+}
+
+.terms-box {
+    border: 2px solid #8f8f8f;
+    border-radius: 8px;
+    background: #fbfbfb;
+    padding: 16px;
+    max-height: 280px;
+    overflow-y: auto;
+    margin-bottom: 18px;
+}
+
+.terms-box h3 {
+    margin-top: 0;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 8px 0 20px;
+}
+
+.checkbox-row input[type="checkbox"] {
+    margin-top: 6px;
+    transform: scale(1.4);
+}
+
+.alert {
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.alert-error {
+    border: 2px solid #930000;
+    background: #fff1f1;
+    color: #570000;
+}
+
+.alert-success {
+    border: 2px solid #0c6e00;
+    background: #edfce8;
+    color: #064200;
+}
+
+.art-preview {
+    margin-top: 14px;
+}
+
+.art-preview img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #c4c4c4;
+    border-radius: 8px;
+}
