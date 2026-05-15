@@ -1,8 +1,17 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from "react-router-dom";
 import logo from "./assets/Kunstroute logo.png";
-
+import { getCurrentUser } from './utils/auth';
+import './Navbar.css';
 
 export default function Navbar() {
+  const location = useLocation();
+  const [ingelogd, setIngelogd] = useState(false);
+
+  useEffect(() => {
+    setIngelogd(!!getCurrentUser());
+  }, [location]);
+
   return (
     <nav className="navbar">
       <Link to="/" className="logo">
@@ -10,17 +19,20 @@ export default function Navbar() {
       </Link>
 
       <ul className="nav-links">
-        <li><Link to="/kaart" className="tekst-groen">Kaart</Link></li>
-        <li><Link to="/kunstwerken" className="tekst-roze">Kunstwerken</Link></li>
-        <li><Link to="/kunstenaars" className="tekst-geel">Kunstenaars</Link></li>
-        <li><Link to="/info-agenda" className="tekst-blauw">Info & Agenda</Link></li>
+        <li><Link to="/kaart">Kaart</Link></li>
+        <li><Link to="/kunstwerken">Kunstwerken</Link></li>
+        <li><Link to="/kunstenaars">Kunstenaars</Link></li>
+        <li><Link to="/info-agenda">Info & Agenda</Link></li>
         <li>
-          <Link to="/inschrijven" className="btn-inschrijven">Inschrijven</Link>
+          <Link to={ingelogd ? '/profiel' : '/login'} className="btn-inloggen">
+            {ingelogd ? 'Mijn profiel' : 'Inloggen'}
+          </Link>
         </li>
       </ul>
     </nav>
   );
 }
+
 
 
 
