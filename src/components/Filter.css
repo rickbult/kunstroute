@@ -1,2 +1,350 @@
-@import url("./filter.css");
+.filter-widget .zoekfilter-balk {
+  display: flex;
+  gap: 0;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  padding: 0.4rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.filter-widget .zoekbalk {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: flex;
+  border-right: 1px solid #e5e5e5;
+  padding-right: 0.5rem;
+}
+
+.filter-widget .zoekbalk input {
+  width: 100%;
+  max-width: 560px;
+  padding: 0.5rem 0.8rem 0.5rem 2.3rem;
+  border: none;
+  border-radius: 0;
+  font-size: 0.9rem;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 0.7rem center;
+  outline: none;
+  color: #333;
+}
+
+.filter-widget .zoekbalk input::placeholder {
+  color: #aaa;
+}
+
+.filter-widget .zoekbalk input:focus {
+  outline: none;
+}
+
+.filter-widget .filtergebied {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+
+.filter-widget .filterknoppen-rij {
+  display: flex;
+  gap: 0;
+  flex-wrap: nowrap;
+  align-items: center;
+  padding: 0;
+  overflow: visible;
+  max-width: calc(100vw - 600px);
+  position: relative;
+  z-index: 1;
+}
+
+.filter-widget .filterknop-omhulsel {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #e5e5e5;
+  padding-right: 0.5rem;
+}
+
+.filter-widget .filterknop-omhulsel:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.filter-widget .filterknop {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.7rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-widget .filterknop:hover {
+  background-color: #f0f0f0;
+  color: #007bff;
+}
+
+.filter-widget .filterknop.actief {
+  background-color: transparent;
+  color: #007bff;
+  font-weight: 600;
+}
+
+.filter-widget .filterknop .uitklap-icoon {
+  font-size: 0.65rem;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.filter-widget .filterknop-omhulsel:has(> .filter-keuzemenu) .filterknop .uitklap-icoon {
+  transform: rotate(180deg);
+}
+
+.filter-widget .extra-filters-knop {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  background-color: transparent;
+  border: none;
+  border-right: 1px solid #e5e5e5;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.filter-widget .extra-filters-knop:hover {
+  background-color: #f0f0f0;
+  color: #007bff;
+}
+
+.filter-widget .extra-filters-knop.actief {
+  color: #007bff;
+  font-weight: 600;
+}
+
+.filter-widget .extra-filters-knop .wissel-icoon {
+  font-size: 0.65rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.filter-widget .filterknoppen-rij > .extra-filters-knop:last-child {
+  border-right: none;
+}
+
+.filter-widget .filterknop-omhulsel:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.filter-widget .filter-keuzemenu {
+  position: fixed;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfcfc 100%);
+  border: 1px solid #e7e7e7;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  padding: 0.45rem 0.55rem;
+  min-width: 220px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  overflow: visible;
+}
+
+
+.filter-widget .filterlabel-met-icoon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.filter-widget .filterlabel-met-icoon .rolstoel-icoon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.filter-widget .filteroptie {
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 0.6rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #333;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.filter-widget .filteroptie:hover {
+  background-color: #f1f1f1;
+}
+
+.filter-widget .filteroptie input[type="checkbox"],
+.filter-widget .filteroptie input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  margin-right: 0.6rem;
+  cursor: pointer;
+  accent-color: #007bff;
+  flex-shrink: 0;
+}
+
+.filter-widget .filteroptie span {
+  flex: 1;
+}
+
+.filter-widget .extra-filters-venster {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: auto;
+  width: fit-content;
+  max-width: calc(100vw - 2rem);
+  margin-top: 0.65rem;
+  background: linear-gradient(180deg, #ffffff 0%, #fcfcfc 100%);
+  border: 1px solid #e7e7e7;
+  border-radius: 18px;
+  padding: 0.45rem 0.55rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  overflow: visible;
+  z-index: 1000;
+  animation: slideDown 0.2s ease-out;
+}
+
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-widget .extra-filters-inhoud {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.filter-widget .extra-filters-inhoud .filterknop {
+  margin-right: 0;
+  margin-bottom: 0;
+  padding: 0.38rem 0.78rem;
+  border-radius: 8px;
+}
+
+.filter-widget .extra-filters-inhoud .filterknop-omhulsel {
+  border-right: 1px solid #e6e6e6;
+  padding-right: 0.55rem;
+}
+
+.filter-widget .extra-filters-inhoud .filterknop-omhulsel:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+@media (max-width: 1024px) {
+  .filter-widget .filterknop {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .filter-widget .filter-keuzemenu {
+    min-width: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-widget .zoekfilter-balk {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    border-radius: 12px;
+    padding: 0.5rem;
+    align-items: stretch;
+  }
+
+  .filter-widget .zoekbalk {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e5e5;
+    padding-right: 0;
+    padding-bottom: 0.5rem;
+  }
+
+  .filter-widget .zoekbalk input {
+    width: 100%;
+    max-width: none;
+  }
+
+  .filter-widget .filterknoppen-rij {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    gap: 0;
+  }
+
+  .filter-widget .filterknop-omhulsel {
+    border-right: 1px solid #e5e5e5;
+    padding-right: 0.5rem;
+    flex: 1;
+  }
+
+  .filter-widget .filterknop-omhulsel:last-child {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .filter-widget .filterknop {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .filter-widget .filter-keuzemenu {
+    position: fixed;
+    min-width: 200px;
+  }
+
+  .filter-widget .extra-filters-venster {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: calc(100% + 1rem);
+    border-radius: 12px;
+    padding: 0.5rem;
+  }
+
+  .filter-widget .extra-filters-inhoud {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+}
 
