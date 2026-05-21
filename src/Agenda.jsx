@@ -111,8 +111,9 @@ export const AgendaPage = () => {
 
 
   return (
-    <div className="agenda-page">
-      <div className="agenda-main-column">
+    <div className="agenda-wrapper">
+      <div className="agenda-page">
+        <div className="agenda-main-column">
 
         <div className="agenda-calendar-card">
           <div className="cal-header">
@@ -163,75 +164,39 @@ export const AgendaPage = () => {
             </span>
           </div>
         </div>
-
-        <div className="agenda-info-card">
-          <h2 className="info-card-title">
-            <span className="info-icon">ℹ</span> Over de Kunstroute
-          </h2>
-          <p className="info-card-body">
-            De Kunstroute Noordwest Veluwe is een jaarlijks terugkerend evenement waarbij
-            kunstliefhebbers de kans krijgen om een kijkje te nemen in de ateliers van lokale
-            kunstenaars.
-          </p>
-          <p className="info-card-detail">
-            <strong>Eerste weekend:</strong> 5 &amp; 6 september 2026<br />
-            Locaties: Elspeet, Hulshorst, Nunspeet, Vierhouten, Wezep
-          </p>
-          <p className="info-card-detail">
-            <strong>Tweede weekend:</strong> 19 &amp; 20 september 2026<br />
-            Locaties: Ermelo, Harderwijk
-          </p>
-          <div className="info-card-row">
-            <div>
-              <strong>Openingstijden</strong>
-              <p>Zaterdag &amp; Zondag: 11:00 – 17:00</p>
-              <p className="info-note">Check per kunstenaar de specifieke openingstijden.</p>
-            </div>
-          </div>
-          <div className="info-card-row">
-            <div>
-              <strong>Startpunten</strong>
-              <p>
-                U kunt op elk willekeurig punt starten. Download de routekaart of gebruik de
-                interactieve kaart op deze website.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
-
-      <aside className="agenda-side-panel">
-        <div className="agenda-events-card">
-          <div className="events-panel-header">
-            <h3 className="events-panel-title">Berichten </h3>
-            <p className="events-panel-subtitle">Deadlines & Kunstroute datums</p>
-          </div>
-          {selectedEvents.length > 0 && (
-            <div className="selected-events-section">
-              <div className="selected-events-header">
-                <p className="selected-events-label">
-                  Geselecteerd: {fmtEventDate(selectedDateKey)}
-                </p>
-                <button
-                  type="button"
-                  className="selected-events-clear"
-                  onClick={() => setSelectedDateKey(null)}
-                >
-                  Wissen
-                </button>
-              </div>
-              <div className="selected-events-list">
-                {selectedEvents.map((evt, i) =>
-                  renderEventCard(evt, `selected-${i}`, "event-card-selected")
-                )}
-              </div>
-            </div>
-          )}
-          <div className="events-list">
-            {remainingEvents.map((evt, i) => renderEventCard(evt, `remaining-${i}`))}
-          </div>
+      <div className="agenda-side-wrapper">
+        <aside className="agenda-events-card agenda-side-panel">
+        <div className="events-panel-header">
+          <h3 className="events-panel-title">Berichten & agenda-items</h3>
+          <p className="events-panel-subtitle">Belangrijke momenten en kunstroute-updates</p>
         </div>
-      </aside>
+
+        {selectedEvents.length > 0 && (
+          <div className="selected-events-section">
+            <div className="selected-events-header">
+              <p className="selected-events-label">Geselecteerde Datum</p>
+              <button 
+                className="selected-events-clear" 
+                onClick={() => setSelectedDateKey(null)}
+              >
+                Wissen
+              </button>
+            </div>
+            <div className="selected-events-list">
+              {selectedEvents.map((evt, i) => renderEventCard(evt, `selected-${i}`, "event-card-selected"))}
+            </div>
+          </div>
+        )}
+        <div className="events-list">
+          <h3 className="events-title">
+            {selectedEvents.length > 0 ? "Overige Evenementen" : "Alle Evenementen"}
+          </h3>
+          {remainingEvents.map((evt, i) => renderEventCard(evt, `remaining-${i}`))}
+        </div>
+        </aside>
+      </div>
+      </div>
     </div>
   );
 };

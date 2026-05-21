@@ -1,5 +1,9 @@
 import React from "react";
 import "./InfoPage.css";
+import teuniePhoto from './assets/bestuur/teunie.png';
+import hansPhoto from './assets/bestuur/hans.png';
+import gerdaPhoto from './assets/bestuur/gerda.png';
+import veluvinePhoto from './assets/veluvine.png';
 
 const PhoneIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -18,21 +22,21 @@ const boardMembers = [
   {
     name: "Teunie Bastiaan",
     role: "Voorzitter",
-    photo: "",
+    photo: teuniePhoto,
     phone: "0619 – 93 58 77",
     email: "voorzitter@kunstroute-noordwest-veluwe.nl",
   },
   {
     name: "Hans Bastiaan",
     role: "Penningmeester",
-    photo: "",
+    photo: hansPhoto,
     phone: "0610 – 91 97 45",
     email: "penningmeester@kunstroute-noordwest-veluwe.nl",
   },
   {
     name: "Gerda van 't Goor",
     role: "Secretaris",
-    photo: "",
+    photo: gerdaPhoto,
     phone: "0629 – 19 09 18",
     email: "secretaris@kunstroute-noordwest-veluwe.nl",
   },
@@ -320,7 +324,7 @@ export const InfoPage = () => {
           is te bezoeken tijdens de openingsuren.
         </p>
         <div className="overzicht-image">
-          <img src="" alt="Veluvine Nunspeet" />
+          <img src={veluvinePhoto} alt="Veluvine Nunspeet" />
         </div>
       </section>
 
