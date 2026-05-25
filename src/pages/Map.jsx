@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import './Map.css';
-import fallbackKaartpunten from '../../server/kaartpuntenFallback.json';
+// Data now served from the API (MongoDB). No local JSON imports.
 import { FilterBalk } from '../components/filter.jsx';
 
 const maakSlug = (waarde) =>
@@ -89,7 +89,7 @@ function MapController({ bounds, sidebarIngeklapt }) {
 
 export default function KaartComponent() {
   const location = useLocation();
-  const [kaartPuntenLijst, stelKaartPuntenLijstIn] = useState(() => filterGeldigeKaartpunten(fallbackKaartpunten));
+  const [kaartPuntenLijst, stelKaartPuntenLijstIn] = useState([]);
   const [geselecteerdeLocatie, stelGeselecteerdeLocatieIn] = useState(null);
   const [sidebarIngeklapt, zetSidebarIngeklapt] = useState(false);
   const [zoekterm, setZoekterm] = useState('');
@@ -145,21 +145,22 @@ export default function KaartComponent() {
     const uniekeKunstvormen = new Set();
     const uniekeRolstoelNiveaus = new Set();
 
-    kaartPuntenLijst.forEach((kaartPunt) => {
-      const dagMatches = kaartPunt.openDagenKunstroute2026?.match(/[A-Za-zÀ-ÿ]+dag/g) || [];
+    kaartPuntenLijst.forEach((kaart) => {
+      const dagMatches = kaart.openDagenKunstroute2026?.match(/[A-Za-zÀ-ÿ]+dag/g) || [];
       dagMatches.forEach((dag) => uniekeOpeningsdagen.add(dag));
 
-      const plaats = kaartPunt.volledigAdres?.split(',').pop()?.trim() || kaartPunt.stad?.trim();
+      const plaats = kaart.volledigAdres?.split(',').pop()?.trim();
       if (plaats) {
         uniekePlaatsen.add(plaats);
       }
 
-      if (kaartPunt.titelWerk) {
-        uniekeKunstvormen.add(kaartPunt.titelWerk);
+      const kunstvorm = kaart.kunstvorm || kaart.discipline;
+      if (kunstvorm) {
+        uniekeKunstvormen.add(kunstvorm);
       }
 
-      if (kaartPunt.rolstoeltoegankelijkheid) {
-        uniekeRolstoelNiveaus.add(kaartPunt.rolstoeltoegankelijkheid);
+      if (kaart.rolstoeltoegankelijkheid) {
+        uniekeRolstoelNiveaus.add(kaart.rolstoeltoegankelijkheid);
       }
     });
 
@@ -201,10 +202,12 @@ export default function KaartComponent() {
           [kaartPunt.volledigAdres, kaartPunt.stad].filter(Boolean).some((waarde) => waarde.includes(plaats))
         );
 
+      const kunstvorm = kaartPunt.kunstvorm || kaartPunt.discipline || null;
       const kunstvormFilter = geselecteerdeFilters.kunstvorm || [];
       const voldoetAanKunstvorm =
         kunstvormFilter.length === 0 ||
-        kunstvormFilter.includes(kaartPunt.titelWerk);
+        !kunstvorm ||
+        kunstvormFilter.includes(kunstvorm);
 
       const dagenFilter = geselecteerdeFilters.openingsdagen || [];
       const voldoetAanDagen =
