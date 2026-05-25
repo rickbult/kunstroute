@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import artistsData from "../data/artists.json";
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "../components/Card.jsx";
 import { FilterBalk } from "../components/filter.jsx";
 import "./Artists.css";
@@ -7,6 +6,43 @@ import "./Artists.css";
 export default function Artists() {
   const [zoekterm, setZoekterm] = useState("");
   const [geselecteerdeFilters, setGeselecteerdeFilters] = useState({});
+  const [artistsData, setArtistsData] = useState([]);
+  const [isLaden, setIsLaden] = useState(true);
+  const [fout, setFout] = useState("");
+
+  useEffect(() => {
+    let actief = true;
+
+    fetch("/api/artists")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        if (!actief || !Array.isArray(data)) {
+          return;
+        }
+
+        setArtistsData(data);
+      })
+      .catch((error) => {
+        if (actief) {
+          setFout(`Kon kunstenaars niet laden: ${error.message}`);
+        }
+      })
+      .finally(() => {
+        if (actief) {
+          setIsLaden(false);
+        }
+      });
+
+    return () => {
+      actief = false;
+    };
+  }, []);
 
   const filterOpties = useMemo(() => {
     const uniekeOpeningsdagen = new Set();
@@ -88,6 +124,9 @@ export default function Artists() {
         <p>Maak kennis met de creatieve geesten achter de kunstwerken.</p>
       </div>
 
+      {fout && <p className="page-error">{fout}</p>}
+      {isLaden && <p className="page-loading">Kunstenaars laden...</p>}
+
       <div className="filter-widget">
         <div className="zoekfilter-balk">
           <div className="zoekbalk">
@@ -108,10 +147,10 @@ export default function Artists() {
       </div>
 
       <div className="card-grid">
-        {gefilterdeKaarten.length > 0 ? (
+        {!isLaden && gefilterdeKaarten.length > 0 ? (
           gefilterdeKaarten.map((kaart) => <Card key={kaart.link} {...kaart} />)
         ) : (
-          <p>Geen kunstenaars gevonden met de geselecteerde filters.</p>
+          !isLaden && <p>Geen kunstenaars gevonden met de geselecteerde filters.</p>
         )}
       </div>
     </div>

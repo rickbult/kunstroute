@@ -1,35 +1,84 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import "./ArtistDetail.css";
-import kaartpuntenFallback from "../../server/kaartpuntenFallback.json";
 
-const maakSlug = (waarde) =>
-  (waarde || "")
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/https?:\/\/[^/]+\//, "")
-    .replace(/\/+$/, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-
-const haalArtistUitKaartpunten = (id) =>
-  kaartpuntenFallback.find((punt) => {
-    const naamSlug = maakSlug(punt.naamKunstenaar);
-    const urlSlug = (() => {
-      try {
-        return new URL(punt.detailPaginaUrl).pathname.split("/").filter(Boolean).pop() || "";
-      } catch (e) {
-        return "";
-      }
-    })();
-    return naamSlug === id || urlSlug === id;
-  });
-
-export const ArtistDetail = ({ artists }) => {
+export const ArtistDetail = () => {
   const { id } = useParams();
-  const artist = artists.find((a) => a.link === id);
-  const kaartpunt = artist ? null : haalArtistUitKaartpunten(id);
+  const [artist, setArtist] = useState(null);
+  const [kaartpunt, setKaartpunt] = useState(null);
+  const [isLaden, setIsLaden] = useState(true);
+
+  const kaartSlug = id;
+
+  useEffect(() => {
+    let actief = true;
+
+    Promise.all([fetch("/api/artists"), fetch("/api/kaartpunten")])
+      .then(async ([artistsResponse, kaartpuntenResponse]) => {
+        if (!artistsResponse.ok) {
+          throw new Error(`Artists HTTP ${artistsResponse.status}`);
+        }
+        if (!kaartpuntenResponse.ok) {
+          throw new Error(`Kaartpunten HTTP ${kaartpuntenResponse.status}`);
+        }
+
+        const [artistsData, kaartpuntenData] = await Promise.all([
+          artistsResponse.json(),
+          kaartpuntenResponse.json(),
+        ]);
+
+        if (!actief) {
+          return;
+        }
+
+        setArtist(Array.isArray(artistsData) ? artistsData.find((item) => item.link === id) || null : null);
+        setKaartpunt(
+          Array.isArray(kaartpuntenData)
+            ? kaartpuntenData.find((punt) => {
+                try {
+                  const urlSlug = new URL(punt.detailPaginaUrl).pathname.split("/").filter(Boolean).pop() || "";
+                  const naamSlug = (punt.naamKunstenaar || "")
+                    .toString()
+                    .toLowerCase()
+                    .trim()
+                    .replace(/https?:\/\/[^/]+\//, "")
+                    .replace(/\/+$/, "")
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-+|-+$/g, "");
+
+                  return naamSlug === id || urlSlug === id;
+                } catch (e) {
+                  return false;
+                }
+              }) || null
+            : null,
+        );
+      })
+      .catch(() => {
+        if (actief) {
+          setArtist(null);
+          setKaartpunt(null);
+        }
+      })
+      .finally(() => {
+        if (actief) {
+          setIsLaden(false);
+        }
+      });
+
+    return () => {
+      actief = false;
+    };
+  }, [id]);
+
+  if (isLaden) {
+    return (
+      <div className="detail-wrapper">
+        <p>Kunstenaar laden...</p>
+      </div>
+    );
+  }
 
   if (!artist && !kaartpunt) {
     return (
@@ -40,12 +89,26 @@ export const ArtistDetail = ({ artists }) => {
     );
   }
 
+  const navigatieKnoppen = (
+    <div className="artist-action-row">
+      <Link to={`/kaart?artist=${encodeURIComponent(kaartSlug)}`} className="artist-action-button artist-action-button-primary">
+        Bekijk kunstenaar op de kaart
+      </Link>
+      <Link to="/kunstenaars" className="artist-action-button artist-action-button-secondary">
+        Bekijk overzicht van alle kunstenaars
+      </Link>
+    </div>
+  );
+
   if (kaartpunt) {
     return (
       <div className="detail-wrapper">
-        <Link to="/kaart" className="back-link">← Terug naar kaart</Link>
-
         <div className="artist-hero">
+          {kaartpunt.fotoUrl && (
+            <div className="artist-image">
+              <img src={kaartpunt.fotoUrl} alt={kaartpunt.naamKunstenaar} />
+            </div>
+          )}
           <div className="artist-info" style={{ width: '100%' }}>
             <h1 className="artist-name">{kaartpunt.naamKunstenaar}</h1>
             <div className="artist-tags">
@@ -67,6 +130,7 @@ export const ArtistDetail = ({ artists }) => {
                 <p>{kaartpunt.openDagenKunstroute2026}</p>
               </div>
             </div>
+            {navigatieKnoppen}
           </div>
         </div>
       </div>
@@ -75,8 +139,6 @@ export const ArtistDetail = ({ artists }) => {
 
   return (
     <div className="detail-wrapper">
-      <Link to="/" className="back-link">← Terug naar kunstenaars</Link>
-
       <div className="artist-hero">
         <div className="artist-image">
           <img src={artist.imgSrc} alt={artist.imgAlt} />
@@ -102,6 +164,7 @@ export const ArtistDetail = ({ artists }) => {
               <p> {artist.email || "Email"}</p>
             </div>
           </div>
+          {navigatieKnoppen}
         </div>
       </div>
 
