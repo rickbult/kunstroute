@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
-import artistsData from "./data/artists.json";
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
@@ -41,10 +40,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/info" element={<Info />} />
           <Route path="/agenda" element={<AgendaPage />} />
-          <Route
-            path="/artist/:id"
-            element={<ArtistDetail artists={artistsData} />}
-          />
+          <Route path="/artist/:id" element={<ArtistDetail />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

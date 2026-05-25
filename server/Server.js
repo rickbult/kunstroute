@@ -11,8 +11,38 @@ dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const serverApplicatie = express();
 const SERVER_POORT = process.env.PORT || 5000;
+const mapArtistPhotosPad = path.resolve(new URL('../src/data/mapArtistPhotos.json', import.meta.url).pathname);
 const fallbackKaartpuntenPad = path.resolve(new URL('./kaartpuntenFallback.json', import.meta.url).pathname);
 let fallbackKaartpunten = [];
+let fallbackArtistPhotos = {};
+
+const maakSlug = (waarde) =>
+  (waarde || '')
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/https?:\/\/[^/]+\//, '')
+    .replace(/\/+$/, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+const maakArtistRecord = (punt) => ({
+  imgSrc: punt.fotoUrl || '',
+  imgAlt: `Foto van ${punt.naamKunstenaar}`,
+  title: punt.naamKunstenaar,
+  description: punt.titelWerk || punt.volledigAdres || '',
+  location: punt.stad || '',
+  address: punt.volledigAdres || '',
+  postcode: '',
+  wheelchairaccessibility: punt.rolstoeltoegankelijkheid || 'Onbekend',
+  days: punt.openDagenKunstroute2026 || '',
+  phone: '',
+  email: '',
+  website: punt.googleMapsUrl || punt.detailPaginaUrl || '',
+  link: maakSlug(punt.detailPaginaUrl) || maakSlug(punt.naamKunstenaar),
+  discipline: punt.titelWerk || '',
+  artworks: [],
+});
 
 try {
   const fallbackBestand = fs.readFileSync(fallbackKaartpuntenPad, 'utf8');
@@ -21,7 +51,13 @@ try {
   console.warn('⚠️ Lokale fallback kaartpunten niet geladen:', fout.message);
 }
 
-// MongoDB Verbinding
+try {
+  const photosBestand = fs.readFileSync(mapArtistPhotosPad, 'utf8');
+  fallbackArtistPhotos = JSON.parse(photosBestand);
+} catch (fout) {
+  console.warn("⚠️ Lokale fallback kunstenaarfoto's niet geladen:", fout.message);
+}
+
 const mongoVerbinding = process.env.MONGODB_URI;
 
 if (!mongoVerbinding) {
@@ -29,7 +65,6 @@ if (!mongoVerbinding) {
   process.exit(1);
 }
 
-// Schemas
 const gebruikerSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -37,30 +72,61 @@ const gebruikerSchema = new mongoose.Schema({
 });
 const Gebruiker = mongoose.model('User', gebruikerSchema);
 
-const gegevensSchema = new mongoose.Schema({
-  content: { type: String, required: true }
-});
-const GegevensModel = mongoose.model("DataModel", gegevensSchema);
+async function vulKaartpuntFotosAan() {
+  const puntenZonderFoto = await KaartPunt.find({
+    $or: [{ fotoUrl: null }, { fotoUrl: { $exists: false } }],
+  }).lean();
 
-// --- MIDDLEWARE ---
+  for (const punt of puntenZonderFoto) {
+    const fotoUrl = fallbackArtistPhotos[maakSlug(punt.naamKunstenaar)];
+    if (!fotoUrl) {
+      continue;
+    }
+
+    await KaartPunt.updateOne({ _id: punt._id }, { $set: { fotoUrl } });
+  }
+}
+
 serverApplicatie.use(express.json());
 
-// CORS Middleware (Correcte implementatie)
 serverApplicatie.use((verzoek, antwoord, volgende) => {
   antwoord.header("Access-Control-Allow-Origin", "*");
   antwoord.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   antwoord.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  
+
   if (verzoek.method === 'OPTIONS') {
     return antwoord.sendStatus(200);
   }
-  volgende(); // Hier gaat het vaak mis als dit niet wordt aangeroepen
+
+  volgende();
 });
 
-// --- ROUTES ---
 serverApplicatie.get("/", (verzoek, antwoord) => antwoord.json({ message: "Kunstroute API OK" }));
 
-// AUTH ROUTES
+serverApplicatie.get("/api/artists", async (verzoek, antwoord, volgende) => {
+  try {
+    const kaartpunten = await KaartPunt.find().lean();
+    antwoord.json(kaartpunten.map(maakArtistRecord));
+  } catch (fout) {
+    volgende(fout);
+  }
+});
+
+serverApplicatie.get("/api/artists/:id", async (verzoek, antwoord, volgende) => {
+  try {
+    const kaartpunten = await KaartPunt.find().lean();
+    const artist = kaartpunten.map(maakArtistRecord).find((item) => item.link === verzoek.params.id);
+
+    if (!artist) {
+      return antwoord.status(404).json({ error: 'Kunstenaar niet gevonden' });
+    }
+
+    antwoord.json(artist);
+  } catch (fout) {
+    volgende(fout);
+  }
+});
+
 serverApplicatie.post("/api/auth/register", async (verzoek, antwoord, volgende) => {
   try {
     const { username, email, password } = verzoek.body;
@@ -69,7 +135,7 @@ serverApplicatie.post("/api/auth/register", async (verzoek, antwoord, volgende) 
     await gebruiker.save();
     antwoord.status(201).json({ message: 'User aangemaakt', user: { username } });
   } catch (fout) {
-    volgende(fout); // Geef de fout door aan de error handler
+    volgende(fout);
   }
 });
 
@@ -81,30 +147,11 @@ serverApplicatie.post("/api/auth/login", async (verzoek, antwoord, volgende) => 
       return antwoord.status(401).json({ error: 'Ongeldige credentials' });
     }
     const token = jwt.sign(
-      { id: gebruiker._id, username }, 
+      { id: gebruiker._id, username },
       process.env.JWT_SECRET || 'kunstroute_secret_2026',
       { expiresIn: '1h' }
     );
     antwoord.json({ token, user: { id: gebruiker._id, username } });
-  } catch (fout) {
-    volgende(fout);
-  }
-});
-
-// DATA ROUTES
-serverApplicatie.post("/api/data", async (verzoek, antwoord, volgende) => {
-  try {
-    const nieuweGegevens = await GegevensModel.create({ content: verzoek.body.content });
-    antwoord.status(201).json(nieuweGegevens);
-  } catch (fout) {
-    volgende(fout);
-  }
-});
-
-serverApplicatie.get("/api/data", async (verzoek, antwoord, volgende) => {
-  try {
-    const gegevens = await GegevensModel.find();
-    antwoord.json(gegevens);
   } catch (fout) {
     volgende(fout);
   }
@@ -139,6 +186,7 @@ serverApplicatie.post("/api/kaartpunten", async (verzoek, antwoord, volgende) =>
       detailPaginaUrl: verzoek.body.detailPaginaUrl,
       stad: verzoek.body.stad,
       titelWerk: verzoek.body.titelWerk,
+      fotoUrl: verzoek.body.fotoUrl ?? null,
       breedtegraad: verzoek.body.breedtegraad,
       lengtegraad: verzoek.body.lengtegraad,
       geocodeWeergaveNaam: verzoek.body.geocodeWeergaveNaam,
@@ -150,11 +198,10 @@ serverApplicatie.post("/api/kaartpunten", async (verzoek, antwoord, volgende) =>
   }
 });
 
-// --- ERROR HANDLER (MOET 4 PARAMETERS HEBBEN) ---
 serverApplicatie.use((fout, verzoek, antwoord, volgende) => {
   console.error("❌ Error stack:", fout.stack);
-  antwoord.status(fout.status || 500).json({ 
-    error: fout.message || 'Interne server fout' 
+  antwoord.status(fout.status || 500).json({
+    error: fout.message || 'Interne server fout'
   });
 });
 
@@ -162,6 +209,7 @@ async function startServer() {
   try {
     await mongoose.connect(mongoVerbinding);
     console.log("✅ MongoDB Connected!");
+    await vulKaartpuntFotosAan();
   } catch (error) {
     console.warn("⚠️ MongoDB niet bereikbaar, fallback wordt gebruikt:", error.message);
   }

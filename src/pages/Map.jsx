@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useState, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import './Map.css';
-import mapArtistPhotos from '../data/mapArtistPhotos.json';
 import fallbackKaartpunten from '../../server/kaartpuntenFallback.json';
+import { FilterBalk } from '../components/filter.jsx';
 
 const maakSlug = (waarde) =>
   (waarde || '')
@@ -24,8 +24,6 @@ const haalInitialenOp = (naam) =>
     .map((w) => w[0].toUpperCase())
     .slice(0, 2)
     .join('');
-
-const zoekKunstenaarFoto = (naamKunstenaar) => mapArtistPhotos[maakSlug(naamKunstenaar)] || null;
 
 const zoekKaartpuntLink = (kaartPunt) => {
   if (kaartPunt?.detailPaginaUrl) {
@@ -90,9 +88,12 @@ function MapController({ bounds, sidebarIngeklapt }) {
 }
 
 export default function KaartComponent() {
+  const location = useLocation();
   const [kaartPuntenLijst, stelKaartPuntenLijstIn] = useState(() => filterGeldigeKaartpunten(fallbackKaartpunten));
   const [geselecteerdeLocatie, stelGeselecteerdeLocatieIn] = useState(null);
   const [sidebarIngeklapt, zetSidebarIngeklapt] = useState(false);
+  const [zoekterm, setZoekterm] = useState('');
+  const [geselecteerdeFilters, setGeselecteerdeFilters] = useState({});
   const containerRef = useRef(null);
   const cardRefs = useRef({});
   const huidigJaar = new Date().getFullYear();
@@ -126,6 +127,123 @@ export default function KaartComponent() {
     };
   }, []);
 
+  useEffect(() => {
+    const artistId = new URLSearchParams(location.search).get('artist');
+    if (!artistId || kaartPuntenLijst.length === 0) {
+      return;
+    }
+
+    const gevondenPunt = kaartPuntenLijst.find((kaartPunt) => zoekKaartpuntLink(kaartPunt) === artistId);
+    if (gevondenPunt) {
+      selecteerLocatie(gevondenPunt);
+    }
+  }, [location.search, kaartPuntenLijst]);
+
+  const filterOpties = useMemo(() => {
+    const uniekeOpeningsdagen = new Set();
+    const uniekePlaatsen = new Set();
+    const uniekeKunstvormen = new Set();
+    const uniekeRolstoelNiveaus = new Set();
+
+    kaartPuntenLijst.forEach((kaartPunt) => {
+      const dagMatches = kaartPunt.openDagenKunstroute2026?.match(/[A-Za-zÀ-ÿ]+dag/g) || [];
+      dagMatches.forEach((dag) => uniekeOpeningsdagen.add(dag));
+
+      const plaats = kaartPunt.volledigAdres?.split(',').pop()?.trim() || kaartPunt.stad?.trim();
+      if (plaats) {
+        uniekePlaatsen.add(plaats);
+      }
+
+      if (kaartPunt.titelWerk) {
+        uniekeKunstvormen.add(kaartPunt.titelWerk);
+      }
+
+      if (kaartPunt.rolstoeltoegankelijkheid) {
+        uniekeRolstoelNiveaus.add(kaartPunt.rolstoeltoegankelijkheid);
+      }
+    });
+
+    const opNederlands = (a, b) => a.localeCompare(b, 'nl');
+
+    return {
+      openingsdagen: Array.from(uniekeOpeningsdagen).sort(opNederlands),
+      plaatsen: Array.from(uniekePlaatsen).sort(opNederlands),
+      kunstvormen: Array.from(uniekeKunstvormen).sort(opNederlands),
+      rolstoelNiveaus: Array.from(uniekeRolstoelNiveaus).sort(opNederlands),
+    };
+  }, [kaartPuntenLijst]);
+
+  const gefilterdeKaartPunten = useMemo(() => {
+    const term = zoekterm.trim().toLowerCase();
+
+    let resultaten = kaartPuntenLijst.filter((kaartPunt) => {
+      const voldoetAanZoekterm =
+        term.length === 0 ||
+        [
+          kaartPunt.naamKunstenaar,
+          kaartPunt.volledigAdres,
+          kaartPunt.stad,
+          kaartPunt.titelWerk,
+          kaartPunt.openDagenKunstroute2026,
+        ]
+          .filter(Boolean)
+          .some((waarde) => waarde.toString().toLowerCase().includes(term));
+
+      const rolstoelFilter = geselecteerdeFilters.rolstoelToegang || [];
+      const voldoetAanRolstoel =
+        rolstoelFilter.length === 0 ||
+        rolstoelFilter.includes(kaartPunt.rolstoeltoegankelijkheid);
+
+      const plaatsFilter = geselecteerdeFilters.plaats || [];
+      const voldoetAanPlaats =
+        plaatsFilter.length === 0 ||
+        plaatsFilter.some((plaats) =>
+          [kaartPunt.volledigAdres, kaartPunt.stad].filter(Boolean).some((waarde) => waarde.includes(plaats))
+        );
+
+      const kunstvormFilter = geselecteerdeFilters.kunstvorm || [];
+      const voldoetAanKunstvorm =
+        kunstvormFilter.length === 0 ||
+        kunstvormFilter.includes(kaartPunt.titelWerk);
+
+      const dagenFilter = geselecteerdeFilters.openingsdagen || [];
+      const voldoetAanDagen =
+        dagenFilter.length === 0 ||
+        dagenFilter.some((dag) => kaartPunt.openDagenKunstroute2026?.includes(dag));
+
+      return (
+        voldoetAanZoekterm &&
+        voldoetAanRolstoel &&
+        voldoetAanPlaats &&
+        voldoetAanKunstvorm &&
+        voldoetAanDagen
+      );
+    });
+
+    const sorteervolgorde = geselecteerdeFilters.sortering?.[0];
+    if (sorteervolgorde === 'A-Z') {
+      resultaten = [...resultaten].sort((a, b) => a.naamKunstenaar.localeCompare(b.naamKunstenaar, 'nl'));
+    } else if (sorteervolgorde === 'Z-A') {
+      resultaten = [...resultaten].sort((a, b) => b.naamKunstenaar.localeCompare(a.naamKunstenaar, 'nl'));
+    }
+
+    return resultaten;
+  }, [kaartPuntenLijst, zoekterm, geselecteerdeFilters]);
+
+  useEffect(() => {
+    if (!geselecteerdeLocatie) {
+      return;
+    }
+
+    const nogZichtbaar = gefilterdeKaartPunten.some(
+      (kaartPunt) => kaartPunt.detailPaginaUrl === geselecteerdeLocatie.detailPaginaUrl
+    );
+
+    if (!nogZichtbaar) {
+      stelGeselecteerdeLocatieIn(null);
+    }
+  }, [gefilterdeKaartPunten, geselecteerdeLocatie]);
+
   // Scroll sidebar to selected card when selection changes
   useEffect(() => {
     if (!geselecteerdeLocatie) return;
@@ -153,7 +271,7 @@ export default function KaartComponent() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  const coordinaatLijst = kaartPuntenLijst.map((p) => [p.breedtegraad, p.lengtegraad]);
+  const coordinaatLijst = gefilterdeKaartPunten.map((p) => [p.breedtegraad, p.lengtegraad]);
   let kaartBounds = null;
   if (coordinaatLijst.length > 0) {
     const latitudes = coordinaatLijst.map((c) => c[0]);
@@ -202,8 +320,8 @@ export default function KaartComponent() {
             attribution='&copy; OpenStreetMap contributors'
           />
 
-          {kaartPuntenLijst.map((kaartPunt) => {
-            const fotoUrl = zoekKunstenaarFoto(kaartPunt.naamKunstenaar);
+          {gefilterdeKaartPunten.map((kaartPunt) => {
+            const fotoUrl = kaartPunt.fotoUrl || null;
             const isSelected = geselecteerdeLocatie?.detailPaginaUrl === kaartPunt.detailPaginaUrl;
             const markerIcon = maakProfielfotoMarker(fotoUrl, kaartPunt.naamKunstenaar, isSelected);
 
@@ -222,10 +340,29 @@ export default function KaartComponent() {
       </div>
 
       <aside className="kaart-sidebar">
+        <div className="kaart-sidebar-filters">
+          <div className="kaart-sidebar-search">
+            <input
+              type="text"
+              placeholder="Zoek een kunstenaar..."
+              value={zoekterm}
+              onChange={(e) => setZoekterm(e.target.value)}
+            />
+          </div>
+
+          <div className="filter-widget kaart-sidebar-filter-widget">
+            <FilterBalk
+              geselecteerdeFilters={geselecteerdeFilters}
+              bijFilterWijziging={setGeselecteerdeFilters}
+              filterOpties={filterOpties}
+            />
+          </div>
+        </div>
+
         <div className="sidebar-content">
-          {kaartPuntenLijst.map((kaartPunt) => {
+          {gefilterdeKaartPunten.length > 0 ? gefilterdeKaartPunten.map((kaartPunt) => {
             const isSelected = geselecteerdeLocatie?.detailPaginaUrl === kaartPunt.detailPaginaUrl;
-            const fotoUrl = zoekKunstenaarFoto(kaartPunt.naamKunstenaar);
+            const fotoUrl = kaartPunt.fotoUrl || null;
             const kaartpuntLink = zoekKaartpuntLink(kaartPunt);
             const key = kaartPunt.detailPaginaUrl || kaartPunt.naamKunstenaar;
             return (
@@ -261,7 +398,9 @@ export default function KaartComponent() {
                 </div>
               </div>
             );
-          })}
+          }) : (
+            <p className="kaart-sidebar-empty">Geen kunstenaars gevonden met de geselecteerde filters.</p>
+          )}
         </div>
         <div className="kaart-sidebar-note">ⓒ KunstRoute Noord-West Veluwe - {huidigJaar}</div>
       </aside>
