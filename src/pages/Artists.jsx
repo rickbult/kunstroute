@@ -1,47 +1,27 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Card } from "../components/Card.jsx";
 import { FilterBalk } from "../components/filter.jsx";
+// artists are now provided from the API (MongoDB)
 import "./Artists.css";
 
 export default function Artists() {
   const [zoekterm, setZoekterm] = useState("");
   const [geselecteerdeFilters, setGeselecteerdeFilters] = useState({});
-  const [artistsData, setArtistsData] = useState([]);
-  const [isLaden, setIsLaden] = useState(true);
-  const [fout, setFout] = useState("");
+  const [artists, setArtists] = useState([]);
 
   useEffect(() => {
     let actief = true;
-
-    fetch("/api/artists")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
-
-        return response.json();
-      })
+    fetch('/api/artists')
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then((data) => {
-        if (!actief || !Array.isArray(data)) {
-          return;
-        }
-
-        setArtistsData(data);
+        if (!actief || !Array.isArray(data)) return;
+        setArtists(data);
       })
-      .catch((error) => {
-        if (actief) {
-          setFout(`Kon kunstenaars niet laden: ${error.message}`);
-        }
-      })
-      .finally(() => {
-        if (actief) {
-          setIsLaden(false);
-        }
+      .catch((e) => {
+        console.warn('Kon /api/artists niet laden, fallback gebruikt:', e.message);
       });
 
-    return () => {
-      actief = false;
-    };
+    return () => { actief = false; };
   }, []);
 
   const filterOpties = useMemo(() => {
@@ -50,22 +30,17 @@ export default function Artists() {
     const uniekeKunstvormen = new Set();
     const uniekeRolstoelNiveaus = new Set();
 
-    artistsData.forEach((kaart) => {
+    artists.forEach((kaart) => {
       const dagMatches = kaart.days?.match(/[A-Za-zÀ-ÿ]+dag/g) || [];
       dagMatches.forEach((dag) => uniekeOpeningsdagen.add(dag));
 
       const plaats = kaart.address?.split(",").pop()?.trim();
-      if (plaats) {
-        uniekePlaatsen.add(plaats);
-      }
+      if (plaats) uniekePlaatsen.add(plaats);
 
-      if (kaart.discipline) {
-        uniekeKunstvormen.add(kaart.discipline);
-      }
+      const kunstvorm = kaart.kunstvorm || kaart.discipline;
+      if (kunstvorm) uniekeKunstvormen.add(kunstvorm);
 
-      if (kaart.wheelchairaccessibility) {
-        uniekeRolstoelNiveaus.add(kaart.wheelchairaccessibility);
-      }
+      if (kaart.wheelchairaccessibility) uniekeRolstoelNiveaus.add(kaart.wheelchairaccessibility);
     });
 
     const opNederlands = (a, b) => a.localeCompare(b, "nl");
@@ -76,30 +51,27 @@ export default function Artists() {
       kunstvormen: Array.from(uniekeKunstvormen).sort(opNederlands),
       rolstoelNiveaus: Array.from(uniekeRolstoelNiveaus).sort(opNederlands),
     };
-  }, []);
+  }, [artists]);
 
-  let gefilterdeKaarten = artistsData.filter((kaart) => {
+  let gefilterdeKaarten = artists.filter((kaart) => {
     const voldoetAanZoekterm = kaart.title?.toLowerCase().includes(zoekterm.toLowerCase());
 
     const rolstoelFilter = geselecteerdeFilters.rolstoelToegang || [];
     const voldoetAanRolstoel =
-      rolstoelFilter.length === 0 ||
-      rolstoelFilter.includes(kaart.wheelchairaccessibility);
+      rolstoelFilter.length === 0 || rolstoelFilter.includes(kaart.wheelchairaccessibility);
 
     const plaatsFilter = geselecteerdeFilters.plaats || [];
     const voldoetAanPlaats =
-      plaatsFilter.length === 0 ||
-      plaatsFilter.some((plaats) => kaart.address?.includes(plaats));
+      plaatsFilter.length === 0 || plaatsFilter.some((plaats) => kaart.address?.includes(plaats));
 
     const kunstvormFilter = geselecteerdeFilters.kunstvorm || [];
+    const kunstvorm = kaart.kunstvorm || kaart.discipline;
     const voldoetAanKunstvorm =
-      kunstvormFilter.length === 0 ||
-      kunstvormFilter.includes(kaart.discipline);
+      kunstvormFilter.length === 0 || kunstvormFilter.includes(kunstvorm);
 
     const dagenFilter = geselecteerdeFilters.openingsdagen || [];
     const voldoetAanDagen =
-      dagenFilter.length === 0 ||
-      dagenFilter.some((dag) => kaart.days?.includes(dag));
+      dagenFilter.length === 0 || dagenFilter.some((dag) => kaart.days?.includes(dag));
 
     return (
       voldoetAanZoekterm &&
@@ -124,9 +96,6 @@ export default function Artists() {
         <p>Maak kennis met de creatieve geesten achter de kunstwerken.</p>
       </div>
 
-      {fout && <p className="page-error">{fout}</p>}
-      {isLaden && <p className="page-loading">Kunstenaars laden...</p>}
-
       <div className="filter-widget">
         <div className="zoekfilter-balk">
           <div className="zoekbalk">
@@ -147,10 +116,10 @@ export default function Artists() {
       </div>
 
       <div className="card-grid">
-        {!isLaden && gefilterdeKaarten.length > 0 ? (
-          gefilterdeKaarten.map((kaart) => <Card key={kaart.link} {...kaart} />)
+        {gefilterdeKaarten.length > 0 ? (
+          gefilterdeKaarten.map((kaart) => <Card key={kaart.link || kaart.title} {...kaart} />)
         ) : (
-          !isLaden && <p>Geen kunstenaars gevonden met de geselecteerde filters.</p>
+          <p>Geen kunstenaars gevonden met de geselecteerde filters.</p>
         )}
       </div>
     </div>

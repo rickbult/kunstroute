@@ -3,18 +3,13 @@ import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
 import KaartPunt from "./LocationModel.js";
+import Artist from "./ArtistModel.js";
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const serverApplicatie = express();
 const SERVER_POORT = process.env.PORT || 5000;
-const mapArtistPhotosPad = path.resolve(new URL('../src/data/mapArtistPhotos.json', import.meta.url).pathname);
-const fallbackKaartpuntenPad = path.resolve(new URL('./kaartpuntenFallback.json', import.meta.url).pathname);
-let fallbackKaartpunten = [];
-let fallbackArtistPhotos = {};
 
 const maakSlug = (waarde) =>
   (waarde || '')
@@ -25,38 +20,6 @@ const maakSlug = (waarde) =>
     .replace(/\/+$/, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
-
-const maakArtistRecord = (punt) => ({
-  imgSrc: punt.fotoUrl || '',
-  imgAlt: `Foto van ${punt.naamKunstenaar}`,
-  title: punt.naamKunstenaar,
-  description: punt.titelWerk || punt.volledigAdres || '',
-  location: punt.stad || '',
-  address: punt.volledigAdres || '',
-  postcode: '',
-  wheelchairaccessibility: punt.rolstoeltoegankelijkheid || 'Onbekend',
-  days: punt.openDagenKunstroute2026 || '',
-  phone: '',
-  email: '',
-  website: punt.googleMapsUrl || punt.detailPaginaUrl || '',
-  link: maakSlug(punt.detailPaginaUrl) || maakSlug(punt.naamKunstenaar),
-  discipline: punt.titelWerk || '',
-  artworks: [],
-});
-
-try {
-  const fallbackBestand = fs.readFileSync(fallbackKaartpuntenPad, 'utf8');
-  fallbackKaartpunten = JSON.parse(fallbackBestand);
-} catch (fout) {
-  console.warn('⚠️ Lokale fallback kaartpunten niet geladen:', fout.message);
-}
-
-try {
-  const photosBestand = fs.readFileSync(mapArtistPhotosPad, 'utf8');
-  fallbackArtistPhotos = JSON.parse(photosBestand);
-} catch (fout) {
-  console.warn("⚠️ Lokale fallback kunstenaarfoto's niet geladen:", fout.message);
-}
 
 const mongoVerbinding = process.env.MONGODB_URI;
 
@@ -73,18 +36,7 @@ const gebruikerSchema = new mongoose.Schema({
 const Gebruiker = mongoose.model('User', gebruikerSchema);
 
 async function vulKaartpuntFotosAan() {
-  const puntenZonderFoto = await KaartPunt.find({
-    $or: [{ fotoUrl: null }, { fotoUrl: { $exists: false } }],
-  }).lean();
-
-  for (const punt of puntenZonderFoto) {
-    const fotoUrl = fallbackArtistPhotos[maakSlug(punt.naamKunstenaar)];
-    if (!fotoUrl) {
-      continue;
-    }
-
-    await KaartPunt.updateOne({ _id: punt._id }, { $set: { fotoUrl } });
-  }
+  return undefined;
 }
 
 serverApplicatie.use(express.json());
@@ -105,8 +57,46 @@ serverApplicatie.get("/", (verzoek, antwoord) => antwoord.json({ message: "Kunst
 
 serverApplicatie.get("/api/artists", async (verzoek, antwoord, volgende) => {
   try {
+    const artistsCount = await Artist.countDocuments();
+    if (artistsCount > 0) {
+      const artists = await Artist.find().lean();
+      return antwoord.json(artists.map((a) => ({
+        imgSrc: a.imgSrc || '',
+        imgAlt: a.imgAlt || `Foto van ${a.title}`,
+        title: a.title,
+        description: a.description || '',
+        location: a.address?.split(',').pop()?.trim() || '',
+        address: a.address || '',
+        postcode: '',
+        wheelchairaccessibility: a.wheelchairaccessibility || 'Onbekend',
+        days: a.days || '',
+        phone: a.phone || '',
+        email: a.email || '',
+        website: a.website || '',
+        link: a.link,
+        discipline: a.discipline || ''
+      })));
+    }
+
     const kaartpunten = await KaartPunt.find().lean();
-    antwoord.json(kaartpunten.map(maakArtistRecord));
+    antwoord.json(kaartpunten.map((punt) => ({
+      imgSrc: punt.fotoUrl || '',
+      imgAlt: `Foto van ${punt.naamKunstenaar}`,
+      title: punt.naamKunstenaar,
+      description: punt.titelWerk || punt.volledigAdres || '',
+      location: punt.stad || '',
+      address: punt.volledigAdres || '',
+      postcode: '',
+      wheelchairaccessibility: punt.rolstoeltoegankelijkheid || 'Onbekend',
+      days: punt.openDagenKunstroute2026 || '',
+      phone: '',
+      email: '',
+      website: punt.googleMapsUrl || punt.detailPaginaUrl || '',
+      link: maakSlug(punt.detailPaginaUrl) || maakSlug(punt.naamKunstenaar),
+      discipline: punt.kunstvorm || '',
+      kunstvorm: punt.kunstvorm || '',
+      artworks: [],
+    })));
   } catch (fout) {
     volgende(fout);
   }
@@ -114,14 +104,56 @@ serverApplicatie.get("/api/artists", async (verzoek, antwoord, volgende) => {
 
 serverApplicatie.get("/api/artists/:id", async (verzoek, antwoord, volgende) => {
   try {
+    const artistsCount = await Artist.countDocuments();
+    if (artistsCount > 0) {
+      const artist = await Artist.findOne({ link: verzoek.params.id }).lean();
+      if (artist) {
+        return antwoord.json({
+          imgSrc: artist.imgSrc || '',
+          imgAlt: artist.imgAlt || `Foto van ${artist.title}`,
+          title: artist.title,
+          description: artist.description || '',
+          location: artist.address?.split(',').pop()?.trim() || '',
+          address: artist.address || '',
+          postcode: '',
+          wheelchairaccessibility: artist.wheelchairaccessibility || 'Onbekend',
+          days: artist.days || '',
+          phone: artist.phone || '',
+          email: artist.email || '',
+          website: artist.website || '',
+          link: artist.link,
+          discipline: artist.discipline || '',
+          kunstvorm: artist.discipline || '',
+          artworks: [],
+        });
+      }
+    }
+
     const kaartpunten = await KaartPunt.find().lean();
-    const artist = kaartpunten.map(maakArtistRecord).find((item) => item.link === verzoek.params.id);
+    const artist = kaartpunten.find((item) => (maakSlug(item.detailPaginaUrl) || maakSlug(item.naamKunstenaar)) === verzoek.params.id);
 
     if (!artist) {
       return antwoord.status(404).json({ error: 'Kunstenaar niet gevonden' });
     }
 
-    antwoord.json(artist);
+    antwoord.json({
+      imgSrc: artist.fotoUrl || '',
+      imgAlt: `Foto van ${artist.naamKunstenaar}`,
+      title: artist.naamKunstenaar,
+      description: artist.titelWerk || artist.volledigAdres || '',
+      location: artist.stad || '',
+      address: artist.volledigAdres || '',
+      postcode: '',
+      wheelchairaccessibility: artist.rolstoeltoegankelijkheid || 'Onbekend',
+      days: artist.openDagenKunstroute2026 || '',
+      phone: '',
+      email: '',
+      website: artist.googleMapsUrl || artist.detailPaginaUrl || '',
+      link: maakSlug(artist.detailPaginaUrl) || maakSlug(artist.naamKunstenaar),
+      discipline: artist.kunstvorm || '',
+      kunstvorm: artist.kunstvorm || '',
+      artworks: [],
+    });
   } catch (fout) {
     volgende(fout);
   }
@@ -159,18 +191,9 @@ serverApplicatie.post("/api/auth/login", async (verzoek, antwoord, volgende) => 
 
 serverApplicatie.get("/api/kaartpunten", async (verzoek, antwoord, volgende) => {
   try {
-    if (mongoose.connection.readyState === 1) {
-      const alleKaartpunten = await KaartPunt.find().lean();
-      if (Array.isArray(alleKaartpunten) && alleKaartpunten.length > 0) {
-        return antwoord.json(alleKaartpunten);
-      }
-    }
-
-    antwoord.json(fallbackKaartpunten);
+    const alleKaartpunten = await KaartPunt.find().lean();
+    antwoord.json(alleKaartpunten);
   } catch (fout) {
-    if (fallbackKaartpunten.length > 0) {
-      return antwoord.json(fallbackKaartpunten);
-    }
     volgende(fout);
   }
 });
@@ -186,6 +209,7 @@ serverApplicatie.post("/api/kaartpunten", async (verzoek, antwoord, volgende) =>
       detailPaginaUrl: verzoek.body.detailPaginaUrl,
       stad: verzoek.body.stad,
       titelWerk: verzoek.body.titelWerk,
+      kunstvorm: verzoek.body.kunstvorm ?? null,
       fotoUrl: verzoek.body.fotoUrl ?? null,
       breedtegraad: verzoek.body.breedtegraad,
       lengtegraad: verzoek.body.lengtegraad,

@@ -4,6 +4,7 @@ const kaartPuntSchema = new mongoose.Schema({
   naamKunstenaar: { type: String, required: true },
   fotoUrl: { type: String, default: null },
   volledigAdres: { type: String, required: true },
+  kunstvorm: { type: String, default: null },
   googleMapsUrl: { type: String, required: true },
   openDagenKunstroute2026: { type: String, required: true },
   rolstoeltoegankelijkheid: { type: String, required: true },
