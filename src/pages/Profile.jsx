@@ -6,10 +6,11 @@ import "./Profile.css";
 export default function Profile() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [bewerken, setBewerken] = useState(false);
+  const [bewerken, setBewerken] = useState(true);
   const [form, setForm] = useState({});
   const [succes, setSucces] = useState("");
   const [fout, setFout] = useState("");
+  const [adresCheck, setAdresCheck] = useState(null);
 
   useEffect(function () {
     async function loadUser() {
@@ -33,12 +34,41 @@ export default function Profile() {
     const type = e.target.type;
     const files = e.target.files;
 
+    if (['adres', 'postcode', 'woonplaats'].includes(name)) {
+      setAdresCheck(null);
+    }
+
     setForm(function (prev) {
       return {
         ...prev,
         [name]: type === "file" ? (files && files[0] ? files[0] : null) : value,
       };
     });
+  }
+
+  async function controleerAdres() {
+    if (!form.adres && !form.woonplaats) return;
+    setAdresCheck('loading');
+
+    const basis = { format: 'json', limit: 1, countrycodes: 'nl' };
+    const pogingen = [
+      form.adres && form.woonplaats && { street: form.adres, postalcode: form.postcode, city: form.woonplaats, ...basis },
+      form.adres && form.woonplaats && { street: form.adres, city: form.woonplaats, ...basis },
+      form.woonplaats               && { city: form.woonplaats, ...basis },
+    ].filter(Boolean);
+
+    for (const params of pogingen) {
+      const qs = new URLSearchParams(params).toString();
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?${qs}`);
+        const data = await res.json();
+        if (data?.[0]) {
+          setAdresCheck({ gevonden: true, display: data[0].display_name });
+          return;
+        }
+      } catch {}
+    }
+    setAdresCheck({ gevonden: false });
   }
 
   async function handleOpslaan(e) {
@@ -70,6 +100,9 @@ export default function Profile() {
     formData.append("adres", form.adres || "");
     formData.append("postcode", form.postcode || "");
     formData.append("woonplaats", form.woonplaats || "");
+    formData.append("openZaterdag",         form.openZaterdag         ? "true" : "false");
+    formData.append("openZondag",           form.openZondag           ? "true" : "false");
+    formData.append("rolstoeltoegankelijk", form.rolstoeltoegankelijk || "");
 
     if (form.profielfoto && typeof form.profielfoto !== "string") {
       formData.append("profielfoto", form.profielfoto);
@@ -221,6 +254,21 @@ export default function Profile() {
                 </span>
               </div>
             </div>
+          </div>
+
+          <div className="profiel-sectie">
+            <h2>Open dagen kunstroute</h2>
+            <div className="profiel-open-dagen">
+              <span className={`profiel-dag-badge ${user.openZaterdag ? 'actief' : ''}`}>Zaterdag</span>
+              <span className={`profiel-dag-badge ${user.openZondag   ? 'actief' : ''}`}>Zondag</span>
+            </div>
+          </div>
+
+          <div className="profiel-sectie">
+            <h2>Rolstoeltoegankelijkheid</h2>
+            <span className={`profiel-dag-badge ${user.rolstoeltoegankelijk === 'Ja' ? 'actief' : user.rolstoeltoegankelijk === 'Gedeeltelijk' ? 'gedeeltelijk' : ''}`}>
+              ♿ {user.rolstoeltoegankelijk || '—'}
+            </span>
           </div>
 
           <div className="profiel-sectie">
@@ -384,6 +432,46 @@ export default function Profile() {
           </div>
 
           <div className="profiel-sectie">
+            <h2>Open dagen kunstroute</h2>
+            <p className="reg-info" style={{ marginBottom: '12px' }}>Geef aan op welke dagen je open bent tijdens de kunstroute.</p>
+            <div className="profiel-open-dagen">
+              <label className="profiel-dag-label">
+                <input
+                  type="checkbox"
+                  name="openZaterdag"
+                  checked={!!form.openZaterdag}
+                  onChange={(e) => setForm(prev => ({ ...prev, openZaterdag: e.target.checked }))}
+                />
+                Zaterdag
+              </label>
+              <label className="profiel-dag-label">
+                <input
+                  type="checkbox"
+                  name="openZondag"
+                  checked={!!form.openZondag}
+                  onChange={(e) => setForm(prev => ({ ...prev, openZondag: e.target.checked }))}
+                />
+                Zondag
+              </label>
+            </div>
+          </div>
+
+          <div className="profiel-sectie">
+            <h2>Rolstoeltoegankelijkheid</h2>
+            <select
+              className="reg-input"
+              name="rolstoeltoegankelijk"
+              value={form.rolstoeltoegankelijk || ""}
+              onChange={(e) => setForm(prev => ({ ...prev, rolstoeltoegankelijk: e.target.value }))}
+            >
+              <option value="">— Kies een optie —</option>
+              <option value="Ja">Ja</option>
+              <option value="Gedeeltelijk">Gedeeltelijk</option>
+              <option value="Nee">Nee</option>
+            </select>
+          </div>
+
+          <div className="profiel-sectie">
             <h2>Adres</h2>
 
             <div className="reg-field">
@@ -415,6 +503,33 @@ export default function Profile() {
                   value={form.woonplaats || ""}
                   onChange={handleChange}
                 />
+              </div>
+
+              <div className="reg-adres-check-row">
+                <button
+                  type="button"
+                  className="reg-btn-adres-check"
+                  onClick={controleerAdres}
+                  disabled={adresCheck === 'loading' || (!form.adres && !form.woonplaats)}
+                >
+                  {adresCheck === 'loading' ? 'Opzoeken...' : 'Controleer adres op kaart'}
+                </button>
+
+                {adresCheck && adresCheck !== 'loading' && (
+                  <div className={`reg-adres-result ${adresCheck.gevonden ? 'gevonden' : 'niet-gevonden'}`}>
+                    {adresCheck.gevonden ? (
+                      <>
+                        <span className="reg-adres-icon">✓</span>
+                        <span>Gevonden: <strong>{adresCheck.display}</strong></span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="reg-adres-icon">✗</span>
+                        <span>Adres niet gevonden — controleer je spelling of gebruik een bekende plaatsnaam.</span>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>

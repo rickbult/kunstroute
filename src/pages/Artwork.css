@@ -1,5 +1,5 @@
 .kunstwerken-wrapper {
-  background-image: url('./assets/kunstwerken-bg.png');
+  background-image: url('../assets/kunstwerken-bg.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
