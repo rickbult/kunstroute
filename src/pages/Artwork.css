@@ -1,0 +1,149 @@
+.kunstwerken-wrapper {
+  background-image: url('./assets/kunstwerken-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: calc(100vh - 72px);
+  width: 100%;
+}
+
+.kunstwerken-page {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 72px);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+}
+
+.kunstwerken-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.kunstwerken-header h1 {
+  font-size: 2.5rem;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.kunstwerken-header p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-bar-container {
+  margin-top: 2.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.kunstwerken-search-input {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.9rem 1.5rem;
+  font-size: 1rem;
+  border: 1px solid #e1e1e1;
+  border-radius: 999px;
+  outline: none;
+  background-color: #fff;
+  color: #333;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.kunstwerken-search-input::placeholder {
+  color: #aaa;
+}
+
+.kunstwerken-search-input:focus {
+  border-color: #999;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.kunstwerken-grid {
+  column-count: 4;
+  column-gap: 1.5rem;
+}
+
+@media (max-width: 1200px) {
+  .kunstwerken-grid { column-count: 3; }
+}
+
+@media (max-width: 900px) {
+  .kunstwerken-grid { column-count: 2; }
+}
+
+@media (max-width: 600px) {
+  .kunstwerken-grid { column-count: 1; }
+}
+
+.kunstwerk-card {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: inline-block; /* Helps with masonry rendering */
+  width: 100%;
+}
+
+.kunstwerk-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.kunstwerk-image-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.kunstwerk-image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.kunstwerk-card:hover .kunstwerk-image-wrapper img {
+  transform: scale(1.05);
+}
+
+.kunstwerk-info {
+  padding: 1.25rem;
+}
+
+.kunstwerk-category {
+  display: block;
+  font-size: 0.75rem;
+  color: #999;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.kunstwerk-info h3 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.1rem;
+  color: #1a1a1a;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.kunstwerk-artist {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.no-artworks {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #888;
+  padding: 3rem;
+}
