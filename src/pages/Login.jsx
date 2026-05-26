@@ -1,59 +1,60 @@
-// DIT IS AI GEGENEREERD!!!!!!!!!!!!;
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../utils/auth';
 import './Login.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [fout, setFout] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setFout('');
+    setLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', {
-        username,
-        password
-      });
-      localStorage.setItem('token', res.data.token);  // Sla token op
-      setMessage('✅ Login succes! Token opgeslagen.');
-      console.log('TEST TOKEN:', res.data.token);
-      // Reset form
-      setUsername('');
-      setPassword('');
+      const result = await login(email, password);
+      if (!result.success) {
+        setFout(result.error || 'Inloggen mislukt.');
+        return;
+      }
+      window.dispatchEvent(new Event('authchange'));
+      navigate('/profile');
     } catch (err) {
-      setMessage('❌ Fout: ' + (err.response?.data?.error || 'Probeer opnieuw'));
+      setFout('Er ging iets mis. Probeer opnieuw.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="login-container">
-      <h2>🔐 Kunstroute Login</h2>
+      <h2>Inloggen</h2>
       <form onSubmit={handleLogin}>
         <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="E-mailadres"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Wachtwoord"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Inloggen</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Bezig...' : 'Inloggen'}
+        </button>
       </form>
-      {message && <p className={message.startsWith('✅') ? 'success' : 'error'}>{message}</p>}
-      
+      {fout && <p className="error">{fout}</p>}
       <div className="signup-link">
-        <Link to="/signup">👉 Nog geen account? Registreer hier</Link>
+        <Link to="/register">Nog geen account? Registreer hier</Link>
       </div>
-      
-      <p>Test met backend credentials (MongoDB).</p>
     </div>
   );
 };

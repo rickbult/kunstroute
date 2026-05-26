@@ -137,6 +137,11 @@ export const ArtistDetail = () => {
     );
   }
 
+  const openDagen = [
+    artist.openZaterdag && 'Zaterdag',
+    artist.openZondag && 'Zondag',
+  ].filter(Boolean).join(' & ');
+
   return (
     <div className="detail-wrapper">
       <div className="artist-hero">
@@ -146,8 +151,8 @@ export const ArtistDetail = () => {
         <div className="artist-info">
           <h1 className="artist-name">{artist.title}</h1>
           <div className="artist-tags">
-            <span className="tag tag-location"> {artist.location}</span>
-            <span className="tag tag-days">{artist.days}</span>
+            <span className="tag tag-location">{artist.location}</span>
+            {openDagen && <span className="tag tag-days">{openDagen}</span>}
           </div>
           <p className="artist-bio">{artist.description}</p>
 
@@ -159,9 +164,9 @@ export const ArtistDetail = () => {
               <a href="#" className="map-link">Bekijk op kaart</a>
             </div>
             <div className="contact-section">
-              <h3>Contact</h3>
-              <p> {artist.phone || "Telefoon nummer"}</p>
-              <p> {artist.email || "Email"}</p>
+              <h3>Toegankelijkheid</h3>
+              {artist.rolstoeltoegankelijk && <p>Rolstoel: {artist.rolstoeltoegankelijk}</p>}
+              {openDagen && <p>Open: {openDagen}</p>}
             </div>
           </div>
           {navigatieKnoppen}

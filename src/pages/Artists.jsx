@@ -1,127 +1,140 @@
-import { useMemo, useState, useEffect } from "react";
-import { Card } from "../components/Card.jsx";
+import { useState, useEffect, useMemo } from "react";
 import { FilterBalk } from "../components/filter.jsx";
-// artists are now provided from the API (MongoDB)
 import "./Artists.css";
 
 export default function Artists() {
-  const [zoekterm, setZoekterm] = useState("");
-  const [geselecteerdeFilters, setGeselecteerdeFilters] = useState({});
+  const [searchQuery, setSearchQuery] = useState('');
   const [artists, setArtists] = useState([]);
+  const [geselecteerdeFilters, setGeselecteerdeFilters] = useState({});
 
   useEffect(() => {
     let actief = true;
     fetch('/api/artists')
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then((data) => {
-        if (!actief || !Array.isArray(data)) return;
-        setArtists(data);
+        if (actief && Array.isArray(data)) setArtists(data);
       })
-      .catch((e) => {
-        console.warn('Kon /api/artists niet laden, fallback gebruikt:', e.message);
-      });
-
+      .catch((e) => console.warn('Kon /api/artists niet laden:', e.message));
     return () => { actief = false; };
   }, []);
 
-  const filterOpties = useMemo(() => {
-    const uniekeOpeningsdagen = new Set();
-    const uniekePlaatsen = new Set();
-    const uniekeKunstvormen = new Set();
-    const uniekeRolstoelNiveaus = new Set();
+  const filterOpties = useMemo(() => ({
+    plaatsen:        [...new Set(artists.map(a => a.location).filter(Boolean))].sort(),
+    kunstvormen:     [...new Set(artists.map(a => a.discipline).filter(Boolean))].sort(),
+    rolstoelNiveaus: ['Ja', 'Gedeeltelijk', 'Nee'],
+    openingsdagen:   ['Zaterdag', 'Zondag'],
+  }), [artists]);
 
-    artists.forEach((kaart) => {
-      const dagMatches = kaart.days?.match(/[A-Za-zÀ-ÿ]+dag/g) || [];
-      dagMatches.forEach((dag) => uniekeOpeningsdagen.add(dag));
+  const gefilterd = useMemo(() => {
+    let lijst = artists;
 
-      const plaats = kaart.address?.split(",").pop()?.trim();
-      if (plaats) uniekePlaatsen.add(plaats);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      lijst = lijst.filter(a =>
+        (a.title       && a.title.toLowerCase().includes(q)) ||
+        (a.location    && a.location.toLowerCase().includes(q)) ||
+        (a.description && a.description.toLowerCase().includes(q)) ||
+        (a.discipline  && a.discipline.toLowerCase().includes(q))
+      );
+    }
 
-      const kunstvorm = kaart.kunstvorm || kaart.discipline;
-      if (kunstvorm) uniekeKunstvormen.add(kunstvorm);
+    const dagen = geselecteerdeFilters.openingsdagen || [];
+    if (dagen.length > 0) {
+      lijst = lijst.filter(a =>
+        (dagen.includes('Zaterdag') ? a.openZaterdag : true) &&
+        (dagen.includes('Zondag')   ? a.openZondag   : true)
+      );
+    }
 
-      if (kaart.wheelchairaccessibility) uniekeRolstoelNiveaus.add(kaart.wheelchairaccessibility);
-    });
+    const rolstoel = geselecteerdeFilters.rolstoelToegang || [];
+    if (rolstoel.length > 0) {
+      lijst = lijst.filter(a => rolstoel.includes(a.rolstoeltoegankelijk));
+    }
 
-    const opNederlands = (a, b) => a.localeCompare(b, "nl");
+    const vormen = geselecteerdeFilters.kunstvorm || [];
+    if (vormen.length > 0) {
+      lijst = lijst.filter(a => vormen.includes(a.discipline));
+    }
 
-    return {
-      openingsdagen: Array.from(uniekeOpeningsdagen).sort(opNederlands),
-      plaatsen: Array.from(uniekePlaatsen).sort(opNederlands),
-      kunstvormen: Array.from(uniekeKunstvormen).sort(opNederlands),
-      rolstoelNiveaus: Array.from(uniekeRolstoelNiveaus).sort(opNederlands),
-    };
-  }, [artists]);
+    const plaatsen = geselecteerdeFilters.plaats || [];
+    if (plaatsen.length > 0) {
+      lijst = lijst.filter(a => plaatsen.includes(a.location));
+    }
 
-  let gefilterdeKaarten = artists.filter((kaart) => {
-    const voldoetAanZoekterm = kaart.title?.toLowerCase().includes(zoekterm.toLowerCase());
+    const sortering = geselecteerdeFilters.sortering?.[0];
+    if (sortering === 'A-Z') lijst = [...lijst].sort((a, b) => a.title.localeCompare(b.title));
+    if (sortering === 'Z-A') lijst = [...lijst].sort((a, b) => b.title.localeCompare(a.title));
 
-    const rolstoelFilter = geselecteerdeFilters.rolstoelToegang || [];
-    const voldoetAanRolstoel =
-      rolstoelFilter.length === 0 || rolstoelFilter.includes(kaart.wheelchairaccessibility);
-
-    const plaatsFilter = geselecteerdeFilters.plaats || [];
-    const voldoetAanPlaats =
-      plaatsFilter.length === 0 || plaatsFilter.some((plaats) => kaart.address?.includes(plaats));
-
-    const kunstvormFilter = geselecteerdeFilters.kunstvorm || [];
-    const kunstvorm = kaart.kunstvorm || kaart.discipline;
-    const voldoetAanKunstvorm =
-      kunstvormFilter.length === 0 || kunstvormFilter.includes(kunstvorm);
-
-    const dagenFilter = geselecteerdeFilters.openingsdagen || [];
-    const voldoetAanDagen =
-      dagenFilter.length === 0 || dagenFilter.some((dag) => kaart.days?.includes(dag));
-
-    return (
-      voldoetAanZoekterm &&
-      voldoetAanRolstoel &&
-      voldoetAanPlaats &&
-      voldoetAanKunstvorm &&
-      voldoetAanDagen
-    );
-  });
-
-  const sorteervolgorde = geselecteerdeFilters.sortering?.[0];
-  if (sorteervolgorde === "A-Z") {
-    gefilterdeKaarten = [...gefilterdeKaarten].sort((a, b) => a.title.localeCompare(b.title));
-  } else if (sorteervolgorde === "Z-A") {
-    gefilterdeKaarten = [...gefilterdeKaarten].sort((a, b) => b.title.localeCompare(a.title));
-  }
+    return lijst;
+  }, [artists, searchQuery, geselecteerdeFilters]);
 
   return (
-    <div className="page-wrapper">
-      <div className="page-header">
-        <h1>Onze Kunstenaars</h1>
-        <p>Maak kennis met de creatieve geesten achter de kunstwerken.</p>
-      </div>
-
-      <div className="filter-widget">
-        <div className="zoekfilter-balk">
-          <div className="zoekbalk">
+    <div className="artists-wrapper">
+      <section className="artists-page">
+        <div className="artists-page-header">
+          <h1>Onze Kunstenaars</h1>
+          <p>Maak kennis met de creatieve geesten achter de kunstwerken.</p>
+          <div className="artists-search-container">
+            <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
             <input
               type="text"
               placeholder="Zoek een kunstenaar..."
-              value={zoekterm}
-              onChange={(e) => setZoekterm(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="artists-search-input"
             />
           </div>
-
-          <FilterBalk
-            geselecteerdeFilters={geselecteerdeFilters}
-            bijFilterWijziging={setGeselecteerdeFilters}
-            filterOpties={filterOpties}
-          />
         </div>
-      </div>
 
-      <div className="card-grid">
-        {gefilterdeKaarten.length > 0 ? (
-          gefilterdeKaarten.map((kaart) => <Card key={kaart.link || kaart.title} {...kaart} />)
-        ) : (
-          <p>Geen kunstenaars gevonden met de geselecteerde filters.</p>
-        )}
-      </div>
+        <div className="filter-widget">
+          <div className="zoekfilter-balk">
+            <FilterBalk
+              bijFilterWijziging={setGeselecteerdeFilters}
+              geselecteerdeFilters={geselecteerdeFilters}
+              filterOpties={filterOpties}
+            />
+          </div>
+        </div>
+
+        <div className="artists-page-grid">
+          {gefilterd.map((artist) => (
+            <div key={artist.link || artist.title} className="artist-page-card">
+              <div className="artist-card-top">
+                {artist.imgSrc && (
+                  <div className="artist-card-bg" style={{ backgroundImage: `url(${artist.imgSrc})` }} />
+                )}
+                <div className="artist-card-overlay" />
+                <div className="artist-card-header-text">
+                  <h3>{artist.title}</h3>
+                  {artist.location && (
+                    <div className="artist-location">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                      {artist.location}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="artist-card-bottom">
+                {artist.description && <p className="artist-description">{artist.description}</p>}
+                {(artist.openZaterdag || artist.openZondag) && (
+                  <div className="artist-days-tag">
+                    {[artist.openZaterdag && 'Zaterdag', artist.openZondag && 'Zondag'].filter(Boolean).join(' & ')}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+          {gefilterd.length === 0 && (
+            <p className="no-artists">Geen kunstenaars gevonden die aan je zoekopdracht voldoen.</p>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

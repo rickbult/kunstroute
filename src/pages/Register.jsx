@@ -29,9 +29,14 @@ export default function Registreren() {
   const [form, setForm] = useState(LEEG);
   const [fout, setFout] = useState("");
   const [loading, setLoading] = useState(false);
+  const [adresCheck, setAdresCheck] = useState(null); // null | 'loading' | { gevonden, display }
 
   function handleChange(e) {
     const { name, value, type, checked, files } = e.target;
+
+    if (['adres', 'postcode', 'woonplaats'].includes(name)) {
+      setAdresCheck(null);
+    }
 
     setForm((prev) => ({
       ...prev,
@@ -44,6 +49,31 @@ export default function Registreren() {
             : null
           : value,
     }));
+  }
+
+  async function controleerAdres() {
+    if (!form.adres && !form.woonplaats) return;
+    setAdresCheck('loading');
+
+    const basis = { format: 'json', limit: 1, countrycodes: 'nl' };
+    const pogingen = [
+      form.adres && form.woonplaats && { street: form.adres, postalcode: form.postcode, city: form.woonplaats, ...basis },
+      form.adres && form.woonplaats && { street: form.adres, city: form.woonplaats, ...basis },
+      form.woonplaats               && { city: form.woonplaats, ...basis },
+    ].filter(Boolean);
+
+    for (const params of pogingen) {
+      const qs = new URLSearchParams(params).toString();
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?${qs}`);
+        const data = await res.json();
+        if (data?.[0]) {
+          setAdresCheck({ gevonden: true, display: data[0].display_name });
+          return;
+        }
+      } catch {}
+    }
+    setAdresCheck({ gevonden: false });
   }
 
   async function handleSubmit(e) {
@@ -354,6 +384,33 @@ export default function Registreren() {
                 value={form.woonplaats}
                 onChange={handleChange}
               />
+            </div>
+
+            <div className="reg-adres-check-row">
+              <button
+                type="button"
+                className="reg-btn-adres-check"
+                onClick={controleerAdres}
+                disabled={adresCheck === 'loading' || (!form.adres && !form.woonplaats)}
+              >
+                {adresCheck === 'loading' ? 'Opzoeken...' : 'Controleer adres op kaart'}
+              </button>
+
+              {adresCheck && adresCheck !== 'loading' && (
+                <div className={`reg-adres-result ${adresCheck.gevonden ? 'gevonden' : 'niet-gevonden'}`}>
+                  {adresCheck.gevonden ? (
+                    <>
+                      <span className="reg-adres-icon">✓</span>
+                      <span>Gevonden: <strong>{adresCheck.display}</strong></span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="reg-adres-icon">✗</span>
+                      <span>Adres niet gevonden — controleer je spelling of gebruik een bekende plaatsnaam.</span>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </section>
 
