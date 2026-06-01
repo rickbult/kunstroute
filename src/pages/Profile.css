@@ -1,22 +1,46 @@
-.profiel-page {
+.page.profiel-page {
+  background-color: var(--color-primary-dark);
+  background-image: linear-gradient(rgba(42, 35, 86, 0.4), rgba(42, 35, 86, 0.4)), url('../assets/agenda-bg-landscape.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.profiel-kleurstrip {
+  display: flex;
+  height: 6px;
+  width: 100%;
+}
+.profiel-kleurstrip .groen  { flex: 1; background: #2ba44a; }
+.profiel-kleurstrip .geel   { flex: 1; background: #a6d51e; }
+.profiel-kleurstrip .roze   { flex: 1; background: #e42a6a; }
+.profiel-kleurstrip .paars  { flex: 1; background: #2e2b76; }
+
+.profiel-inner {
   max-width: 820px;
   margin: 0 auto;
+  padding: 2rem 1rem 4rem;
 }
 
 .profiel-header {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 2px solid #2301ba;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid #2e2b76;
   flex-wrap: wrap;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(46,43,118,0.07);
 }
 
 .profiel-avatar {
   width: 72px;
   height: 72px;
-  background-color: #2301ba;
+  background-color: #2e2b76;
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -35,7 +59,7 @@
 .profiel-naam {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2301ba;
+  color: #2e2b76;
 }
 
 .profiel-email {
@@ -52,20 +76,21 @@
 }
 
 .profiel-uitloggen {
-  background: transparent;
-  color: #e01b68;
-  border: 1.5px solid #e01b68;
+  background: #e01b68;
+  color: #fff;
+  border: none;
   border-radius: 6px;
-  padding: 0.45rem 1rem;
+  padding: 0.5rem 1.2rem;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
   white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(224,27,104,0.3);
 }
 
 .profiel-uitloggen:hover {
-  background: #fff0f5;
+  background: #c01558;
 }
 
 .profiel-melding {
@@ -88,13 +113,17 @@
 }
 
 .profiel-sectie {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 12px rgba(46,43,118,0.07);
 }
 
 .profiel-sectie h2 {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #2301ba;
+  color: #2e2b76;
   margin-bottom: 1rem;
   padding-bottom: 0.4rem;
   border-bottom: 1px solid #dde;
@@ -130,7 +159,7 @@
 }
 
 .profiel-bewerk-btn {
-  background-color: #2301ba;
+  background-color: #2e2b76;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -142,7 +171,7 @@
 }
 
 .profiel-bewerk-btn:hover {
-  background-color: #1a0090;
+  background-color: #1b163a;
 }
 
 .profiel-form-actions {
@@ -242,7 +271,7 @@
 .profiel-dag-label input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #2301ba;
+  accent-color: #2e2b76;
   cursor: pointer;
 }
 
@@ -284,7 +313,7 @@
 }
 
 .reg-btn-sec {
-  background: transparent;
+  background: #eef0fb;
   color: #2e2b76;
   border: 2px solid #2e2b76;
   border-radius: 6px;
@@ -296,5 +325,5 @@
 }
 
 .reg-btn-sec:hover {
-  background-color: rgba(46, 43, 118, 0.07);
+  background-color: #dde0f5;
 }

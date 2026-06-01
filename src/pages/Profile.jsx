@@ -144,6 +144,7 @@ export default function Profile() {
 
   return (
     <div className="page profiel-page">
+      <div className="profiel-inner">
       <div className="profiel-header">
         {user.profielfoto ? (
           <img
@@ -165,13 +166,6 @@ export default function Profile() {
           ) : null}
         </div>
 
-        <button
-          type="button"
-          className="profiel-uitloggen"
-          onClick={handleUitloggen}
-        >
-          Uitloggen
-        </button>
       </div>
 
       {succes ? <div className="profiel-melding profiel-succes">{succes}</div> : null}
@@ -554,6 +548,7 @@ export default function Profile() {
           </div>
         </form>
       )}
+      </div>
     </div>
   );
 }
