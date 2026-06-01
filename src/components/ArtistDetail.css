@@ -160,77 +160,34 @@
   background: rgba(44, 47, 122, 0.04);
 }
 
-.artist-works {
-  margin-top: 2rem;
+.artist-kunstwerk-sectie {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
 }
 
-.artist-works h2 {
+.artist-kunstwerk-sectie h2 {
   font-size: 1.25rem;
   font-weight: 600;
   color: #1a1a1a;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 1.25rem 0;
 }
 
-.artist-works hr {
-  border: none;
-  border-top: 1px solid #ddd;
-  margin-bottom: 1.5rem;
-}
-
-.works-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
-}
-
-.work-card {
-  border-radius: 0.75rem;
-  overflow: hidden;
-  background: white;
-  border: 1px solid #eee;
-}
-
-.work-image {
-  background-color: #464951;
-  height: 200px;
-}
-
-.work-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.artist-kunstwerk-foto {
+  max-width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 12px;
   display: block;
+  margin: 0 auto;
 }
 
-.work-info {
-  padding: 0.75rem 1rem;
-}
-
-.work-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.25rem;
-}
-
-.work-name {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.work-year {
-  font-size: 0.75rem;
-  color: #999;
-  background-color: #f0f0f0;
-  padding: 0.15rem 0.5rem;
-  border-radius: 999px;
-}
-
-.work-bio {
-  font-size: 0.8rem;
-  color: #888;
-  margin: 0;
+@media (max-width: 768px) {
+  .artist-kunstwerk-foto {
+    max-height: 60vh;
+    border-radius: 8px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -263,7 +220,4 @@
     width: 100%;
   }
 
-  .works-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
