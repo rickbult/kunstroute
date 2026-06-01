@@ -96,19 +96,17 @@ export default function Artists() {
 
         <div className="artists-page-grid">
           {gefilterd.map((artist) => (
-            <div key={artist.link || artist.title} className="artist-page-card">
+            <div key={artist.link || artist.title} className="artist-page-card" onClick={() => navigate(`/kunstenaars/${artist.link}`)}>
               <div className="artist-card-top">
-                {artist.imgSrc && (
-                  <div className="artist-card-bg" style={{ backgroundImage: `url(${artist.imgSrc})` }} />
-                )}
+                {artist.imgSrc && <img src={artist.imgSrc} alt={artist.imgAlt || artist.title} />}
                 <div className="artist-card-overlay" />
                 <div className="artist-card-header-text">
                   <h3>{artist.title}</h3>
                   {artist.location && (
                     <div className="artist-location">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
                       </svg>
                       {artist.location}
                     </div>
@@ -116,12 +114,18 @@ export default function Artists() {
                 </div>
               </div>
               <div className="artist-card-bottom">
+                {artist.discipline && <span className="artist-discipline">{artist.discipline}</span>}
                 {artist.description && <p className="artist-description">{artist.description}</p>}
-                {(artist.openZaterdag || artist.openZondag) && (
-                  <div className="artist-days-tag">
-                    {[artist.openZaterdag && 'Zaterdag', artist.openZondag && 'Zondag'].filter(Boolean).join(' & ')}
-                  </div>
-                )}
+                <div className="artist-card-footer">
+                  {(artist.openZaterdag || artist.openZondag) && (
+                    <span className="artist-days-tag">
+                      {[artist.openZaterdag && 'Za', artist.openZondag && 'Zo'].filter(Boolean).join(' & ')}
+                    </span>
+                  )}
+                  {artist.rolstoeltoegankelijk === 'Ja' && (
+                    <span className="artist-rolstoel-tag">♿ Toegankelijk</span>
+                  )}
+                </div>
               </div>
             </div>
           ))}

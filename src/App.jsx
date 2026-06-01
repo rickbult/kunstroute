@@ -36,6 +36,7 @@ function App() {
           <Route path="/info" element={<Info />} />
           <Route path="/agenda" element={<AgendaPage />} />
           <Route path="/artist/:id" element={<ArtistDetail />} />
+          <Route path="/kunstenaars/:id" element={<ArtistDetail />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

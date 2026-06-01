@@ -173,26 +173,12 @@ export const ArtistDetail = () => {
         </div>
       </div>
 
-      <div className="artist-works">
-        <h2>Werken van Kunstenaar</h2>
-        <hr />
-        <div className="works-grid">
-          {(artist.artworks || []).map((work, index) => (
-            <div key={index} className="work-card">
-              <div className="work-image">
-                <img src={work.imgSrc} alt={work.name} />
-              </div>
-              <div className="work-info">
-                <div className="work-header">
-                  <span className="work-name">{work.name}</span>
-                  <span className="work-year">{work.year}</span>
-                </div>
-                <p className="work-bio">{work.bio}</p>
-              </div>
-            </div>
-          ))}
+      {artist.kunstFoto && (
+        <div className="artist-kunstwerk-sectie">
+          <h2>Kunstwerk</h2>
+          <img src={artist.kunstFoto} alt={`Kunstwerk van ${artist.title}`} className="artist-kunstwerk-foto" />
         </div>
-      </div>
+      )}
     </div>
   );
 };
