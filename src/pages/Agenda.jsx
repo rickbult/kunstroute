@@ -111,6 +111,7 @@ export const AgendaPage = () => {
 
 
   return (
+    <div className="agenda-wrapper">
     <div className="agenda-page">
       <div className="agenda-main-column">
 
@@ -232,6 +233,7 @@ export const AgendaPage = () => {
           </div>
         </div>
       </aside>
+    </div>
     </div>
   );
 };

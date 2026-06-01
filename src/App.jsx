@@ -1,9 +1,9 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
-import artistsData from "./data/artists.json";
 
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
+import HomePage from "./pages/HomePage.jsx";
 import Artists from "./pages/Artists.jsx";
 import Artwork from "./pages/Artwork.jsx";
 import Map from "./pages/Map.jsx";
@@ -17,18 +17,12 @@ import NotFoundPage from "./pages/404.jsx";
 
 
 function App() {
-  const location = useLocation();
-  const isMapRoute = location.pathname === '/kaart' || location.pathname === '/map';
-  const toonFooter =
-    !isMapRoute &&
-    location.pathname !== "/404";
-
   return (
-    <div className={`app-shell ${isMapRoute ? 'app-shell-map' : 'app-shell-page'}`}>
+    <div className="app-shell">
       <Navbar />
-      <main className={`app-main ${isMapRoute ? 'app-main-map' : 'app-main-page'}`}>
+      <main className="app-main">
         <Routes>
-          <Route path="/" element={<Artists />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/artists" element={<Artists />} />
           <Route path="/kunstenaars" element={<Artists />} />
           <Route path="/artwork" element={<Artwork />} />
@@ -41,14 +35,12 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/info" element={<Info />} />
           <Route path="/agenda" element={<AgendaPage />} />
-          <Route
-            path="/artist/:id"
-            element={<ArtistDetail artists={artistsData} />}
-          />
+          <Route path="/artist/:id" element={<ArtistDetail />} />
+          <Route path="/kunstenaars/:id" element={<ArtistDetail />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      {toonFooter && <Footer />}
+      <Footer />
     </div>
   );
 }
