@@ -12,12 +12,13 @@ export async function register(formData) {
     if (!response.ok) {
       return {
         success: false,
-        error: data.message || "Registreren mislukt.",
+        error: data.message || data.error || "Registreren mislukt.",
       };
     }
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("currentUser", JSON.stringify(data.user));
+    window.dispatchEvent(new Event('authchange'));
 
     return {
       success: true,
@@ -46,7 +47,7 @@ export async function login(email, password) {
     if (!response.ok) {
       return {
         success: false,
-        error: data.message || "Inloggen mislukt.",
+        error: data.message || data.error || "Inloggen mislukt.",
       };
     }
 
