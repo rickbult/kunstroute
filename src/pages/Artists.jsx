@@ -74,23 +74,18 @@ export default function Artists() {
         <div className="artists-page-header">
           <h1>Onze Kunstenaars</h1>
           <p>Maak kennis met de creatieve geesten achter de kunstwerken.</p>
-          <div className="artists-search-container">
-            <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <input
-              type="text"
-              placeholder="Zoek een kunstenaar..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="artists-search-input"
-            />
-          </div>
         </div>
 
         <div className="filter-widget">
           <div className="zoekfilter-balk">
+            <div className="zoekbalk">
+              <input
+                type="text"
+                placeholder="Zoek een kunstenaar..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
             <FilterBalk
               bijFilterWijziging={setGeselecteerdeFilters}
               geselecteerdeFilters={geselecteerdeFilters}

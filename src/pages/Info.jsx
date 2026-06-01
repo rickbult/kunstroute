@@ -53,6 +53,7 @@ const navItems = [
 
 export default function Info() {
   return (
+    <div className="info-bg">
     <div className="info-page-layout">
 
       <aside className="info-sidebar">
@@ -348,6 +349,7 @@ export default function Info() {
       </section>
 
       </div>
+    </div>
     </div>
   );
 }
