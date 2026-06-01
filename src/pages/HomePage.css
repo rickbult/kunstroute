@@ -162,6 +162,12 @@
   font-weight: 700;
 }
 
+.featured-empty {
+  color: #666;
+  font-size: 1rem;
+  padding: 2rem 0;
+}
+
 .featured-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));

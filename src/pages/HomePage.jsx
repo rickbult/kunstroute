@@ -1,22 +1,18 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import heroBackground from '../assets/home-hero-bg2.png';
-import imagineImg from '../assets/homepage-imagine.png';
-import tijdlijnImg from '../assets/homepage-tijdlijn.png';
-import aardeImg from '../assets/homepage-aarde.png';
-import duivenImg from '../assets/bakje-rode-duiven.png';
-import libraryImg from '../assets/library-i.png';
 import './HomePage.css';
-
-const featuredWorks = [
-  { title: 'Aarde',             artist: 'Stasja van Grootheest', city: 'Harderwijk', image: aardeImg },
-  { title: 'Bakje rode duiven', artist: 'Miranda Adam',          city: 'Ermelo',     image: duivenImg },
-  { title: 'Imagine',           artist: 'Jan Schaafsma',         city: 'Nunspeet',   image: imagineImg },
-  { title: 'Library I',         artist: 'Wim Bakker',            city: 'Nunspeet',   image: libraryImg },
-  { title: 'Tijdlijn',          artist: 'Herma Rikkers',         city: 'Elspeet',    image: tijdlijnImg },
-];
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const [uitgelicht, setUitgelicht] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/artists')
+      .then(r => r.json())
+      .then(data => setUitgelicht(data.filter(a => a.kunstFoto)))
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="home-page">
@@ -60,16 +56,20 @@ export default function HomePage() {
           </div>
           <a href="/kunstwerken">Bekijk alles →</a>
         </div>
-        <div className="featured-grid">
-          {featuredWorks.map((work) => (
-            <article key={work.title} className="featured-card">
-              <img src={work.image} alt={work.title} />
-              <h3>{work.title}</h3>
-              <p className="artist-name">{work.artist}</p>
-              <p className="city-name">{work.city}</p>
-            </article>
-          ))}
-        </div>
+        {uitgelicht.length === 0 ? (
+          <p className="featured-empty">Nog geen kunstwerken ingeschreven.</p>
+        ) : (
+          <div className="featured-grid">
+            {uitgelicht.map((artist) => (
+              <article key={artist.link} className="featured-card" onClick={() => navigate(`/kunstenaars/${artist.link}`)} style={{cursor: 'pointer'}}>
+                <img src={artist.kunstFoto} alt={`Kunstwerk van ${artist.title}`} />
+                <h3>{artist.discipline || 'Kunstwerk'}</h3>
+                <p className="artist-name">{artist.title}</p>
+                <p className="city-name">{artist.location}</p>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
     </div>
