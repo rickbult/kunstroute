@@ -301,3 +301,55 @@
 .artwork-remove-btn:hover {
   background: var(--color-error);
 }
+.reg-adres-check-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.reg-btn-adres-check {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.reg-btn-adres-check:hover:not(:disabled) {
+  background: rgba(42, 35, 86, 0.07);
+}
+
+.reg-btn-adres-check:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.reg-adres-result {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.reg-adres-result.gevonden {
+  background: #e6f9e6;
+  color: #166534;
+}
+
+.reg-adres-result.niet-gevonden {
+  background: #fde8e8;
+  color: var(--color-error);
+}
+
+.reg-adres-icon {
+  font-weight: 700;
+  flex-shrink: 0;
+}
