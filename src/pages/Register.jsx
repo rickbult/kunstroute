@@ -30,10 +30,31 @@ export default function Register() {
   const [loading, setLoading] = useState(false);
   const [artworks, setArtworks] = useState([]);
   const [profielfoto, setProfielfoto] = useState(null);
+  const [adresCheck, setAdresCheck] = useState(null);
 
   function handleChange(e) {
     const { name, value } = e.target;
+    if (['adres', 'postcode', 'woonplaats'].includes(name)) setAdresCheck(null);
     setForm(prev => ({ ...prev, [name]: value }));
+  }
+
+  async function controleerAdres() {
+    if (!form.adres && !form.woonplaats) return;
+    setAdresCheck('loading');
+    const basis = { format: 'json', limit: 1, countrycodes: 'nl' };
+    const pogingen = [
+      form.adres && form.woonplaats && { street: form.adres, postalcode: form.postcode, city: form.woonplaats, ...basis },
+      form.adres && form.woonplaats && { street: form.adres, city: form.woonplaats, ...basis },
+      form.woonplaats               && { city: form.woonplaats, ...basis },
+    ].filter(Boolean);
+    for (const params of pogingen) {
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?${new URLSearchParams(params)}`);
+        const data = await res.json();
+        if (data?.[0]) { setAdresCheck({ gevonden: true, display: data[0].display_name }); return; }
+      } catch {}
+    }
+    setAdresCheck({ gevonden: false });
   }
 
   function handleArtworkUpload(e) {
@@ -100,7 +121,7 @@ export default function Register() {
     formData.append('uitleg_kunstwerken', form.uitleg_kunstwerken || '');
 
     if (profielfoto) formData.append('profielfoto', profielfoto);
-    artworks.forEach((art, i) => formData.append(`kunstwerk_${i}`, art.file));
+    if (artworks.length > 0) formData.append('kunstFoto', artworks[0].file);
 
     try {
       const result = await register(formData);
@@ -220,6 +241,22 @@ export default function Register() {
                   <label className="reg-label">Woonplaats *</label>
                   <input className="reg-input" name="woonplaats" value={form.woonplaats} onChange={handleChange} />
                 </div>
+              </div>
+              <div className="reg-adres-check-row">
+                <button
+                  type="button"
+                  className="reg-btn-adres-check"
+                  onClick={controleerAdres}
+                  disabled={adresCheck === 'loading' || (!form.adres && !form.woonplaats)}
+                >
+                  {adresCheck === 'loading' ? 'Opzoeken...' : 'Controleer adres op kaart'}
+                </button>
+                {adresCheck && adresCheck !== 'loading' && (
+                  <div className={`reg-adres-result ${adresCheck.gevonden ? 'gevonden' : 'niet-gevonden'}`}>
+                    <span className="reg-adres-icon">{adresCheck.gevonden ? '✓' : '✗'}</span>
+                    <span>{adresCheck.gevonden ? adresCheck.display : 'Adres niet gevonden — controleer je spelling.'}</span>
+                  </div>
+                )}
               </div>
             </section>
           )}
