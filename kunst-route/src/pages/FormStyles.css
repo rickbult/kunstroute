@@ -1,0 +1,171 @@
+.reg-bg {
+  min-height: 100vh;
+  background: #f4f4f7;
+  padding: 2rem 1rem;
+}
+
+.reg-container {
+  max-width: 780px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.reg-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 2px solid #2301ba;
+}
+
+.reg-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+
+.reg-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2301ba;
+}
+
+.reg-subtitle {
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 0.2rem;
+}
+
+.reg-fout {
+  background: #fde8e8;
+  border: 1px solid #f28b82;
+  border-left: 4px solid #c62828;
+  border-radius: 6px;
+  color: #c62828;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.reg-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.reg-section {
+  margin-bottom: 2rem;
+}
+
+.reg-section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2301ba;
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #dde;
+}
+
+.reg-info {
+  font-size: 0.875rem;
+  color: #555;
+  margin-bottom: 1rem;
+  line-height: 1.55;
+}
+
+.reg-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.reg-field {
+  margin-bottom: 1rem;
+}
+
+.reg-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+
+.reg-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #333;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.reg-input:focus {
+  border-color: #2301ba;
+}
+
+.reg-textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.reg-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.reg-checkbox-label {
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reg-submit-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.reg-btn {
+  background-color: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.65rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.reg-btn:hover {
+  background-color: #1558b0;
+}
+
+.reg-btn-sec {
+  background: transparent;
+  color: #2301ba;
+  border: 1.5px solid #2301ba;
+  border-radius: 4px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.reg-btn-sec:hover {
+  background: #f0f0ff;
+}
