@@ -243,7 +243,7 @@ serverApplicatie.post(
   upload.fields([{ name: 'profielfoto', maxCount: 1 }, { name: 'kunstFoto', maxCount: 1 }]),
   async (verzoek, antwoord, volgende) => {
     try {
-      const { voornaam, achternaam, email, password, telefoon, kunstrichting, bio, website, facebook, instagram, adres, postcode, woonplaats } = verzoek.body;
+      const { voornaam, achternaam, email, password, telefoon, kunstrichting, bio, website, facebook, instagram, adres, postcode, woonplaats, openZaterdag, openZondag } = verzoek.body;
 
       const bestaand = await Gebruiker.findOne({ email });
       if (bestaand) return antwoord.status(409).json({ error: 'E-mailadres is al in gebruik.' });
@@ -271,6 +271,8 @@ serverApplicatie.post(
         adres: adres || '',
         postcode: postcode || '',
         woonplaats: woonplaats || '',
+        openZaterdag: openZaterdag === 'true' || openZaterdag === true,
+        openZondag:   openZondag   === 'true' || openZondag   === true,
         profielfotoUrl,
         kunstFotoUrl,
         breedtegraad,

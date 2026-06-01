@@ -47,7 +47,10 @@ export default function Navbar() {
             <li><button className="navbar-btn-outline" onClick={handleUitloggen}>Uitloggen</button></li>
           </>
         ) : (
-          <li><Link to="/register" className="navbar-btn">Inschrijven</Link></li>
+          <>
+            <li><Link to="/login" className="navbar-btn-outline">Inloggen</Link></li>
+            <li><Link to="/register" className="navbar-btn">Inschrijven</Link></li>
+          </>
         )}
       </ul>
     </nav>
