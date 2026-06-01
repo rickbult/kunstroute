@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = "/api/auth";
 
 export async function register(formData) {
   try {
@@ -76,18 +76,17 @@ export async function getCurrentUser() {
       },
     });
 
-    if (!response.ok) {
-      logout();
-      return null;
+    if (response.ok) {
+      const user = await response.json();
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      return user;
     }
-
-    const user = await response.json();
-    localStorage.setItem("currentUser", JSON.stringify(user));
-    return user;
-  } catch (error) {
-    const savedUser = localStorage.getItem("currentUser");
-    return savedUser ? JSON.parse(savedUser) : null;
+  } catch {
+    // network error — fall through to cached user
   }
+
+  const savedUser = localStorage.getItem("currentUser");
+  return savedUser ? JSON.parse(savedUser) : null;
 }
 
 export async function updateCurrentUser(formData) {

@@ -8,6 +8,39 @@ dotenv.config({ path: new URL('./.env', import.meta.url) });
 
 const mongoVerbindingUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/kunstroute';
 const gegevensPad = path.resolve('../src/data/kunstroute_2026_marker_ready.json');
+const artistPhotoPad = path.resolve('../src/data/mapArtistPhotos.json');
+const artistsJsonPad = path.resolve('../src/data/artists.json');
+
+let artistPhotos = {};
+let disciplineMap = {};
+
+try {
+  artistPhotos = JSON.parse(fs.readFileSync(artistPhotoPad, 'utf8'));
+} catch (fout) {
+  console.warn('Lokale artist photo map niet geladen:', fout.message);
+}
+
+try {
+  const artistsRaw = fs.readFileSync(artistsJsonPad, 'utf8');
+  const artistsArr = JSON.parse(artistsRaw);
+  disciplineMap = artistsArr.reduce((acc, a) => {
+    const key = a.link || maakSlug(a.title || a.title || '');
+    if (key && a.discipline) acc[key] = a.discipline;
+    return acc;
+  }, {});
+} catch (fout) {
+  console.warn('Lokale artists.json niet geladen voor discipline mapping:', fout.message);
+}
+
+const maakSlug = (waarde) =>
+  (waarde || '')
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/https?:\/\/[^/]+\//, '')
+    .replace(/\/+$/, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
 function isGeldigKaartpunt(kaartpunt) {
   return Number.isFinite(kaartpunt.breedtegraad) && Number.isFinite(kaartpunt.lengtegraad);
@@ -20,8 +53,10 @@ async function voerSeedUit() {
   const bronRecords = JSON.parse(ruweJson).filter(isGeldigKaartpunt);
   const kaartPuntRecords = bronRecords.map((record) => ({
     ...record,
+    fotoUrl: artistPhotos[maakSlug(record.naamKunstenaar)] ?? record.fotoUrl ?? null,
     geocodeWeergaveNaam: record.geocodeWeergaveNaam ?? record.geocodeDisplayName ?? null,
     geocodeZoekopdracht: record.geocodeZoekopdracht ?? record.geocodeQueryUsed ?? null,
+    kunstvorm: disciplineMap[maakSlug(record.naamKunstenaar)] ?? null,
   }));
 
   if (kaartPuntRecords.length === 0) {

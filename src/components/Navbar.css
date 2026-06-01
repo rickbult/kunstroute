@@ -1,103 +1,69 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-*{
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}* 
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.navbar {
+  height: 86px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(46, 43, 118, 0.08);
 }
 
-
-.navbar {
-  position: fixed;
-  top: 0;
+.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.6rem 2rem;
-  border-bottom: 2px solid #2301ba;
+  height: 4px;
+  background: linear-gradient(to right,
+    #2e2b76 0%, #2e2b76 25%,
+    #e42a6a 25%, #e42a6a 50%,
+    #2ba44a 50%, #2ba44a 75%,
+    #a6d51e 75%, #a6d51e 100%
+  );
 }
 
-.logo {
+.brand-logo {
   display: flex;
+  align-items: center;
   text-decoration: none;
 }
 
-.logo-img {
-  height: 60px;
+.navbar-logo-img {
+  height: 70px;
   width: auto;
 }
 
-.nav-links {
-  list-style: none;
+.navbar-links {
   display: flex;
   align-items: center;
-  gap: 1.8rem;
+  gap: 2rem;
+  list-style: none;
 }
 
-
-
-.btn-inschrijven {
-  background-color: #2301ba;
+.nav-link {
   text-decoration: none;
-  color: #ffffff;
-  padding: 0.5rem 1.2rem;
-  border-radius: 6px;
-  font-weight: 600;
-  transition: background-color 0.2s;
-}
-
-.page {
-  background-color: #ffffff;
-  color: #000000;
-  padding: 2rem;
-  min-height: calc(100vh - 60px);
-}
-
-.nav-links a {
-  font-size : 1.1rem;
+  font-size: 1.1rem;
   font-weight: 500;
-  
+  color: #1a1a1a;
+  transition: color 0.2s ease;
 }
 
-.nav-links .tekst-blauw {
-  color: #2e2e8b;
-  text-decoration: none;
-}
-
-.tekst-roze {
-  color: #e01b68;
-   text-decoration: none;
-}
-
-.tekst-geel {
-  color: #f2c14e;
-   text-decoration: none;
-}
-
-.tekst-groen {
-  color: #4caf50;
-  text-decoration: none;
-  position: relative;
-  display: inline-flex;
-  align-items: center;
+.nav-link:hover {
+  color: #555;
 }
 
 .route-link {
+  display: inline-flex;
+  align-items: center;
   gap: 0.35rem;
   white-space: nowrap;
-}
-
-.route-label {
-  display: inline-block;
-  line-height: 1;
 }
 
 .badge-nieuw {
@@ -106,15 +72,77 @@ body {
   background-color: #382F88;
   color: #ffffff;
   font-family: 'Bebas Neue', sans-serif;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  font-weight: 500;
-  padding: 0.4rem 0.4rem 0.3rem 0.4rem;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.4rem 0.25rem;
   border-radius: 5px;
-  white-space: nowrap;
   line-height: 1;
-  margin-left: -1.5rem;
-  margin-right: -1.25rem;
-  margin-bottom: 1.75rem;
-  transform: scale(0.85);
+}
+
+.navbar-btn {
+  text-decoration: none;
+  background: #2e2b76;
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease;
+  border: 2px solid #2e2b76;
+  cursor: pointer;
+}
+
+.navbar-btn:hover {
+  background: #1b163a;
+  border-color: #1b163a;
+}
+
+.navbar-btn-outline {
+  text-decoration: none;
+  background: transparent;
+  color: #1a1a1a;
+  font-size: 1rem;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  transition: background 0.2s ease, color 0.2s ease;
+  border: 2px solid #1a1a1a;
+  cursor: pointer;
+}
+
+.navbar-btn-outline:hover {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.navbar-btn-uitloggen {
+  background: #e01b68;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  box-shadow: 0 2px 8px rgba(224,27,104,0.3);
+}
+
+.navbar-btn-uitloggen:hover {
+  background: #c01558;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    height: auto;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .navbar-links {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+  }
 }

@@ -1,21 +1,31 @@
+.agenda-wrapper {
+  background-image: url('../assets/agenda-bg-landscape.png');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  min-height: calc(100vh - 72px);
+  width: 100%;
+}
 
 .agenda-page {
   display: flex;
   gap: 1.5rem;
-  align-items: flex-start;
+  align-items: stretch;
+  justify-content: center;
   max-width: 1100px;
   margin: 0 auto;
   padding: 2.5rem 2rem 4rem;
 }
 
-
 .agenda-info-card,
 .agenda-calendar-card,
 .agenda-events-card {
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 0.75rem;
   padding: 1.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
 }
 .agenda-main-column {
   flex: 1;

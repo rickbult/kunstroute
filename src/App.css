@@ -1,13 +1,8 @@
- :root {
-  --navbar-height: 82px;
-}
-
 .app-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding-top: var(--navbar-height);
 }
 
 .app-shell-map {
