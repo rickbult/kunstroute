@@ -20,6 +20,8 @@ const LEEG = {
   postcode: '',
   woonplaats: '',
   uitleg_kunstwerken: '',
+  openZaterdag: false,
+  openZondag: false,
 };
 
 export default function Register() {
@@ -33,9 +35,9 @@ export default function Register() {
   const [adresCheck, setAdresCheck] = useState(null);
 
   function handleChange(e) {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     if (['adres', 'postcode', 'woonplaats'].includes(name)) setAdresCheck(null);
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   }
 
   async function controleerAdres() {
@@ -88,6 +90,10 @@ export default function Register() {
       for (const veld of verplicht) {
         if (!form[veld].trim()) { setFout('Vul alle verplichte velden in (*).'); return; }
       }
+      if (!form.openZaterdag && !form.openZondag) {
+        setFout('Selecteer minimaal één open dag (zaterdag en/of zondag).');
+        return;
+      }
     }
     setStep(s => s + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -119,6 +125,8 @@ export default function Register() {
     formData.append('postcode', form.postcode);
     formData.append('woonplaats', form.woonplaats);
     formData.append('uitleg_kunstwerken', form.uitleg_kunstwerken || '');
+    formData.append('openZaterdag', form.openZaterdag);
+    formData.append('openZondag', form.openZondag);
 
     if (profielfoto) formData.append('profielfoto', profielfoto);
     if (artworks.length > 0) formData.append('kunstFoto', artworks[0].file);
@@ -226,6 +234,19 @@ export default function Register() {
                 <label className="reg-label">Facebook</label>
                 <input className="reg-input" name="facebook" value={form.facebook} onChange={handleChange} />
               </div>
+              <h3 className="reg-subsection-title">Open dagen *</h3>
+              <p className="reg-info">Selecteer op welke dag(en) je open bent tijdens de kunstroute.</p>
+              <div className="reg-open-dagen">
+                <label className="reg-dag-label">
+                  <input type="checkbox" name="openZaterdag" checked={form.openZaterdag} onChange={handleChange} />
+                  Zaterdag
+                </label>
+                <label className="reg-dag-label">
+                  <input type="checkbox" name="openZondag" checked={form.openZondag} onChange={handleChange} />
+                  Zondag
+                </label>
+              </div>
+
               <h3 className="reg-subsection-title">Adres (voor ballotage)</h3>
               <p className="reg-info">Vul hieronder het adres in waar we jou kunnen balloteren indien van toepassing.</p>
               <div className="reg-field">

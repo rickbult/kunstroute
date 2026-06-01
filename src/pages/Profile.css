@@ -267,3 +267,34 @@
   border-color: #f9a825;
   color: #7a5800;
 }
+.reg-btn {
+  background-color: #2e2b76;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reg-btn:hover {
+  background-color: #1b163a;
+}
+
+.reg-btn-sec {
+  background: transparent;
+  color: #2e2b76;
+  border: 2px solid #2e2b76;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reg-btn-sec:hover {
+  background-color: rgba(46, 43, 118, 0.07);
+}
