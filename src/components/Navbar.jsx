@@ -44,7 +44,7 @@ export default function Navbar() {
         {ingelogd ? (
           <>
             <li><Link to="/profile" className="navbar-btn">Mijn account</Link></li>
-            <li><button className="navbar-btn-outline" onClick={handleUitloggen}>Uitloggen</button></li>
+            <li><button className="navbar-btn-uitloggen" onClick={handleUitloggen}>Uitloggen</button></li>
           </>
         ) : (
           <>
