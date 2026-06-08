@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 
 import Navbar from "./components/Navbar.jsx";
@@ -17,10 +17,16 @@ import NotFoundPage from "./pages/404.jsx";
 
 
 function App() {
+  const location = useLocation();
+  const isMapRoute = location.pathname === '/kaart' || location.pathname === '/map';
+  const toonFooter =
+    !isMapRoute &&
+    location.pathname !== "/404";
+
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${isMapRoute ? 'app-shell-map' : 'app-shell-page'}`}>
       <Navbar />
-      <main className="app-main">
+      <main className={`app-main ${isMapRoute ? 'app-main-map' : 'app-main-page'}`}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/artists" element={<Artists />} />
@@ -40,7 +46,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      <Footer />
+      {toonFooter && <Footer />}
     </div>
   );
 }
