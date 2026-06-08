@@ -49,6 +49,28 @@ const zoekKaartpuntLink = (kaartPunt) => {
 const filterGeldigeKaartpunten = (kaartpunten) =>
   kaartpunten.filter((d) => Number.isFinite(d.breedtegraad) && Number.isFinite(d.lengtegraad));
 
+// Sommige profielfoto's verwijzen naar een upload die op deze omgeving niet
+// bestaat (bv. enkel aanwezig op de server waar 'm geüpload is). Laad elke foto
+// vooraf: lukt dat niet, behandel het kaartpunt dan als 'geen foto' — zo valt
+// de marker/kaart automatisch terug op de bestaande initialen-weergave, zonder
+// ooit een kapot-plaatje-icoon te tonen.
+const fotoIsLaadbaar = (url) =>
+  new Promise((resolve) => {
+    if (!url) return resolve(false);
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = url;
+  });
+
+const metGecontroleerdeFotos = async (kaartpunten) =>
+  Promise.all(
+    kaartpunten.map(async (punt) => ({
+      ...punt,
+      fotoUrl: (await fotoIsLaadbaar(punt.fotoUrl)) ? punt.fotoUrl : null,
+    }))
+  );
+
 const maakProfielfotoMarker = (fotoUrl, naamKunstenaar, isSelected, inRoute) => {
   const klassen = `${isSelected ? 'selected' : ''} ${inRoute ? 'in-route' : ''}`.trim();
   const html = fotoUrl
@@ -202,7 +224,9 @@ export default function KaartComponent() {
           return;
         }
 
-        stelKaartPuntenLijstIn(filterGeldigeKaartpunten(data));
+        return metGecontroleerdeFotos(filterGeldigeKaartpunten(data)).then((punten) => {
+          if (actief) stelKaartPuntenLijstIn(punten);
+        });
       })
       .catch((e) => {
         console.warn('Fout bij ophalen kaartpunten:', e.message);
