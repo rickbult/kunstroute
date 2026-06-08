@@ -3,7 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import './Map.css';
-// Data now served from the API (MongoDB). No local JSON imports.
+// Kaartpunten komen live uit de Gebruikers-collectie (zelfde bron als
+// /kunstenaars en /kunstwerken) — geen seeded/offline mockdata meer.
 import { FilterBalk } from '../components/filter.jsx';
 import { RoutePlanner } from '../components/RoutePlanner.jsx';
 
@@ -194,20 +195,17 @@ export default function KaartComponent() {
   useEffect(() => {
     let actief = true;
 
-    fetch('/api/kaartpunten')
+    fetch('/api/map-punten')
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
       .then((data) => {
         if (!actief || !Array.isArray(data)) {
           return;
         }
 
-        const geldigePunten = filterGeldigeKaartpunten(data);
-        if (geldigePunten.length > 0) {
-          stelKaartPuntenLijstIn(geldigePunten);
-        }
+        stelKaartPuntenLijstIn(filterGeldigeKaartpunten(data));
       })
       .catch((e) => {
-        console.warn('Fout bij ophalen kaartpunten, fallback wordt gebruikt:', e.message);
+        console.warn('Fout bij ophalen kaartpunten:', e.message);
       });
 
     return () => {

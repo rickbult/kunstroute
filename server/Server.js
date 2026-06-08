@@ -107,6 +107,8 @@ serverApplicatie.get("/api/map-punten", async (verzoek, antwoord, volgende) => {
     antwoord.json(gebruikers.map((u) => ({
       naamKunstenaar:          `${u.voornaam} ${u.achternaam}`.trim(),
       volledigAdres:           [u.adres, u.postcode, u.woonplaats].filter(Boolean).join(', '),
+      stad:                    u.woonplaats || '',
+      kunstvorm:               u.kunstrichting || '',
       breedtegraad:            u.breedtegraad,
       lengtegraad:             u.lengtegraad,
       detailPaginaUrl:         u._id.toString(),
