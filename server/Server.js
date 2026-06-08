@@ -112,7 +112,7 @@ serverApplicatie.get("/api/map-punten", async (verzoek, antwoord, volgende) => {
       detailPaginaUrl:         u._id.toString(),
       openDagenKunstroute2026: [u.openZaterdag && 'Zaterdag', u.openZondag && 'Zondag'].filter(Boolean).join(' & ') || '',
       rolstoeltoegankelijkheid: u.rolstoeltoegankelijk || '',
-      fotoUrl: u.profielfotoUrl ? `http://localhost:${SERVER_POORT}${u.profielfotoUrl}` : null,
+      fotoUrl: u.profielfotoUrl || null,
     })));
   } catch (fout) {
     volgende(fout);
@@ -139,8 +139,8 @@ serverApplicatie.get("/api/auth/me", verifieerToken, async (verzoek, antwoord, v
     const { password: _, ...veilig } = gebruiker;
     antwoord.json({
       ...veilig,
-      profielfoto: gebruiker.profielfotoUrl ? `http://localhost:${SERVER_POORT}${gebruiker.profielfotoUrl}` : '',
-      kunstFoto:   gebruiker.kunstFotoUrl   ? `http://localhost:${SERVER_POORT}${gebruiker.kunstFotoUrl}`   : '',
+      profielfoto: gebruiker.profielfotoUrl || '',
+      kunstFoto:   gebruiker.kunstFotoUrl   || '',
     });
   } catch (fout) {
     volgende(fout);
@@ -182,8 +182,8 @@ serverApplicatie.put(
       antwoord.json({
         user: {
           ...veilig,
-          profielfoto: bijgewerkt.profielfotoUrl ? `http://localhost:${SERVER_POORT}${bijgewerkt.profielfotoUrl}` : '',
-          kunstFoto:   bijgewerkt.kunstFotoUrl   ? `http://localhost:${SERVER_POORT}${bijgewerkt.kunstFotoUrl}`   : '',
+          profielfoto: bijgewerkt.profielfotoUrl || '',
+          kunstFoto:   bijgewerkt.kunstFotoUrl   || '',
         }
       });
     } catch (fout) {
@@ -217,8 +217,8 @@ function gebruikerNaarArtist(u) {
   const volleNaam = `${u.voornaam} ${u.achternaam}`.trim();
   const adresRegel = [u.adres, u.postcode, u.woonplaats].filter(Boolean).join(', ');
   return {
-    imgSrc:    u.profielfotoUrl ? `http://localhost:${SERVER_POORT}${u.profielfotoUrl}` : '',
-    kunstFoto: u.kunstFotoUrl   ? `http://localhost:${SERVER_POORT}${u.kunstFotoUrl}`  : '',
+    imgSrc:    u.profielfotoUrl || '',
+    kunstFoto: u.kunstFotoUrl   || '',
     imgAlt:    `Foto van ${volleNaam}`,
     title:     volleNaam,
     description: u.bio || '',
