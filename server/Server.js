@@ -387,6 +387,19 @@ async function startServer() {
   try {
     await mongoose.connect(mongoVerbinding);
     console.log("✅ MongoDB verbonden!");
+
+    try {
+      // Verwijdert verouderde indexen die niet meer bij het schema horen (zoals
+      // een wees-index 'username_1' uit een eerdere schemaversie — dat veld
+      // bestaat al lang niet meer) en maakt ontbrekende indexen aan. Zonder dit
+      // blijft zo'n unieke index op een afwezig veld actief: elk nieuw document
+      // indexeert dan als 'null', en zodra een tweede registratie diezelfde
+      // 'null' raakt, faalt die met een E11000 dup-key-fout.
+      await Gebruiker.syncIndexes();
+      console.log("✅ Gebruiker-indexen gesynchroniseerd");
+    } catch (syncFout) {
+      console.warn("⚠️ Synchroniseren van indexen mislukt:", syncFout.message);
+    }
   } catch (error) {
     console.warn("⚠️ MongoDB niet bereikbaar:", error.message);
   }
