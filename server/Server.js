@@ -7,6 +7,7 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import KaartPunt from "./LocationModel.js";
+import { berekenRoute } from "./RouteService.js";
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
 
@@ -361,6 +362,15 @@ serverApplicatie.get("/api/kaartpunten", async (verzoek, antwoord, volgende) => 
   try {
     const alleKaartpunten = await KaartPunt.find().lean();
     antwoord.json(alleKaartpunten);
+  } catch (fout) {
+    volgende(fout);
+  }
+});
+
+serverApplicatie.get("/api/route", async (verzoek, antwoord, volgende) => {
+  try {
+    const { coordinaten } = verzoek.query;
+    antwoord.json(await berekenRoute(coordinaten));
   } catch (fout) {
     volgende(fout);
   }

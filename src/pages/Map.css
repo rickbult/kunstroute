@@ -92,6 +92,7 @@
 	z-index: 10;
 	height: 100%;
 	min-height: 0;
+	position: relative;
 	transition: width 0.25s ease, flex-basis 0.25s ease, padding 0.25s ease, border 0.25s ease;
 }
 
@@ -197,6 +198,12 @@
 	padding: 8px;
 	height: 100%;
 	min-height: 0;
+}
+
+/* Ruimte onderaan zodat de laatste kaart niet verdwijnt achter de zwevende
+   "Route plannen"/"Selectie wissen"-balk */
+.sidebar-content.met-zwevende-balk {
+	padding-bottom: 100px;
 }
 
 .kaart-sidebar-empty {
@@ -518,4 +525,105 @@
 		max-width: 210px;
 		font-size: 0.88rem;
 	}
+}
+
+/* Routeplanner toggle + selectie wissen (zwevend onderaan de sidebar) */
+.route-zwevende-balk {
+	position: absolute;
+	left: 50%;
+	bottom: 58px;
+	transform: translateX(-50%);
+	width: calc(100% - 36px);
+	max-width: 360px;
+	display: flex;
+	gap: 8px;
+	z-index: 20;
+}
+
+.route-toggle-knop-zwevend,
+.route-wis-knop-zwevend {
+	flex: 1 1 auto;
+	min-width: 0;
+	background: #fff;
+	color: var(--brand-ink);
+	border: 1px solid rgba(46, 43, 118, 0.14);
+	border-radius: 999px;
+	padding: 0.8rem 1rem;
+	font-size: 0.88rem;
+	font-weight: 600;
+	cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	box-shadow: 0 10px 28px rgba(46, 43, 118, 0.22);
+	transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.route-toggle-knop-zwevend:hover,
+.route-wis-knop-zwevend:hover {
+	border-color: rgba(44, 47, 122, 0.35);
+	box-shadow: 0 12px 32px rgba(46, 43, 118, 0.3);
+}
+
+.route-toggle-knop-zwevend.actief {
+	background: var(--brand-blue);
+	color: #fff;
+	border-color: var(--brand-blue);
+}
+
+.route-wis-knop-zwevend {
+	flex: 0 0 auto;
+	color: #c0264f;
+	border-color: rgba(192, 38, 79, 0.25);
+}
+
+.route-wis-knop-zwevend:hover {
+	background: #fdeef2;
+	border-color: rgba(192, 38, 79, 0.4);
+}
+
+/* Route-stop knop op locatie kaarten */
+.card-acties {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-top: 6px;
+	flex-wrap: wrap;
+}
+
+.route-stop-knop {
+	border: 1px solid rgba(46, 43, 118, 0.25);
+	background: #fff;
+	color: var(--brand-blue);
+	border-radius: 999px;
+	padding: 0.3rem 0.7rem;
+	font-size: 0.78rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+	white-space: nowrap;
+}
+
+.route-stop-knop:hover {
+	border-color: var(--brand-blue);
+}
+
+.route-stop-knop.in-route {
+	background: var(--brand-blue);
+	color: #fff;
+	border-color: var(--brand-blue);
+}
+
+/* Markering van punten die in de geplande route zitten */
+.profiel-marker.in-route .profiel-marker-body {
+	box-shadow: 0 0 0 3px var(--brand-green), 0 6px 18px rgba(46, 43, 118, 0.22);
+}
+
+.profiel-marker.in-route .profiel-marker-tail {
+	border-top-color: var(--brand-green);
+}
+
+.kaart-wrapper.has-selection .profiel-marker.in-route {
+	opacity: 1;
 }
