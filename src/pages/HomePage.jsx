@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import heroBackground from '../assets/home-hero-bg2.png';
+import { fotoMetFallback, placeholderFoto } from '../utils/images';
 import './HomePage.css';
 
 export default function HomePage() {
@@ -62,7 +63,14 @@ export default function HomePage() {
           <div className="featured-grid">
             {uitgelicht.map((artist) => (
               <article key={artist.link} className="featured-card" onClick={() => navigate(`/kunstenaars/${artist.link}`)} style={{cursor: 'pointer'}}>
-                <img src={artist.kunstFoto} alt={`Kunstwerk van ${artist.title}`} />
+                <img
+                  src={fotoMetFallback(artist.kunstFoto, artist.title)}
+                  alt={`Kunstwerk van ${artist.title}`}
+                  onError={(e) => {
+                    const fallback = placeholderFoto(artist.title);
+                    if (e.currentTarget.src !== fallback) e.currentTarget.src = fallback;
+                  }}
+                />
                 <h3>{artist.discipline || 'Kunstwerk'}</h3>
                 <p className="artist-name">{artist.title}</p>
                 <p className="city-name">{artist.location}</p>

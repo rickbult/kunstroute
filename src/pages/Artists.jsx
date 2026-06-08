@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { FilterBalk } from "../components/filter.jsx";
+import { fotoMetFallback, placeholderFoto } from "../utils/images";
 import "./Artists.css";
 
 export default function Artists() {
@@ -98,7 +99,14 @@ export default function Artists() {
           {gefilterd.map((artist) => (
             <div key={artist.link || artist.title} className="artist-page-card" onClick={() => navigate(`/kunstenaars/${artist.link}`)}>
               <div className="artist-card-top">
-                {artist.imgSrc && <img src={artist.imgSrc} alt={artist.imgAlt || artist.title} />}
+                <img
+                  src={fotoMetFallback(artist.imgSrc, artist.title)}
+                  alt={artist.imgAlt || artist.title}
+                  onError={(e) => {
+                    const fallback = placeholderFoto(artist.title);
+                    if (e.currentTarget.src !== fallback) e.currentTarget.src = fallback;
+                  }}
+                />
                 <div className="artist-card-overlay" />
                 <div className="artist-card-header-text">
                   <h3>{artist.title}</h3>

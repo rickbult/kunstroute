@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fotoMetFallback, placeholderFoto } from '../utils/images';
 import './Artwork.css';
 
 export const KunstwerkenPage = () => {
@@ -49,11 +50,16 @@ export const KunstwerkenPage = () => {
       <div className="kunstwerken-grid">
         {filteredArtworks.map((artist) => (
           <div key={artist.link || artist.title} className="kunstwerk-card" onClick={() => navigate(`/kunstenaars/${artist.link}`)}>
-            {artist.kunstFoto && (
-              <div className="kunstwerk-image-wrapper">
-                <img src={artist.kunstFoto} alt={`Kunstwerk van ${artist.title}`} />
-              </div>
-            )}
+            <div className="kunstwerk-image-wrapper">
+              <img
+                src={fotoMetFallback(artist.kunstFoto, artist.title)}
+                alt={`Kunstwerk van ${artist.title}`}
+                onError={(e) => {
+                  const fallback = placeholderFoto(artist.title);
+                  if (e.currentTarget.src !== fallback) e.currentTarget.src = fallback;
+                }}
+              />
+            </div>
             <div className="kunstwerk-info">
               {artist.discipline && <span className="kunstwerk-category">{artist.discipline}</span>}
               <h3>{artist.title}</h3>

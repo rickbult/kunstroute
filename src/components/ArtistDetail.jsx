@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { fotoMetFallback, placeholderFoto } from "../utils/images";
 import "./ArtistDetail.css";
 
 export const ArtistDetail = () => {
@@ -146,7 +147,14 @@ export const ArtistDetail = () => {
     <div className="detail-wrapper">
       <div className="artist-hero">
         <div className="artist-image">
-          <img src={artist.imgSrc} alt={artist.imgAlt} />
+          <img
+            src={fotoMetFallback(artist.imgSrc, artist.title)}
+            alt={artist.imgAlt}
+            onError={(e) => {
+              const fallback = placeholderFoto(artist.title);
+              if (e.currentTarget.src !== fallback) e.currentTarget.src = fallback;
+            }}
+          />
         </div>
         <div className="artist-info">
           <h1 className="artist-name">{artist.title}</h1>
@@ -176,7 +184,15 @@ export const ArtistDetail = () => {
       {artist.kunstFoto && (
         <div className="artist-kunstwerk-sectie">
           <h2>Kunstwerk</h2>
-          <img src={artist.kunstFoto} alt={`Kunstwerk van ${artist.title}`} className="artist-kunstwerk-foto" />
+          <img
+            src={fotoMetFallback(artist.kunstFoto, artist.title)}
+            alt={`Kunstwerk van ${artist.title}`}
+            className="artist-kunstwerk-foto"
+            onError={(e) => {
+              const fallback = placeholderFoto(artist.title);
+              if (e.currentTarget.src !== fallback) e.currentTarget.src = fallback;
+            }}
+          />
         </div>
       )}
     </div>
