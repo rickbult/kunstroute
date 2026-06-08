@@ -29,18 +29,6 @@ const NAVIGATIE_APPS = [
   { naam: 'Apple Maps', bouwUrl: bouwAppleMapsUrl },
 ];
 
-const formatteerAfstand = (km) => `${km.toLocaleString('nl-NL', { maximumFractionDigits: 1 })} km`;
-
-const formatteerDuur = (minuten) => {
-  const afgeronde = Math.round(minuten);
-  if (afgeronde < 60) {
-    return `ongeveer ${afgeronde} minuten`;
-  }
-  const uren = Math.floor(afgeronde / 60);
-  const resterendeMinuten = afgeronde % 60;
-  return `ongeveer ${uren} uur${resterendeMinuten > 0 ? ` en ${resterendeMinuten} minuten` : ''}`;
-};
-
 const RouteStopRij = ({ stop, volgnummer, opVerwijder }) => {
   const sleutel = stop.detailPaginaUrl || stop.naamKunstenaar;
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: sleutel });
@@ -77,6 +65,8 @@ export const RoutePlanner = ({
   opVerwijderStop,
   opHerorden,
   opBerekenRoute,
+  beschikbareKunstenaars,
+  opToevoegenStop,
 }) => {
   const sensoren = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
@@ -120,6 +110,32 @@ export const RoutePlanner = ({
         </DndContext>
       )}
 
+      <select
+        className="route-toevoeg-keuze"
+        value=""
+        onChange={(event) => {
+          const sleutel = event.target.value;
+          if (!sleutel) return;
+          const kaartPunt = beschikbareKunstenaars.find((k) => (k.detailPaginaUrl || k.naamKunstenaar) === sleutel);
+          if (kaartPunt) {
+            opToevoegenStop(kaartPunt);
+          }
+        }}
+        disabled={beschikbareKunstenaars.length === 0}
+      >
+        <option value="">
+          {beschikbareKunstenaars.length === 0 ? 'Alle kunstenaars zijn al toegevoegd' : '+ Kunstenaar toevoegen aan route…'}
+        </option>
+        {beschikbareKunstenaars.map((kaartPunt) => {
+          const sleutel = kaartPunt.detailPaginaUrl || kaartPunt.naamKunstenaar;
+          return (
+            <option key={sleutel} value={sleutel}>
+              {kaartPunt.naamKunstenaar}
+            </option>
+          );
+        })}
+      </select>
+
       <div className="route-planner-acties">
         <button
           type="button"
@@ -137,9 +153,6 @@ export const RoutePlanner = ({
 
       {routeLaadStatus === 'klaar' && routeData && (
         <>
-          <p className="route-planner-resultaat">
-            {formatteerAfstand(routeData.afstandKm)} · {formatteerDuur(routeData.duurMinuten)}
-          </p>
           <details className="route-app-keuze">
             <summary className="route-app-keuze-knop">Openen in app</summary>
             <div className="route-app-keuze-menu">

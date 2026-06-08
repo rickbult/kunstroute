@@ -525,6 +525,75 @@
 		max-width: 210px;
 		font-size: 0.88rem;
 	}
+
+	/* Op smalle schermen past een 25vw-brede zijbalk niet meer naast de kaart —
+	   stapel kaart en zijbalk daarom verticaal en laat de zijbalk de resterende
+	   hoogte vullen. De inklap-knop (bedoeld voor de horizontale layout) heeft
+	   in dit gestapelde ontwerp geen functie meer en wordt daarom verborgen. */
+	.kaart-container,
+	.kaart-container.sidebar-collapsed {
+		flex-direction: column;
+	}
+
+	.kaart-wrapper,
+	.kaart-container.sidebar-collapsed .kaart-wrapper {
+		flex: 0 0 40vh;
+		width: 100%;
+		min-width: 0;
+		height: 40vh;
+	}
+
+	.kaart-sidebar,
+	.kaart-container.sidebar-collapsed .kaart-sidebar {
+		flex: 1 1 auto;
+		width: 100%;
+		min-width: 0;
+		height: auto;
+		border-left: none;
+		border-top: 1px solid var(--brand-border);
+		padding: 0;
+		overflow: visible;
+		pointer-events: auto;
+	}
+
+	.kaart-sidebar-toggle {
+		display: none;
+	}
+
+	.kaart-sidebar-filters {
+		padding: 10px 10px 8px;
+	}
+
+	.kaart-sidebar-search input {
+		padding: 0.7rem 0.9rem;
+		font-size: 0.88rem;
+	}
+
+	.locatie-card {
+		padding: 10px;
+		gap: 8px;
+	}
+
+	.card-foto {
+		width: 44px;
+		height: 44px;
+		min-width: 44px;
+	}
+
+	.card-info h3 {
+		font-size: 0.9rem;
+	}
+
+	.route-zwevende-balk {
+		width: calc(100% - 24px);
+		max-width: none;
+	}
+
+	.route-toggle-knop-zwevend,
+	.route-wis-knop-zwevend {
+		padding: 0.7rem 0.85rem;
+		font-size: 0.82rem;
+	}
 }
 
 /* Routeplanner toggle + selectie wissen (zwevend onderaan de sidebar) */

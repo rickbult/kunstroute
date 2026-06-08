@@ -382,6 +382,12 @@ export default function KaartComponent() {
 
   const routeStopCoordinaten = routeStops.map((stop) => [stop.breedtegraad, stop.lengtegraad]);
 
+  // Kunstenaars die (binnen de huidige filters) nog niet in de route zitten —
+  // alfabetisch, zodat ze ook handmatig via een dropdown toe te voegen zijn.
+  const beschikbareKunstenaarsVoorRoute = [...gefilterdeKaartPunten]
+    .filter((kaartPunt) => !zitInRoute(kaartPunt))
+    .sort((a, b) => a.naamKunstenaar.localeCompare(b.naamKunstenaar, 'nl'));
+
   // Zodra er een route wordt opgebouwd, toon alleen de geselecteerde kunstenaars
   // op de kaart — dat houdt de kaart overzichtelijk en focust op de route zelf.
   const kaartMarkerPunten =
@@ -464,28 +470,26 @@ export default function KaartComponent() {
       </div>
 
       <aside className="kaart-sidebar">
-        <div className="kaart-sidebar-filters">
-          {!planModusActief && (
-            <>
-              <div className="kaart-sidebar-search">
-                <input
-                  type="text"
-                  placeholder="Zoek een kunstenaar..."
-                  value={zoekterm}
-                  onChange={(e) => setZoekterm(e.target.value)}
-                />
-              </div>
+        {!planModusActief && (
+          <div className="kaart-sidebar-filters">
+            <div className="kaart-sidebar-search">
+              <input
+                type="text"
+                placeholder="Zoek een kunstenaar..."
+                value={zoekterm}
+                onChange={(e) => setZoekterm(e.target.value)}
+              />
+            </div>
 
-              <div className="filter-widget kaart-sidebar-filter-widget">
-                <FilterBalk
-                  geselecteerdeFilters={geselecteerdeFilters}
-                  bijFilterWijziging={setGeselecteerdeFilters}
-                  filterOpties={filterOpties}
-                />
-              </div>
-            </>
-          )}
-        </div>
+            <div className="filter-widget kaart-sidebar-filter-widget">
+              <FilterBalk
+                geselecteerdeFilters={geselecteerdeFilters}
+                bijFilterWijziging={setGeselecteerdeFilters}
+                filterOpties={filterOpties}
+              />
+            </div>
+          </div>
+        )}
 
         {planModusActief ? (
           <RoutePlanner
@@ -495,6 +499,8 @@ export default function KaartComponent() {
             opVerwijderStop={verwijderRouteStop}
             opHerorden={herordenRouteStops}
             opBerekenRoute={berekenRoute}
+            beschikbareKunstenaars={beschikbareKunstenaarsVoorRoute}
+            opToevoegenStop={wisselRouteStop}
           />
         ) : (
           <div className={`sidebar-content ${routeStops.length > 0 ? 'met-zwevende-balk' : ''}`}>
