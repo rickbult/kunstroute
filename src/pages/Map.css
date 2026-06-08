@@ -528,23 +528,27 @@
 
 	/* Op smalle schermen past een 25vw-brede zijbalk niet meer naast de kaart —
 	   stapel kaart en zijbalk daarom verticaal en laat de zijbalk de resterende
-	   hoogte vullen. De inklap-knop (bedoeld voor de horizontale layout) heeft
-	   in dit gestapelde ontwerp geen functie meer en wordt daarom verborgen. */
-	.kaart-container,
-	.kaart-container.sidebar-collapsed {
+	   hoogte vullen. De inklap-knop krijgt hier een nieuwe rol: de (onderaan
+	   gestapelde) zijbalk volledig verbergen zodat de kaart het hele scherm vult. */
+	.kaart-container {
 		flex-direction: column;
 	}
 
-	.kaart-wrapper,
-	.kaart-container.sidebar-collapsed .kaart-wrapper {
+	.kaart-wrapper {
 		flex: 0 0 40vh;
 		width: 100%;
 		min-width: 0;
 		height: 40vh;
 	}
 
-	.kaart-sidebar,
-	.kaart-container.sidebar-collapsed .kaart-sidebar {
+	.kaart-container.sidebar-collapsed .kaart-wrapper {
+		flex: 1 1 auto;
+		width: 100%;
+		min-width: 0;
+		height: 100%;
+	}
+
+	.kaart-sidebar {
 		flex: 1 1 auto;
 		width: 100%;
 		min-width: 0;
@@ -556,8 +560,52 @@
 		pointer-events: auto;
 	}
 
+	.kaart-container.sidebar-collapsed .kaart-sidebar {
+		flex: 0 0 0;
+		width: 100%;
+		min-width: 0;
+		height: 0;
+		border-top: 0;
+		overflow: hidden;
+		pointer-events: none;
+	}
+
+	/* Op mobiel verandert de inklap-knop in een "handvat" dat in het verlengde
+	   van de (onderaan gestapelde) zijbalk hangt — net als bij een bottom sheet.
+	   Hij rust precies op de naad tussen kaart en zijbalk: bij 40vh wanneer de
+	   zijbalk open is, en onderaan beeld wanneer hij is dichtgeklapt. De vorm en
+	   achtergrondkleur lopen door op die van de zijbalk, zodat hij er optisch bij
+	   hoort in plaats van los over de kaart te zweven. De pijltjes (bedoeld voor
+	   horizontaal in-/uitklappen) worden 90° gedraaid zodat ze omhoog/omlaag wijzen. */
 	.kaart-sidebar-toggle {
-		display: none;
+		top: 40vh;
+		right: auto;
+		left: 50%;
+		width: 64px;
+		height: 30px;
+		border-radius: 14px;
+		border: 1px solid var(--brand-border);
+		background: var(--brand-muted);
+		color: var(--brand-ink);
+		box-shadow: 0 4px 14px rgba(46, 43, 118, 0.14);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transform: translate(-50%, -50%) rotate(90deg);
+	}
+
+	.kaart-sidebar-toggle:hover {
+		background: #ffffff;
+		transform: translate(-50%, -50%) rotate(90deg) scale(1.08);
+	}
+
+	.kaart-container.sidebar-collapsed .kaart-sidebar-toggle {
+		top: 100%;
+		transform: translate(-50%, -50%) rotate(90deg);
+	}
+
+	.kaart-container.sidebar-collapsed .kaart-sidebar-toggle:hover {
+		transform: translate(-50%, -50%) rotate(90deg) scale(1.08);
 	}
 
 	.kaart-sidebar-filters {

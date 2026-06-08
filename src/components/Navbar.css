@@ -132,18 +132,117 @@
   background: #c01558;
 }
 
+.navbar-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.navbar-hamburger:hover {
+  background: rgba(46, 43, 118, 0.08);
+}
+
+.navbar-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: #2e2b76;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar-hamburger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar-hamburger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar-hamburger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 @media (max-width: 900px) {
   .navbar {
-    height: auto;
-    padding: 1rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    height: 72px;
+    padding: 0 1.2rem;
+  }
+
+  .navbar-logo-img {
+    height: 54px;
+  }
+
+  .navbar-hamburger {
+    display: flex;
   }
 
   .navbar-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #fff;
+    border-top: 1px solid rgba(46, 43, 118, 0.1);
+    box-shadow: 0 14px 28px rgba(46, 43, 118, 0.16);
+    padding: 0.5rem 1.2rem 1.2rem;
+  }
+
+  .navbar-links-open {
+    display: flex;
+  }
+
+  .navbar-links li {
     width: 100%;
-    flex-wrap: wrap;
-    gap: 1rem 1.5rem;
+  }
+
+  .navbar-links li + li {
+    border-top: 1px solid rgba(46, 43, 118, 0.06);
+  }
+
+  .navbar-links .nav-link,
+  .navbar-links .navbar-btn,
+  .navbar-links .navbar-btn-outline,
+  .navbar-links .navbar-btn-uitloggen {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    border-radius: 0;
+  }
+
+  .navbar-links .route-link {
+    justify-content: space-between;
+  }
+
+  .navbar-links .nav-link,
+  .navbar-links .navbar-btn,
+  .navbar-links .navbar-btn-outline,
+  .navbar-links .navbar-btn-uitloggen {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+  }
+
+  .navbar-links .navbar-btn,
+  .navbar-links .navbar-btn-outline,
+  .navbar-links .navbar-btn-uitloggen {
+    margin: 0.4rem 0;
   }
 }
