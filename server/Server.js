@@ -7,6 +7,7 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import KaartPunt from "./LocationModel.js";
+import Artist from "./ArtistModel.js";
 import { berekenRoute } from "./RouteService.js";
 
 dotenv.config({ path: new URL('./.env', import.meta.url) });
@@ -99,22 +100,25 @@ async function geocodeerAdres(adres, postcode, woonplaats) {
 // Return registered users as map points (only those with coordinates)
 serverApplicatie.get("/api/map-punten", async (verzoek, antwoord, volgende) => {
   try {
-    const gebruikers = await Gebruiker.find({
+    // Use the `kaartpunts` collection for map points — this contains the
+    // geo-coordinates and display fields the frontend expects.
+    const punten = await KaartPunt.find({
       breedtegraad: { $ne: null },
       lengtegraad:  { $ne: null },
     }).lean();
 
-    antwoord.json(gebruikers.map((u) => ({
-      naamKunstenaar:          `${u.voornaam} ${u.achternaam}`.trim(),
-      volledigAdres:           [u.adres, u.postcode, u.woonplaats].filter(Boolean).join(', '),
-      stad:                    u.woonplaats || '',
-      kunstvorm:               u.kunstrichting || '',
-      breedtegraad:            u.breedtegraad,
-      lengtegraad:             u.lengtegraad,
-      detailPaginaUrl:         u._id.toString(),
-      openDagenKunstroute2026: [u.openZaterdag && 'Zaterdag', u.openZondag && 'Zondag'].filter(Boolean).join(' & ') || '',
-      rolstoeltoegankelijkheid: u.rolstoeltoegankelijk || '',
-      fotoUrl: u.profielfotoUrl || null,
+    antwoord.json(punten.map((p) => ({
+      naamKunstenaar:          p.naamKunstenaar || '',
+      volledigAdres:           p.volledigAdres || '',
+      stad:                    p.stad || '',
+      kunstvorm:               p.kunstvorm || '',
+      breedtegraad:            p.breedtegraad,
+      lengtegraad:             p.lengtegraad,
+      detailPaginaUrl:         p.detailPaginaUrl || (p._id && p._id.toString()) || '',
+      openDagenKunstroute2026: p.openDagenKunstroute2026 || '',
+      rolstoeltoegankelijkheid: p.rolstoeltoegankelijkheid || '',
+      fotoUrl: p.fotoUrl || null,
+      titelWerk: p.titelWerk || null,
     })));
   } catch (fout) {
     volgende(fout);
@@ -197,6 +201,71 @@ serverApplicatie.put(
 // Return all registered artists (users) from MongoDB
 serverApplicatie.get("/api/artists", async (verzoek, antwoord, volgende) => {
   try {
+    // Prefer the `kaartpunts` collection as the canonical source for
+    // displayed artists/kaartpunten. Fallback order: `kaartpunts` -> `artists` -> `users`.
+    const kaartCount = await KaartPunt.countDocuments();
+    if (kaartCount > 0) {
+      const punten = await KaartPunt.find().lean();
+      const extractSlug = (u) => {
+        try {
+          const url = new URL(u);
+          return url.pathname.split('/').filter(Boolean).pop() || u;
+        } catch (e) {
+          return (u || '').toString().split('/').filter(Boolean).pop() || u || '';
+        }
+      };
+
+      antwoord.json(punten.map((p) => ({
+        // kaartpunts only have a single foto field; use it for both
+        // profile and artwork display so the artworks page is populated.
+        imgSrc:    p.fotoUrl || '',
+        kunstFoto: p.fotoUrl || '',
+        imgAlt:    p.naamKunstenaar || p.titelWerk || '',
+        title:     p.naamKunstenaar || '',
+        description: p.titelWerk || '',
+        location:  p.stad || '',
+        address:   p.volledigAdres || '',
+        postcode:  null,
+        phone:     null,
+        email:     null,
+        website:   null,
+        facebook:  null,
+        instagram: null,
+        discipline:    p.kunstvorm || '',
+        openZaterdag:         p.openDagenKunstroute2026?.includes('Zaterdag') || false,
+        openZondag:           p.openDagenKunstroute2026?.includes('Zondag') || false,
+        rolstoeltoegankelijk: p.rolstoeltoegankelijkheid || '',
+        link:          extractSlug(p.detailPaginaUrl) || (p._id && p._id.toString()) || '',
+      })));
+      return;
+    }
+
+    const artistsCount = await Artist.countDocuments();
+    if (artistsCount > 0) {
+      const artists = await Artist.find().lean();
+      antwoord.json(artists.map((a) => ({
+        imgSrc:    a.imgSrc || '',
+        kunstFoto: a.kunstFoto || '',
+        imgAlt:    a.imgAlt || a.title || '',
+        title:     a.title || '',
+        description: a.description || '',
+        location:  a.woonplaats || a.location || '',
+        address:   a.address || '',
+        postcode:  a.postcode || '',
+        phone:     a.phone || '',
+        email:     a.email || '',
+        website:   a.website || '',
+        facebook:  a.facebook || '',
+        instagram: a.instagram || '',
+        discipline:    a.discipline || '',
+        openZaterdag:         a.openZaterdag || false,
+        openZondag:           a.openZondag || false,
+        rolstoeltoegankelijk: a.wheelchairaccessibility || a.rolstoeltoegankelijk || '',
+        link:          a.link || (a._id && a._id.toString()) || '',
+      })));
+      return;
+    }
+
     const gebruikers = await Gebruiker.find().lean();
     antwoord.json(gebruikers.map(gebruikerNaarArtist));
   } catch (fout) {
@@ -207,9 +276,59 @@ serverApplicatie.get("/api/artists", async (verzoek, antwoord, volgende) => {
 // Return a single registered artist by their MongoDB _id
 serverApplicatie.get("/api/artists/:id", async (verzoek, antwoord, volgende) => {
   try {
-    const gebruiker = await Gebruiker.findById(verzoek.params.id).lean();
-    if (!gebruiker) return antwoord.status(404).json({ error: 'Kunstenaar niet gevonden' });
-    antwoord.json(gebruikerNaarArtist(gebruiker));
+    const rawId = verzoek.params.id || '';
+
+    const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // 1) Exact match on kaartpunts.detailPaginaUrl
+    let byDetail = await KaartPunt.findOne({ detailPaginaUrl: rawId }).lean();
+
+    // 2) If no exact match and `rawId` looks like a slug (no protocol), try
+    //    matching the end of the stored URL (detailPaginaUrl endsWith slug).
+    if (!byDetail && !rawId.startsWith('http')) {
+      const regex = new RegExp(escapeRegex(rawId) + '$', 'i');
+      byDetail = await KaartPunt.findOne({ detailPaginaUrl: { $regex: regex } }).lean();
+    }
+
+    // 3) If still not found and rawId looks URL-encoded, try decoding and exact match
+    if (!byDetail) {
+      try {
+        const decoded = decodeURIComponent(rawId);
+        if (decoded !== rawId) {
+          byDetail = await KaartPunt.findOne({ detailPaginaUrl: decoded }).lean();
+        }
+      } catch (e) {}
+    }
+
+    if (byDetail) {
+      return antwoord.json({
+        imgSrc: byDetail.fotoUrl || '',
+        title: byDetail.naamKunstenaar || '',
+        description: byDetail.titelWerk || '',
+        location: byDetail.stad || '',
+        address: byDetail.volledigAdres || '',
+        discipline: byDetail.kunstvorm || '',
+        openDagenKunstroute2026: byDetail.openDagenKunstroute2026 || '',
+        rolstoeltoegankelijkheid: byDetail.rolstoeltoegankelijkheid || '',
+        link: byDetail.detailPaginaUrl || (byDetail._id && byDetail._id.toString()) || '',
+      });
+    }
+
+    // 4) Try the `artists` collection (exact link or link ending with slug)
+    let artist = await Artist.findOne({ link: rawId }).lean();
+    if (!artist && !rawId.startsWith('http')) {
+      const regex = new RegExp(escapeRegex(rawId) + '$', 'i');
+      artist = await Artist.findOne({ link: { $regex: regex } }).lean();
+    }
+    if (artist) return antwoord.json(artist);
+
+    // 5) If `rawId` is a valid ObjectId, fall back to users collection lookup
+    if (mongoose.Types.ObjectId.isValid(rawId)) {
+      const gebruiker = await Gebruiker.findById(rawId).lean();
+      if (gebruiker) return antwoord.json(gebruikerNaarArtist(gebruiker));
+    }
+
+    return antwoord.status(404).json({ error: 'Kunstenaar niet gevonden' });
   } catch (fout) {
     volgende(fout);
   }
