@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../../Utils/auth';
+import Toast from '../components/Toast';
 import kunstrouteLogo from '../assets/Kunstroute logo.png';
 import './Registreren.css';
 
@@ -27,6 +28,7 @@ export default function Registreren() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState(LEEG);
   const [fout, setFout] = useState('');
+  const [succes, setSucces] = useState('');
   const [artworks, setArtworks] = useState([]);
 
   function handleChange(e) {
@@ -90,15 +92,33 @@ export default function Registreren() {
   function handleSubmit(e) {
     e.preventDefault();
     setFout('');
+    setSucces('');
+
+    if (!form.voorwaardenAkkoord) {
+      setFout('Je moet akkoord gaan met de voorwaarden om een account aan te maken.');
+      return;
+    }
+
     const result = register(form);
     if (!result.success) {
       setFout(result.error);
       return;
     }
-    navigate('/payment');
+
+    setSucces('Account succesvol aangemaakt. Je wordt over 3 seconden doorgestuurd naar de betaalpagina.');
+    setTimeout(() => {
+      navigate('/payment');
+    }, 3000);
   }
 
   const stepTitles = ['Persoonlijk', 'Informatie', 'Uploaden', 'Voorwaarden'];
+
+  function handleTermsChange(e) {
+    setForm(prev => ({
+      ...prev,
+      voorwaardenAkkoord: e.target.checked,
+    }));
+  }
 
   return (
     <div className="reg-bg">
@@ -112,19 +132,8 @@ export default function Registreren() {
           </div>
         </header>
 
-        {fout && (
-          <div className="toast-notification">
-            <div className="toast-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            </div>
-            <div className="toast-content">
-              <p>{fout}</p>
-            </div>
-            <button type="button" onClick={() => setFout('')} className="toast-close">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-          </div>
-        )}
+        <Toast message={fout} type="error" onClose={() => setFout('')} />
+        <Toast message={succes} type="success" onClose={() => setSucces('')} />
 
         <div className="reg-progress-bar">
             {stepTitles.map((t, idx) => (
@@ -312,7 +321,12 @@ export default function Registreren() {
 
               <div className="reg-field" style={{marginTop: '1rem'}}>
                 <label className="reg-checkbox-label" style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                  <input type="checkbox" required />
+                  <input
+                    type="checkbox"
+                    checked={form.voorwaardenAkkoord || false}
+                    onChange={handleTermsChange}
+                    required
+                  />
                   Ik ga akkoord met de voorwaarden voor deelname
                 </label>
               </div>

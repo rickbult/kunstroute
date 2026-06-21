@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { register } from '../../Utils/auth';
+import Toast from '../components/Toast';
 import './Voorwaarden.css';
 
 export default function Voorwaarden() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [succes, setSucces] = useState('');
   const userData = location.state?.userData;
 
   if (!userData) {
@@ -22,12 +25,17 @@ export default function Voorwaarden() {
       alert(result.error);
       return;
     }
-    navigate('/payment');
+
+    setSucces('Account succesvol aangemaakt. Je wordt over 3 seconden doorgestuurd naar de betaalpagina.');
+    setTimeout(() => {
+      navigate('/payment');
+    }, 3000);
   }
 
   return (
     <div className="voorwaarden-bg">
       <div className="voorwaarden-content">
+        <Toast message={succes} type="success" onClose={() => setSucces('')} />
         <h1>Voorwaarden voor deelname aan de kunstroute Noordwest Veluwe</h1>
         <p>Om deel te nemen aan de Kunstroute moet aan een aantal voorwaarden worden voldaan.</p>
 
