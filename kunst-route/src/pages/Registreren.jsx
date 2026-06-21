@@ -95,7 +95,7 @@ export default function Registreren() {
       setFout(result.error);
       return;
     }
-    navigate('/profiel');
+    navigate('/payment');
   }
 
   const stepTitles = ['Persoonlijk', 'Informatie', 'Uploaden', 'Voorwaarden'];

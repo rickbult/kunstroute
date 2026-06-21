@@ -22,7 +22,7 @@ export default function Voorwaarden() {
       alert(result.error);
       return;
     }
-    navigate('/profiel');
+    navigate('/payment');
   }
 
   return (

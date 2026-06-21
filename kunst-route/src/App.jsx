@@ -10,6 +10,7 @@ import Login from "./pages/Login"
 import Registreren from "./pages/Registreren"
 import Profiel from "./pages/Profiel"
 import Voorwaarden from "./pages/Voorwaarden"
+import Payment from "./pages/Payment"
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/registreren" element={<Registreren />} />
         <Route path="/profiel" element={<Profiel />} />
         <Route path="/voorwaarden" element={<Voorwaarden />} />
+        <Route path="/payment" element={<Payment />} />
       </Routes>
     </>
   )
