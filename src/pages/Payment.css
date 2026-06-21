@@ -1,0 +1,190 @@
+.betaling-bg {
+  min-height: calc(100vh - 80px);
+  background-color: var(--color-primary-dark);
+  background-image: linear-gradient(rgba(42, 35, 86, 0.4), rgba(42, 35, 86, 0.7)), url('../assets/hero-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1rem;
+}
+
+.betaling-container {
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.betaling-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 2.5rem;
+}
+
+.betaling-logo {
+  width: 200px;
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.betaling-title {
+  font-size: 1.8rem;
+  color: #3b3a63;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.betaling-subtitle {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.betaling-invoice {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: #fcfcfc;
+}
+
+.invoice-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.invoice-border-bottom {
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 1.5rem;
+}
+
+.invoice-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.text-right {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.invoice-label {
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.invoice-value {
+  font-weight: 600;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.price-row {
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.invoice-price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #cc3a61;
+}
+
+.invoice-details-box {
+  background-color: #f5f8ed;
+  border: 1px solid #e1e7d3;
+  border-radius: 6px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.invoice-details-title {
+  color: #3b3a63;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.fw-bold {
+  font-weight: 600;
+  color: #222;
+}
+
+.text-accent {
+  color: #cc3a61;
+}
+
+.invoice-warning {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.4;
+  margin-top: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.betaling-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-betaald {
+  background-color: #3b3a63;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-betaald:hover {
+  background-color: #2a2947;
+}
+
+.btn-later {
+  background-color: transparent;
+  color: #3b3a63;
+  border: 2px solid #3b3a63;
+  border-radius: 6px;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-later:hover {
+  background-color: #3b3a63;
+  color: #fff;
+}
+
+.betaling-footer-text {
+  text-align: center;
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+}

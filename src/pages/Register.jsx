@@ -29,6 +29,7 @@ export default function Register() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState(LEEG);
   const [fout, setFout] = useState('');
+  const [succes, setSucces] = useState('');
   const [loading, setLoading] = useState(false);
   const [artworks, setArtworks] = useState([]);
   const [profielfoto, setProfielfoto] = useState(null);
@@ -134,7 +135,8 @@ export default function Register() {
     try {
       const result = await register(formData);
       if (!result.success) { setFout(result.error || 'Registreren mislukt.'); return; }
-      navigate('/profile');
+      setSucces('Account succesvol aangemaakt. Je wordt over 3 seconden doorgestuurd naar de betaalpagina.');
+      setTimeout(() => navigate('/payment'), 3000);
     } catch {
       setFout('Er ging iets mis. Probeer opnieuw.');
     } finally {
@@ -164,6 +166,12 @@ export default function Register() {
             <button type="button" onClick={() => setFout('')} className="toast-close">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
+          </div>
+        )}
+
+        {succes && (
+          <div className="toast-notification" style={{ borderLeftColor: '#4caf50', background: '#f0fdf4', color: '#166534' }}>
+            <div className="toast-content"><p>{succes}</p></div>
           </div>
         )}
 

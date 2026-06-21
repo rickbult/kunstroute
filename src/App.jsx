@@ -11,6 +11,7 @@ import { ArtistDetail } from "./components/ArtistDetail.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Profile from "./pages/Profile.jsx";
+import Payment from "./pages/Payment.jsx";
 import Info from "./pages/Info.jsx";
 import { AgendaPage } from "./pages/Agenda.jsx";
 import NotFoundPage from "./pages/404.jsx";
@@ -39,6 +40,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/payment" element={<Payment />} />
           <Route path="/info" element={<Info />} />
           <Route path="/agenda" element={<AgendaPage />} />
           <Route path="/artist/:id" element={<ArtistDetail />} />

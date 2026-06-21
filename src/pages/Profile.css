@@ -327,3 +327,18 @@
 .reg-btn-sec:hover {
   background-color: #dde0f5;
 }
+
+.profiel-actions-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-payment {
+  background-color: #3b3a63;
+}
+
+.btn-payment:hover {
+  background-color: #2a2947;
+}
