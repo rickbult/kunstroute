@@ -32,6 +32,7 @@ export default function Register() {
   const [fout, setFout] = useState('');
   const [succes, setSucces] = useState('');
   const [loading, setLoading] = useState(false);
+  const [veldFouten, setVeldFouten] = useState({});
   const [artworks, setArtworks] = useState([]);
   const [profielfoto, setProfielfoto] = useState(null);
   const [adresCheck, setAdresCheck] = useState(null);
@@ -39,6 +40,8 @@ export default function Register() {
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
     if (['adres', 'postcode', 'woonplaats'].includes(name)) setAdresCheck(null);
+    if (veldFouten[name]) setVeldFouten(prev => ({ ...prev, [name]: false }));
+    if (['openZaterdag', 'openZondag'].includes(name)) setVeldFouten(prev => ({ ...prev, openDagen: false }));
     setForm(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
   }
 
@@ -79,45 +82,48 @@ export default function Register() {
 
   function nextStep() {
     setFout('');
+    const fouten = {};
+
     if (step === 1) {
-      const verplicht = ['voornaam', 'achternaam', 'email', 'wachtwoord', 'telefoon'];
-      for (const veld of verplicht) {
-        if (!form[veld].trim()) { setFout('Vul alle verplichte velden in (*).'); return; }
-      }
-      if (form.voornaam.trim().length < 2 || form.achternaam.trim().length < 2) {
-        setFout('Voor- en achternaam moeten minimaal 2 tekens bevatten.'); return;
-      }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-        setFout('Vul een geldig e-mailadres in (bijv. naam@domein.nl).'); return;
-      }
-      if (form.wachtwoord.length < 8) { setFout('Wachtwoord moet minimaal 8 tekens bevatten.'); return; }
-      if (!/[0-9]/.test(form.wachtwoord)) { setFout('Wachtwoord moet minimaal één cijfer bevatten.'); return; }
-      if (form.wachtwoord !== form.wachtwoordBevestig) { setFout('Wachtwoorden komen niet overeen.'); return; }
-      if (!/^(\+31|0)[0-9\s\-]{8,}$/.test(form.telefoon.trim())) {
-        setFout('Vul een geldig telefoonnummer in (bijv. 06-12345678 of +31612345678).'); return;
-      }
+      if (!form.voornaam.trim() || form.voornaam.trim().length < 2) fouten.voornaam = true;
+      if (!form.achternaam.trim() || form.achternaam.trim().length < 2) fouten.achternaam = true;
+      if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) fouten.email = true;
+      if (!form.wachtwoord || form.wachtwoord.length < 8 || !/[0-9]/.test(form.wachtwoord)) fouten.wachtwoord = true;
+      if (!form.wachtwoordBevestig || form.wachtwoord !== form.wachtwoordBevestig) fouten.wachtwoordBevestig = true;
+      if (form.telefoon.trim() && !/^(\+31|0)[0-9\s\-]{8,}$/.test(form.telefoon.trim())) fouten.telefoon = true;
     }
+
     if (step === 2) {
-      const verplicht = ['kunstrichting', 'adres', 'postcode', 'woonplaats'];
-      for (const veld of verplicht) {
-        if (!form[veld].trim()) { setFout('Vul alle verplichte velden in (*).'); return; }
-      }
-      if (!form.openZaterdag && !form.openZondag) {
-        setFout('Selecteer minimaal één open dag (zaterdag en/of zondag).'); return;
-      }
-      if (!/^\d{4}\s?[A-Za-z]{2}$/.test(form.postcode.trim())) {
-        setFout('Vul een geldige postcode in (bijv. 1234 AB).'); return;
-      }
-      if (form.website && !/^(https?:\/\/|www\.)/i.test(form.website.trim())) {
-        setFout('Website moet beginnen met http://, https:// of www.'); return;
-      }
+      if (!form.kunstrichting.trim()) fouten.kunstrichting = true;
+      if (!form.adres.trim()) fouten.adres = true;
+      if (!form.postcode.trim() || !/^\d{4}\s?[A-Za-z]{2}$/.test(form.postcode.trim())) fouten.postcode = true;
+      if (!form.woonplaats.trim()) fouten.woonplaats = true;
+      if (form.website.trim() && !/^(https?:\/\/|www\.)/i.test(form.website.trim())) fouten.website = true;
+      if (!form.openZaterdag && !form.openZondag) fouten.openDagen = true;
     }
+
+    if (Object.keys(fouten).length > 0) {
+      setVeldFouten(fouten);
+      if (fouten.voornaam || fouten.achternaam) setFout('Voor- en achternaam moeten minimaal 2 tekens bevatten.');
+      else if (fouten.email) setFout('Vul een geldig e-mailadres in (bijv. naam@domein.nl).');
+      else if (fouten.wachtwoord) setFout('Wachtwoord moet minimaal 8 tekens bevatten en één cijfer.');
+      else if (fouten.wachtwoordBevestig) setFout('Wachtwoorden komen niet overeen.');
+      else if (fouten.telefoon) setFout('Vul een geldig telefoonnummer in (bijv. 06-12345678).');
+      else if (fouten.postcode) setFout('Vul een geldige postcode in (bijv. 1234 AB).');
+      else if (fouten.website) setFout('Website moet beginnen met http://, https:// of www.');
+      else if (fouten.openDagen) setFout('Selecteer minimaal één open dag (zaterdag en/of zondag).');
+      else setFout('Vul alle verplichte velden in (*).');
+      return;
+    }
+
+    setVeldFouten({});
     setStep(s => s + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function prevStep() {
     setFout('');
+    setVeldFouten({});
     setStep(s => s - 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -209,30 +215,30 @@ export default function Register() {
               <div className="reg-row">
                 <div className="reg-field">
                   <label className="reg-label">Voornaam *</label>
-                  <input className="reg-input" name="voornaam" value={form.voornaam} onChange={handleChange} />
+                  <input className={`reg-input${veldFouten.voornaam ? ' reg-input-error' : ''}`} name="voornaam" value={form.voornaam} onChange={handleChange} />
                 </div>
                 <div className="reg-field">
                   <label className="reg-label">Achternaam *</label>
-                  <input className="reg-input" name="achternaam" value={form.achternaam} onChange={handleChange} />
+                  <input className={`reg-input${veldFouten.achternaam ? ' reg-input-error' : ''}`} name="achternaam" value={form.achternaam} onChange={handleChange} />
                 </div>
               </div>
               <div className="reg-field">
                 <label className="reg-label">E-mailadres *</label>
-                <input className="reg-input" type="email" name="email" value={form.email} onChange={handleChange} />
+                <input className={`reg-input${veldFouten.email ? ' reg-input-error' : ''}`} type="email" name="email" value={form.email} onChange={handleChange} />
               </div>
               <div className="reg-row">
                 <div className="reg-field">
-                  <label className="reg-label">Wachtwoord * (min. 8 tekens)</label>
-                  <input className="reg-input" type="password" name="wachtwoord" value={form.wachtwoord} onChange={handleChange} />
+                  <label className="reg-label">Wachtwoord * (min. 8 tekens, 1 cijfer)</label>
+                  <input className={`reg-input${veldFouten.wachtwoord ? ' reg-input-error' : ''}`} type="password" name="wachtwoord" value={form.wachtwoord} onChange={handleChange} />
                 </div>
                 <div className="reg-field">
                   <label className="reg-label">Bevestig wachtwoord *</label>
-                  <input className="reg-input" type="password" name="wachtwoordBevestig" value={form.wachtwoordBevestig} onChange={handleChange} />
+                  <input className={`reg-input${veldFouten.wachtwoordBevestig ? ' reg-input-error' : ''}`} type="password" name="wachtwoordBevestig" value={form.wachtwoordBevestig} onChange={handleChange} />
                 </div>
               </div>
               <div className="reg-field">
-                <label className="reg-label">Telefoonnummer *</label>
-                <input className="reg-input" type="tel" name="telefoon" value={form.telefoon} onChange={handleChange} />
+                <label className="reg-label">Telefoonnummer</label>
+                <input className={`reg-input${veldFouten.telefoon ? ' reg-input-error' : ''}`} type="tel" name="telefoon" value={form.telefoon} onChange={handleChange} placeholder="bijv. 06-12345678" />
               </div>
             </section>
           )}
@@ -242,7 +248,7 @@ export default function Register() {
               <h2 className="reg-section-title">Kunstenaars informatie & Adres</h2>
               <div className="reg-field">
                 <label className="reg-label">Kunstrichting / discipline *</label>
-                <input className="reg-input" name="kunstrichting" value={form.kunstrichting} onChange={handleChange} placeholder="bijv. Schilderijen, Beeldhouwen, Fotografie..." />
+                <input className={`reg-input${veldFouten.kunstrichting ? ' reg-input-error' : ''}`} name="kunstrichting" value={form.kunstrichting} onChange={handleChange} placeholder="bijv. Schilderijen, Beeldhouwen, Fotografie..." />
               </div>
               <div className="reg-field">
                 <label className="reg-label">Biografie / beschrijving</label>
@@ -251,7 +257,7 @@ export default function Register() {
               <div className="reg-row">
                 <div className="reg-field">
                   <label className="reg-label">Website</label>
-                  <input className="reg-input" name="website" value={form.website} onChange={handleChange} placeholder="www.jouwsite.nl" />
+                  <input className={`reg-input${veldFouten.website ? ' reg-input-error' : ''}`} name="website" value={form.website} onChange={handleChange} placeholder="www.jouwsite.nl" />
                 </div>
                 <div className="reg-field">
                   <label className="reg-label">Instagram</label>
@@ -264,7 +270,7 @@ export default function Register() {
               </div>
               <h3 className="reg-subsection-title">Open dagen *</h3>
               <p className="reg-info">Selecteer op welke dag(en) je open bent tijdens de kunstroute.</p>
-              <div className="reg-open-dagen">
+              <div className={`reg-open-dagen${veldFouten.openDagen ? ' reg-open-dagen-error' : ''}`}>
                 <label className="reg-dag-label">
                   <input type="checkbox" name="openZaterdag" checked={form.openZaterdag} onChange={handleChange} />
                   Zaterdag
@@ -279,16 +285,16 @@ export default function Register() {
               <p className="reg-info">Vul hieronder het adres in waar we jou kunnen balloteren indien van toepassing.</p>
               <div className="reg-field">
                 <label className="reg-label">Adres met huisnummer *</label>
-                <input className="reg-input" name="adres" value={form.adres} onChange={handleChange} />
+                <input className={`reg-input${veldFouten.adres ? ' reg-input-error' : ''}`} name="adres" value={form.adres} onChange={handleChange} />
               </div>
               <div className="reg-row">
                 <div className="reg-field">
                   <label className="reg-label">Postcode *</label>
-                  <input className="reg-input" name="postcode" value={form.postcode} onChange={handleChange} />
+                  <input className={`reg-input${veldFouten.postcode ? ' reg-input-error' : ''}`} name="postcode" value={form.postcode} onChange={handleChange} placeholder="1234 AB" />
                 </div>
                 <div className="reg-field">
                   <label className="reg-label">Woonplaats *</label>
-                  <input className="reg-input" name="woonplaats" value={form.woonplaats} onChange={handleChange} />
+                  <input className={`reg-input${veldFouten.woonplaats ? ' reg-input-error' : ''}`} name="woonplaats" value={form.woonplaats} onChange={handleChange} />
                 </div>
               </div>
               <div className="reg-adres-check-row">

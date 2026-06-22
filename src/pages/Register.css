@@ -111,6 +111,19 @@
   border-color: var(--color-primary);
 }
 
+.reg-input-error {
+  border-color: var(--color-error);
+  background-color: #fff8f8;
+}
+
+.reg-input-error:focus {
+  border-color: var(--color-error);
+}
+
+.reg-open-dagen-error .reg-dag-label {
+  color: var(--color-error);
+}
+
 .reg-textarea {
   resize: vertical;
   font-family: inherit;
