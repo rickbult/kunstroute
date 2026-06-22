@@ -19,7 +19,7 @@ export default function Payment() {
 
   function handlePaid() {
     setError('');
-    setSuccess('Je hebt aangegeven dat je hebt betaald. Je ontvangt een bevestiging per e-mail. Je kunt je status bekijken in je profiel.');
+    setSuccess('Je hebt aangegeven dat je hebt betaald. Je ontvangt persoonlijk een bevestiging per e-mail van de organisatie (dit is geen automatische mail), zodra je betaling is ontvangen. Je kunt je status bekijken in je profiel.');
 
     const user = getCurrentUser();
     if (user) {
