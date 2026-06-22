@@ -283,6 +283,7 @@ export default function Register() {
 
               <h3 className="reg-subsection-title">Adres (voor ballotage)</h3>
               <p className="reg-info">Vul hieronder het adres in waar we jou kunnen balloteren indien van toepassing.</p>
+              <p className="reg-info">Je atelier/expositieruimte moet binnen één van de volgende gemeenten liggen om mee te kunnen doen: <strong>Oldebroek, Elburg, Nunspeet, Harderwijk, Ermelo of Putten</strong>.</p>
               <div className="reg-field">
                 <label className="reg-label">Adres met huisnummer *</label>
                 <input className={`reg-input${veldFouten.adres ? ' reg-input-error' : ''}`} name="adres" value={form.adres} onChange={handleChange} />
