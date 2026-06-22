@@ -20,6 +20,12 @@ if (!mongoVerbinding) {
   process.exit(1);
 }
 
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error("💥 JWT_SECRET ontbreekt in server/.env");
+  process.exit(1);
+}
+
 // Extended user schema that stores all artist registration fields
 const gebruikerSchema = new mongoose.Schema({
   voornaam:      { type: String, required: true },
@@ -61,13 +67,9 @@ serverApplicatie.use(express.json());
 // Serve uploaded photos as static files
 serverApplicatie.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-serverApplicatie.use((verzoek, antwoord, volgende) => {
-  antwoord.header("Access-Control-Allow-Origin", "*");
-  antwoord.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  antwoord.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  if (verzoek.method === 'OPTIONS') return antwoord.sendStatus(200);
-  volgende();
-});
+// Geen CORS-headers: in productie serveert deze server zelf de frontend, dus
+// alle requests zijn same-origin. (Voor losse cross-origin dev draait de Vite
+// dev-server met een /api-proxy — zie vite.config.js.)
 
 // Serveer de gebouwde frontend (vite build -> ../dist). In productie draait
 // alles via dit ene Node-proces; de API blijft onder /api en /uploads.
@@ -134,7 +136,7 @@ function verifieerToken(verzoek, antwoord, volgende) {
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) return antwoord.status(401).json({ error: 'Niet ingelogd.' });
   try {
-    verzoek.gebruiker = jwt.verify(token, process.env.JWT_SECRET || 'kunstroute_secret_2026');
+    verzoek.gebruiker = jwt.verify(token, JWT_SECRET);
     volgende();
   } catch {
     antwoord.status(401).json({ error: 'Token ongeldig of verlopen.' });
@@ -299,7 +301,7 @@ serverApplicatie.post(
 
       const token = jwt.sign(
         { id: gebruiker._id, email },
-        process.env.JWT_SECRET || 'kunstroute_secret_2026',
+        JWT_SECRET,
         { expiresIn: '1h' }
       );
 
@@ -329,7 +331,7 @@ serverApplicatie.post("/api/auth/login", async (verzoek, antwoord, volgende) => 
     }
     const token = jwt.sign(
       { id: gebruiker._id, email: gebruiker.email },
-      process.env.JWT_SECRET || 'kunstroute_secret_2026',
+      JWT_SECRET,
       { expiresIn: '1h' }
     );
     antwoord.json({
