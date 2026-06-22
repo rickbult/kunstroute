@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 mijn-react-app/node_modules/
+server/node_modules/
 
 # Build output
 dist/
@@ -11,3 +12,12 @@ mijn-react-app/dist/
 
 # Logs
 *.log
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+
+# Uploads (door gebruikers geüploade bestanden)
+server/uploads/*
+!server/uploads/.gitkeep
