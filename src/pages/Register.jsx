@@ -22,6 +22,7 @@ const LEEG = {
   uitleg_kunstwerken: '',
   openZaterdag: false,
   openZondag: false,
+  voorwaardenAkkoord: false,
 };
 
 export default function Register() {
@@ -83,8 +84,18 @@ export default function Register() {
       for (const veld of verplicht) {
         if (!form[veld].trim()) { setFout('Vul alle verplichte velden in (*).'); return; }
       }
+      if (form.voornaam.trim().length < 2 || form.achternaam.trim().length < 2) {
+        setFout('Voor- en achternaam moeten minimaal 2 tekens bevatten.'); return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+        setFout('Vul een geldig e-mailadres in (bijv. naam@domein.nl).'); return;
+      }
       if (form.wachtwoord.length < 8) { setFout('Wachtwoord moet minimaal 8 tekens bevatten.'); return; }
+      if (!/[0-9]/.test(form.wachtwoord)) { setFout('Wachtwoord moet minimaal één cijfer bevatten.'); return; }
       if (form.wachtwoord !== form.wachtwoordBevestig) { setFout('Wachtwoorden komen niet overeen.'); return; }
+      if (!/^(\+31|0)[0-9\s\-]{8,}$/.test(form.telefoon.trim())) {
+        setFout('Vul een geldig telefoonnummer in (bijv. 06-12345678 of +31612345678).'); return;
+      }
     }
     if (step === 2) {
       const verplicht = ['kunstrichting', 'adres', 'postcode', 'woonplaats'];
@@ -92,8 +103,13 @@ export default function Register() {
         if (!form[veld].trim()) { setFout('Vul alle verplichte velden in (*).'); return; }
       }
       if (!form.openZaterdag && !form.openZondag) {
-        setFout('Selecteer minimaal één open dag (zaterdag en/of zondag).');
-        return;
+        setFout('Selecteer minimaal één open dag (zaterdag en/of zondag).'); return;
+      }
+      if (!/^\d{4}\s?[A-Za-z]{2}$/.test(form.postcode.trim())) {
+        setFout('Vul een geldige postcode in (bijv. 1234 AB).'); return;
+      }
+      if (form.website && !/^(https?:\/\/|www\.)/i.test(form.website.trim())) {
+        setFout('Website moet beginnen met http://, https:// of www.'); return;
       }
     }
     setStep(s => s + 1);
@@ -109,6 +125,10 @@ export default function Register() {
   async function handleSubmit(e) {
     e.preventDefault();
     setFout('');
+    if (!form.voorwaardenAkkoord) {
+      setFout('Je moet akkoord gaan met de voorwaarden om je aan te melden.');
+      return;
+    }
     setLoading(true);
 
     const formData = new FormData();
@@ -344,7 +364,12 @@ export default function Register() {
               </div>
               <div className="reg-field" style={{marginTop: '1rem'}}>
                 <label className="reg-checkbox-label" style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-                  <input type="checkbox" required />
+                  <input
+                    type="checkbox"
+                    name="voorwaardenAkkoord"
+                    checked={form.voorwaardenAkkoord}
+                    onChange={handleChange}
+                  />
                   Ik ga akkoord met de voorwaarden voor deelname
                 </label>
               </div>
