@@ -7,7 +7,6 @@ import "./ArtistDetail.css";
 export const ArtistDetail = () => {
   const { id } = useParams();
   const [artist, setArtist] = useState(null);
-  const [kaartpunt, setKaartpunt] = useState(null);
   const [isLaden, setIsLaden] = useState(true);
 
   const kaartSlug = id;
@@ -15,57 +14,19 @@ export const ArtistDetail = () => {
   useEffect(() => {
     let actief = true;
 
-    Promise.all([fetch("/api/artists"), fetch("/api/kaartpunten")])
-      .then(async ([artistsResponse, kaartpuntenResponse]) => {
-        if (!artistsResponse.ok) {
-          throw new Error(`Artists HTTP ${artistsResponse.status}`);
-        }
-        if (!kaartpuntenResponse.ok) {
-          throw new Error(`Kaartpunten HTTP ${kaartpuntenResponse.status}`);
-        }
-
-        const [artistsData, kaartpuntenData] = await Promise.all([
-          artistsResponse.json(),
-          kaartpuntenResponse.json(),
-        ]);
-
-        if (!actief) {
-          return;
-        }
-
-        setArtist(Array.isArray(artistsData) ? artistsData.find((item) => item.link === id) || null : null);
-        setKaartpunt(
-          Array.isArray(kaartpuntenData)
-            ? kaartpuntenData.find((punt) => {
-                try {
-                  const urlSlug = new URL(punt.detailPaginaUrl).pathname.split("/").filter(Boolean).pop() || "";
-                  const naamSlug = (punt.naamKunstenaar || "")
-                    .toString()
-                    .toLowerCase()
-                    .trim()
-                    .replace(/https?:\/\/[^/]+\//, "")
-                    .replace(/\/+$/, "")
-                    .replace(/[^a-z0-9]+/g, "-")
-                    .replace(/^-+|-+$/g, "");
-
-                  return naamSlug === id || urlSlug === id;
-                } catch (e) {
-                  return false;
-                }
-              }) || null
-            : null,
-        );
+    fetch(`/api/artists/${encodeURIComponent(id)}`)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Artist HTTP ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        if (actief) setArtist(data || null);
       })
       .catch(() => {
-        if (actief) {
-          setArtist(null);
-          setKaartpunt(null);
-        }
+        if (actief) setArtist(null);
       })
       .finally(() => {
-        if (actief) {
-          setIsLaden(false);
-        }
+        if (actief) setIsLaden(false);
       });
 
     return () => {
@@ -81,7 +42,7 @@ export const ArtistDetail = () => {
     );
   }
 
-  if (!artist && !kaartpunt) {
+  if (!artist) {
     return (
       <div className="detail-wrapper">
         <p>Kunstenaar niet gevonden.</p>
@@ -100,43 +61,6 @@ export const ArtistDetail = () => {
       </Link>
     </div>
   );
-
-  if (kaartpunt) {
-    return (
-      <div className="detail-wrapper">
-        <div className="artist-hero">
-          {kaartpunt.fotoUrl && (
-            <div className="artist-image">
-              <img src={kaartpunt.fotoUrl} alt={kaartpunt.naamKunstenaar} />
-            </div>
-          )}
-          <div className="artist-info" style={{ width: '100%' }}>
-            <h1 className="artist-name">{kaartpunt.naamKunstenaar}</h1>
-            <div className="artist-tags">
-              <span className="tag tag-location">{kaartpunt.stad}</span>
-              <span className="tag tag-days">{kaartpunt.openDagenKunstroute2026}</span>
-            </div>
-            <p className="artist-bio">{kaartpunt.titelWerk || kaartpunt.volledigAdres}</p>
-
-            <div className="artist-contact-card">
-              <div className="contact-section">
-                <h3>Bezoekadres</h3>
-                <p>{kaartpunt.volledigAdres}</p>
-                <p>{kaartpunt.stad}</p>
-                <a href={kaartpunt.googleMapsUrl || "#"} className="map-link" target="_blank" rel="noreferrer">Bekijk op kaart</a>
-              </div>
-              <div className="contact-section">
-                <h3>Toegankelijkheid</h3>
-                <p>{kaartpunt.rolstoeltoegankelijkheid}</p>
-                <p>{kaartpunt.openDagenKunstroute2026}</p>
-              </div>
-            </div>
-            {navigatieKnoppen}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   const openDagen = [
     artist.openZaterdag && 'Zaterdag',
