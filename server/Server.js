@@ -69,7 +69,10 @@ serverApplicatie.use((verzoek, antwoord, volgende) => {
   volgende();
 });
 
-serverApplicatie.get("/", (verzoek, antwoord) => antwoord.json({ message: "Kunstroute API OK" }));
+// Serveer de gebouwde frontend (vite build -> ../dist). In productie draait
+// alles via dit ene Node-proces; de API blijft onder /api en /uploads.
+const frontendPad = path.join(__dirname, '..', 'dist');
+serverApplicatie.use(express.static(frontendPad));
 
 async function geocodeerAdres(adres, postcode, woonplaats) {
   const basis = { format: 'json', limit: 1, countrycodes: 'nl' };
@@ -377,6 +380,12 @@ serverApplicatie.get("/api/route", async (verzoek, antwoord, volgende) => {
   } catch (fout) {
     volgende(fout);
   }
+});
+
+// SPA-fallback: alle overige GET-routes (geen /api, /uploads) geven de
+// frontend-index terug zodat client-side routing en page-refresh werken.
+serverApplicatie.get(/^(?!\/api|\/uploads).*/, (verzoek, antwoord) => {
+  antwoord.sendFile(path.join(frontendPad, 'index.html'));
 });
 
 serverApplicatie.use((fout, verzoek, antwoord, volgende) => {
